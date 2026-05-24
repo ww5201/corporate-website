@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>阿卡网络科技 - 后台管理系统</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Microsoft YaHei', sans-serif; background: #f5f5f5; }
+    
+    .header {
+      background: linear-gradient(135deg, #0f0f12 0%, #1a1a1f 100%);
+      color: #d4af37;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .header h1 { font-size: 1.8rem; }
+    
+    .container { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
+    
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .tab-btn {
+      padding: 1rem 2rem;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      color: #666;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .tab-btn.active {
+      color: #d4af37;
+      border-bottom-color: #d4af37;
+      font-weight: 600;
+    }
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    
+    .btn {
+      padding: 0.8rem 1.5rem;
+      background: #d4af37;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.3s;
+    }
+    
+    .btn:hover { background: #a88a29; }
+    .btn-danger { background: #dc3545; }
+    .btn-danger:hover { background: #c82333; }
+    .btn-success { background: #28a745; }
+    .btn-success:hover { background: #218838; }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    tr:hover { background: #f8f9fa; }
+    
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #333;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    
+    .form-group textarea {
+      height: 120px;
+      resize: vertical;
+    }
+    
+    .status-badge {
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    
+    .status-pending { background: #ffc107; color: #000; }
+    .status-confirmed { background: #17a2b8; color: #fff; }
+    .status-processing { background: #007bff; color: #fff; }
+    .status-completed { background: #28a745; color: #fff; }
+    .status-cancelled { background: #dc3545; color: #fff; }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal.active { display: flex; }
+    
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🏆 阿卡网络科技 - 后台管理系统</h1>
+  </div>
+  
+  <div class="container">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('products')">产品管理</button>
+      <button class="tab-btn" onclick="switchTab('orders')">订单管理</button>
+      <button class="tab-btn" onclick="switchTab('messages')">客户留言</button>
+    </div>
+    
+    <!-- 产品管理 -->
+    <div id="products" class="tab-content active">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h2>产品列表</h2>
+          <button class="btn" onclick="openProductModal()">+ 添加产品</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>产品名称</th>
+              <th>类别</th>
+              <th>价格</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="products-table"></tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- 订单管理 -->
+    <div id="orders" class="tab-content">
+      <div class="card">
+        <h2>订单列表</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>客户姓名</th>
+              <th>联系电话</th>
+              <th>产品类型</th>
+              <th>预算</th>
+              <th>状态</th>
+              <th>创建时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="orders-table"></tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- 客户留言 -->
+    <div id="messages" class="tab-content">
+      <div class="card">
+        <h2>客户留言</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>客户姓名</th>
+              <th>联系电话</th>
+              <th>留言内容</th>
+              <th>状态</th>
+              <th>时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="messages-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 产品编辑模态框 -->
+  <div id="product-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">添加产品</h2>
+        <button class="close-btn" onclick="closeProductModal()">&times;</button>
+      </div>
+      <form id="product-form">
+        <input type="hidden" id="product-id">
+        <div class="form-group">
+          <label>产品名称 *</label>
+          <input type="text" id="product-name" required>
+        </div>
+        <div class="form-group">
+          <label>产品描述 *</label>
+          <textarea id="product-description" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>价格 *</label>
+          <input type="number" id="product-price" required>
+        </div>
+        <div class="form-group">
+          <label>类别</label>
+          <select id="product-category">
+            <option value="衣柜">衣柜</option>
+            <option value="衣帽间">衣帽间</option>
+            <option value="橱柜">橱柜</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+        <div style="text-align: right;">
+          <button type="button" class="btn" onclick="closeProductModal()">取消</button>
+          <button type="submit" class="btn btn-success">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    const API_BASE = 'http://localhost:3000/api';
+    
+    // 切换标签页
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+      
+      if (tabName === 'products') loadProducts();
+      else if (tabName === 'orders') loadOrders();
+      else if (tabName === 'messages') loadMessages();
+    }
+    
+    // 加载产品列表
+    async function loadProducts() {
+      const res = await fetch(`${API_BASE}/products`);
+      const products = await res.json();
+      const tbody = document.getElementById('products-table');
+      tbody.innerHTML = products.map(p => `
+        <tr>
+          <td>${p.name}</td>
+          <td>${p.category}</td>
+          <td>¥ ${p.price.toLocaleString()}</td>
+          <td>${p.isAvailable ? '<span style="color: #28a745;">上架</span>' : '<span style="color: #dc3545;">下架</span>'}</td>
+          <td>
+            <button class="btn" onclick="editProduct('${p._id}')" style="padding: 0.4rem 0.8rem; margin-right: 0.5rem;">编辑</button>
+            <button class="btn btn-danger" onclick="deleteProduct('${p._id}')" style="padding: 0.4rem 0.8rem;">删除</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+    
+    // 加载订单列表
+    async function loadOrders() {
+      const res = await fetch(`${API_BASE}/orders`);
+      const orders = await res.json();
+      const tbody = document.getElementById('orders-table');
+      tbody.innerHTML = orders.map(o => `
+        <tr>
+          <td>${o.customerName}</td>
+          <td>${o.phone}</td>
+          <td>${o.productType}</td>
+          <td>¥ ${o.budget ? o.budget.toLocaleString() : '未填写'}</td>
+          <td><span class="status-badge status-${o.status}">${getStatusText(o.status)}</span></td>
+          <td>${new Date(o.createdAt).toLocaleDateString('zh-CN')}</td>
+          <td>
+            <button class="btn" onclick="updateOrderStatus('${o._id}')" style="padding: 0.4rem 0.8rem;">更新状态</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+    
+    // 加载留言列表
+    async function loadMessages() {
+      const res = await fetch(`${API_BASE}/messages`);
+      const messages = await res.json();
+      const tbody = document.getElementById('messages-table');
+      tbody.innerHTML = messages.map(m => `
+        <tr>
+          <td>${m.name}</td>
+          <td>${m.phone}</td>
+          <td>${m.content.substring(0, 50)}${m.content.length > 50 ? '...' : ''}</td>
+          <td>${m.isRead ? '<span style="color: #28a745;">已读</span>' : '<span style="color: #ffc107;">未读</span>'}</td>
+          <td>${new Date(m.createdAt).toLocaleDateString('zh-CN')}</td>
+          <td>
+            <button class="btn" onclick="replyMessage('${m._id}')" style="padding: 0.4rem 0.8rem;">回复</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+    
+    function getStatusText(status) {
+      const map = {
+        'pending': '待处理',
+        'confirmed': '已确认',
+        'processing': '处理中',
+        'completed': '已完成',
+        'cancelled': '已取消'
+      };
+      return map[status] || status;
+    }
+    
+    // 产品相关
+    function openProductModal() {
+      document.getElementById('modal-title').textContent = '添加产品';
+      document.getElementById('product-form').reset();
+      document.getElementById('product-id').value = '';
+      document.getElementById('product-modal').classList.add('active');
+    }
+    
+    function closeProductModal() {
+      document.getElementById('product-modal').classList.remove('active');
+    }
+    
+    async function editProduct(id) {
+      const res = await fetch(`${API_BASE}/products/${id}`);
+      const product = await res.json();
+      
+      document.getElementById('modal-title').textContent = '编辑产品';
+      document.getElementById('product-id').value = product._id;
+      document.getElementById('product-name').value = product.name;
+      document.getElementById('product-description').value = product.description;
+      document.getElementById('product-price').value = product.price;
+      document.getElementById('product-category').value = product.category;
+      
+      document.getElementById('product-modal').classList.add('active');
+    }
+    
+    document.getElementById('product-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('product-id').value;
+      const data = {
+        name: document.getElementById('product-name').value,
+        description: document.getElementById('product-description').value,
+        price: Number(document.getElementById('product-price').value),
+        category: document.getElementById('product-category').value
+      };
+      
+      const url = id ? `${API_BASE}/products/${id}` : `${API_BASE}/products`;
+      const method = id ? 'PUT' : 'POST';
+      
+      await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      
+      closeProductModal();
+      loadProducts();
+    });
+    
+    async function deleteProduct(id) {
+      if (!confirm('确定要删除这个产品吗？')) return;
+      await fetch(`${API_BASE}/products/${id}`, { method: 'DELETE' });
+      loadProducts();
+    }
+    
+    // 订单相关
+    async function updateOrderStatus(id) {
+      const status = prompt('输入新状态 (pending/confirmed/processing/completed/cancelled):');
+      if (!status) return;
+      await fetch(`${API_BASE}/orders/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      loadOrders();
+    }
+    
+    // 留言相关
+    async function replyMessage(id) {
+      const reply = prompt('输入回复内容:');
+      if (!reply) return;
+      await fetch(`${API_BASE}/messages/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reply })
+      });
+      loadMessages();
+    }
+    
+    // 初始化加载产品列表
+    loadProducts();
+  </script>
+</body>
+</html>
