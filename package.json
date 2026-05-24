@@ -1,0 +1,12 @@
+{
+  "name": "corporate-website",
+  "version": "1.0.0",
+  "description": "Luxury corporate website",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
