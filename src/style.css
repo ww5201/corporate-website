@@ -435,6 +435,93 @@ section {
   letter-spacing: 1px;
 }
 
+/* ===== 产品展示 ===== */
+.products {
+  background: var(--bg-primary);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+}
+
+.product-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.product-card:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow);
+}
+
+.product-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, var(--accent-gold-dark), var(--accent-gold));
+  position: relative;
+}
+
+.product-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+.product-info {
+  padding: 2rem;
+}
+
+.product-info h4 {
+  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.product-info p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1.2rem;
+  line-height: 1.6;
+}
+
+.product-price {
+  display: block;
+  color: var(--accent-gold);
+  font-size: 1.3rem;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+}
+
+.product-btn {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  background: transparent;
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.product-btn:hover {
+  background: var(--accent-gold);
+  color: var(--bg-primary);
+}
+
 /* ===== 联系我们 ===== */
 .contact {
   background: var(--bg-secondary);
