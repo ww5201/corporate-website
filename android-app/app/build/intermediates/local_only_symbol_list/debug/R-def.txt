@@ -1,0 +1,23 @@
+R_DEF: Internal format may change without notice
+local
+color accent
+color background
+color primary
+color primary_dark
+color splash_bg
+color text_primary
+color text_secondary
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+drawable progress_bar
+id progressBar
+id swipeRefresh
+id tvVersion
+id webView
+layout activity_main
+layout activity_splash
+mipmap ic_launcher
+string app_name
+style Theme.ZhuoyiCustom
+style Theme.ZhuoyiCustom.Splash
+xml network_security_config

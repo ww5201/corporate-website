@@ -49,8 +49,12 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
-        // Initialize WeChat SDK
-        WeChatAuthHelper.init(this);
+        // Initialize WeChat SDK (safe init)
+        try {
+            WeChatAuthHelper.init(this);
+        } catch (Exception e) {
+            // WeChat SDK init failed - non-fatal, login won't work
+        }
 
         progressBar = findViewById(R.id.progressBar);
         swipeRefreshLayout = findViewById(R.id.swipeRefresh);
