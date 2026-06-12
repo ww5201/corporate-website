@@ -21,6 +21,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.content.Context;
 import androidx.appcompat.app.AlertDialog;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -32,6 +35,7 @@ public class MainActivity extends Activity {
     private static final String WEBSITE_URL = "http://8.138.218.146";
     private ValueCallback<Uri[]> uploadMessage;
     private final static int FILE_CHOOSER_RESULT_CODE = 1;
+    private BroadcastReceiver wxLoginReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +49,25 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
+        // Initialize WeChat SDK
+        WeChatAuthHelper.init(this);
+
         progressBar = findViewById(R.id.progressBar);
         swipeRefreshLayout = findViewById(R.id.swipeRefresh);
         webView = findViewById(R.id.webView);
 
         setupSwipeRefresh();
         setupWebView();
+
+        // Register broadcast receiver for WeChat login result
+        wxLoginReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                handleWeChatLoginResult(intent);
+            }
+        };
+        registerReceiver(wxLoginReceiver, new IntentFilter("com.zhuoyi.custom.WX_LOGIN_RESULT"));
+
         webView.loadUrl(WEBSITE_URL);
     }
 
@@ -86,6 +103,9 @@ public class MainActivity extends Activity {
         settings.setDisplayZoomControls(false);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         settings.setUserAgentString(settings.getUserAgentString() + " ZhuoyiCustom/1.0");
+
+        // Add JavaScript interface for WeChat login
+        webView.addJavascriptInterface(new WeChatJsInterface(), "AndroidWeChat");
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -218,9 +238,68 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        if (wxLoginReceiver != null) {
+            try {
+                unregisterReceiver(wxLoginReceiver);
+            } catch (Exception e) {
+                // already unregistered
+            }
+        }
         if (webView != null) {
             webView.destroy();
         }
         super.onDestroy();
+    }
+
+    // ========== WeChat Login ==========
+
+    /**
+     * JavaScript 接口：网页调用 AndroidWeChat.login() 触发原生微信登录
+     */
+    private class WeChatJsInterface {
+        @android.webkit.JavascriptInterface
+        public void login() {
+            runOnUiThread(() -> {
+                if (!WeChatAuthHelper.isWeChatInstalled()) {
+                    Toast.makeText(MainActivity.this, "请先安装微信", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                boolean success = WeChatAuthHelper.login("snsapi_userinfo", "zhuoyi_" + System.currentTimeMillis());
+                if (!success) {
+                    Toast.makeText(MainActivity.this, "微信登录失败", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        @android.webkit.JavascriptInterface
+        public boolean isWeChatInstalled() {
+            return WeChatAuthHelper.isWeChatInstalled();
+        }
+    }
+
+    /**
+     * 处理微信登录回调结果
+     */
+    private void handleWeChatLoginResult(Intent intent) {
+        String code = intent.getStringExtra("code");
+        String error = intent.getStringExtra("error");
+
+        if (error != null) {
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+            runOnUiThread(() -> {
+                webView.evaluateJavascript("window.onWeChatLoginError && window.onWeChatLoginError('" + error + "')", null);
+            });
+            return;
+        }
+
+        if (code != null && !code.isEmpty()) {
+            // Send code to backend via JavaScript, let the web frontend handle the API call
+            runOnUiThread(() -> {
+                webView.evaluateJavascript(
+                    "window.onWeChatLoginCode && window.onWeChatLoginCode('" + code + "')",
+                    null
+                );
+            });
+        }
     }
 }

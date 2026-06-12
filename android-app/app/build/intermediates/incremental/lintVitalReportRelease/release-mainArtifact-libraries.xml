@@ -52,6 +52,19 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
+      name="com.tencent.mm.opensdk:wechat-sdk-android:6.8.24@aar"
+      jars="D:\Android\.gradle\caches\transforms-3\283cbe32429f5114dea53c966e35c87b\transformed\wechat-sdk-android-6.8.24\jars\classes.jar"
+      resolved="com.tencent.mm.opensdk:wechat-sdk-android:6.8.24"
+      folder="D:\Android\.gradle\caches\transforms-3\283cbe32429f5114dea53c966e35c87b\transformed\wechat-sdk-android-6.8.24"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+  <library
       name="D:\tokai\android-app@@:sdk::release"
       jars="D:\tokai\android-app\sdk\build\.transforms\8ddd14b028d3ed9d649805246747496b\transformed\out\jars\classes.jar;D:\tokai\android-app\sdk\build\.transforms\8ddd14b028d3ed9d649805246747496b\transformed\out\jars\libs\R.jar"
       resolved="åç¿å®å¶:sdk:unspecified"

@@ -101,6 +101,161 @@ public class AuthManager {
         }
     }
 
+    /**
+     * 微信登录（OAuth2）
+     * 将微信授权码发送到后端，后端通过微信开放平台换取 openid
+     *
+     * @param code     微信授权码（从 WeChatAuthHelper 获取）
+     * @param nickname 微信昵称（可选，新用户注册时使用）
+     * @param avatar   微信头像 URL（可选）
+     * @param callback 回调
+     */
+    public void loginByWechat(String code, String nickname, String avatar,
+                              com.zhuoyi.sdk.callback.ZhuoyiCallback<Object> callback) {
+        if (apiClient == null) {
+            callback.onFailure(-1, "API 客户端未初始化");
+            return;
+        }
+        if (code == null || code.isEmpty()) {
+            callback.onFailure(-2, "微信授权码为空");
+            return;
+        }
+
+        try {
+            org.json.JSONObject body = new org.json.JSONObject();
+            body.put("code", code);
+            if (nickname != null && !nickname.isEmpty()) {
+                body.put("nickname", nickname);
+            }
+            if (avatar != null && !avatar.isEmpty()) {
+                body.put("avatar", avatar);
+            }
+
+            apiClient.post("/api/auth/wechat/login", body.toString(),
+                new com.google.gson.reflect.TypeToken<com.zhuoyi.sdk.model.ApiResponse<Object>>(){}.getType(),
+                new com.zhuoyi.sdk.callback.ZhuoyiCallback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        handleLoginResponse(data, callback);
+                    }
+
+                    @Override
+                    public void onFailure(int code, String message) {
+                        callback.onFailure(code, message);
+                    }
+                });
+
+        } catch (Exception e) {
+            callback.onFailure(-3, "微信登录请求构建失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 手机号 + 验证码登录
+     *
+     * @param phone    手机号
+     * @param smsCode  短信验证码
+     * @param callback 回调
+     */
+    public void loginByPhone(String phone, String smsCode,
+                             com.zhuoyi.sdk.callback.ZhuoyiCallback<Object> callback) {
+        if (apiClient == null) {
+            callback.onFailure(-1, "API 客户端未初始化");
+            return;
+        }
+        if (phone == null || smsCode == null) {
+            callback.onFailure(-2, "手机号或验证码为空");
+            return;
+        }
+
+        try {
+            org.json.JSONObject body = new org.json.JSONObject();
+            body.put("phone", phone);
+            body.put("code", smsCode);
+
+            apiClient.post("/api/auth/phone/login", body.toString(),
+                new com.google.gson.reflect.TypeToken<com.zhuoyi.sdk.model.ApiResponse<Object>>(){}.getType(),
+                new com.zhuoyi.sdk.callback.ZhuoyiCallback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        handleLoginResponse(data, callback);
+                    }
+
+                    @Override
+                    public void onFailure(int code, String message) {
+                        callback.onFailure(code, message);
+                    }
+                });
+
+        } catch (Exception e) {
+            callback.onFailure(-3, "手机登录请求构建失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 发送短信验证码
+     *
+     * @param phone    手机号
+     * @param callback 回调
+     */
+    public void sendSmsCode(String phone,
+                            com.zhuoyi.sdk.callback.ZhuoyiCallback<Object> callback) {
+        if (apiClient == null) {
+            callback.onFailure(-1, "API 客户端未初始化");
+            return;
+        }
+
+        try {
+            org.json.JSONObject body = new org.json.JSONObject();
+            body.put("phone", phone);
+
+            apiClient.post("/api/auth/sms/send", body.toString(),
+                new com.google.gson.reflect.TypeToken<com.zhuoyi.sdk.model.ApiResponse<Object>>(){}.getType(),
+                callback);
+
+        } catch (Exception e) {
+            callback.onFailure(-3, "发送验证码请求失败: " + e.getMessage());
+        }
+    }
+
+    /** 统一处理登录响应（提取 token/user 并保存会话） */
+    private void handleLoginResponse(Object data,
+                                     com.zhuoyi.sdk.callback.ZhuoyiCallback<Object> callback) {
+        try {
+            org.json.JSONObject result;
+            if (data instanceof org.json.JSONObject) {
+                result = (org.json.JSONObject) data;
+            } else {
+                result = new org.json.JSONObject(data.toString());
+            }
+
+            String token = result.optString("token", "");
+            org.json.JSONObject user = result.optJSONObject("user");
+
+            String userId = "";
+            String userName = "";
+            String role = "user";
+            String phone = "";
+
+            if (user != null) {
+                userId = user.optString("id", "");
+                userName = user.optString("nickname", "");
+                role = user.optString("role", "user");
+                phone = user.optString("phone", "");
+            }
+
+            saveSession(token, userId, userName.isEmpty() ? phone : userName, role);
+
+            if (apiClient != null && !token.isEmpty()) {
+                apiClient.setAuthToken(token);
+            }
+
+            callback.onSuccess(data);
+        } catch (Exception e) {
+            callback.onFailure(-4, "登录响应解析失败: " + e.getMessage());
+        }
+    }
+
     /** 登出 */
     public void logout() {
         prefs.edit().clear().apply();

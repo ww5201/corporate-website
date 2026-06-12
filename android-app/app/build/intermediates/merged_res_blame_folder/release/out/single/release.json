@@ -1,11 +1,11 @@
 [
     {
-        "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\color_m3_textfield_label_color.xml.flat",
-        "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-material-1.9.0-11:\\color\\m3_textfield_label_color.xml"
-    },
-    {
         "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\drawable-xhdpi-v4_abc_textfield_search_default_mtrl_alpha.9.png.flat",
         "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-appcompat-1.6.1-17:\\drawable-xhdpi-v4\\abc_textfield_search_default_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\color_m3_textfield_label_color.xml.flat",
+        "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-material-1.9.0-11:\\color\\m3_textfield_label_color.xml"
     },
     {
         "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\drawable-xxhdpi-v4_abc_ic_commit_search_api_mtrl_alpha.png.flat",
@@ -32,16 +32,16 @@
         "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-appcompat-1.6.1-17:\\anim\\abc_grow_fade_in_from_bottom.xml"
     },
     {
-        "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\layout_material_clock_display_divider.xml.flat",
-        "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-material-1.9.0-11:\\layout\\material_clock_display_divider.xml"
+        "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\drawable-hdpi-v4_notify_panel_notification_icon_bg.png.flat",
+        "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-core-1.9.0-13:\\drawable-hdpi-v4\\notify_panel_notification_icon_bg.png"
     },
     {
         "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\drawable_mtrl_switch_thumb_checked_unchecked.xml.flat",
         "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-material-1.9.0-11:\\drawable\\mtrl_switch_thumb_checked_unchecked.xml"
     },
     {
-        "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\drawable-hdpi-v4_notify_panel_notification_icon_bg.png.flat",
-        "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-core-1.9.0-13:\\drawable-hdpi-v4\\notify_panel_notification_icon_bg.png"
+        "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\layout_material_clock_display_divider.xml.flat",
+        "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-material-1.9.0-11:\\layout\\material_clock_display_divider.xml"
     },
     {
         "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\layout_mtrl_picker_actions.xml.flat",
@@ -382,6 +382,10 @@
     {
         "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\interpolator_btn_radio_to_off_mtrl_animation_interpolator_0.xml.flat",
         "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-appcompat-1.6.1-17:\\interpolator\\btn_radio_to_off_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-main-31:\\mipmap-xxxhdpi\\ic_launcher.png"
     },
     {
         "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\color_mtrl_filled_stroke_color.xml.flat",
@@ -888,6 +892,10 @@
         "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-material-1.9.0-11:\\color\\mtrl_tabs_icon_color_selector_colored.xml"
     },
     {
+        "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-main-31:\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
         "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\color_m3_navigation_bar_ripple_color_selector.xml.flat",
         "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-material-1.9.0-11:\\color\\m3_navigation_bar_ripple_color_selector.xml"
     },
@@ -1108,6 +1116,10 @@
         "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-appcompat-1.6.1-17:\\drawable\\tooltip_frame_light.xml"
     },
     {
+        "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-main-31:\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
         "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\color_m3_tabs_text_color.xml.flat",
         "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-material-1.9.0-11:\\color\\m3_tabs_text_color.xml"
     },
@@ -1246,6 +1258,10 @@
     {
         "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\anim_abc_slide_in_top.xml.flat",
         "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-appcompat-1.6.1-17:\\anim\\abc_slide_in_top.xml"
+    },
+    {
+        "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-main-31:\\mipmap-mdpi\\ic_launcher.png"
     },
     {
         "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\color_mtrl_choice_chip_text_color.xml.flat",
@@ -1438,6 +1454,10 @@
     {
         "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\drawable_notification_bg_low.xml.flat",
         "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-core-1.9.0-13:\\drawable\\notification_bg_low.xml"
+    },
+    {
+        "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-main-31:\\mipmap-hdpi\\ic_launcher.png"
     },
     {
         "merged": "D:\\Android\\.gradle\\daemon\\8.2\\com.zhuoyi.custom.app-merged_res-30:\\anim_m3_motion_fade_enter.xml.flat",

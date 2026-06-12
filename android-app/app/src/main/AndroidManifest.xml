@@ -35,6 +35,28 @@
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true" />
 
+        <!-- Privacy Policy Activity -->
+        <activity
+            android:name=".PrivacyActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true" />
+
+        <!-- WeChat Open Platform Callback Activity -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <data android:scheme="wx187d6ca3a6da9ca3" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

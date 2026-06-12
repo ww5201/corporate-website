@@ -18415,6 +18415,8 @@ com.google.gson.stream.package-info
 com.zhuoyi.custom.MainActivity:
     private static final int FILE_CHOOSER_RESULT_CODE
     private static final java.lang.String WEBSITE_URL
+com.zhuoyi.custom.PrivacyActivity:
+    private static final java.lang.String PRIVACY_URL
 com.zhuoyi.custom.R$color
 com.zhuoyi.custom.R$drawable
 com.zhuoyi.custom.R$id:
@@ -18426,6 +18428,13 @@ com.zhuoyi.custom.R$string
 com.zhuoyi.custom.R$style
 com.zhuoyi.custom.R$xml
 com.zhuoyi.custom.R
+com.zhuoyi.custom.SplashActivity:
+    private static final java.lang.String KEY_PRIVACY_AGREED
+    private static final java.lang.String PREFS_NAME
+    private static final java.lang.String PRIVACY_URL
+com.zhuoyi.custom.WeChatAuthHelper:
+    public static final java.lang.String WECHAT_APP_ID
+    public void <init>()
 com.zhuoyi.sdk.R
 com.zhuoyi.sdk.ZhuoyiSdk
 com.zhuoyi.sdk.api.ApiClient$10
@@ -18442,6 +18451,11 @@ com.zhuoyi.sdk.api.ApiClient$9
 com.zhuoyi.sdk.api.ApiClient
 com.zhuoyi.sdk.auth.AuthManager$1
 com.zhuoyi.sdk.auth.AuthManager$2
+com.zhuoyi.sdk.auth.AuthManager$3
+com.zhuoyi.sdk.auth.AuthManager$4
+com.zhuoyi.sdk.auth.AuthManager$5
+com.zhuoyi.sdk.auth.AuthManager$6
+com.zhuoyi.sdk.auth.AuthManager$7
 com.zhuoyi.sdk.auth.AuthManager
 com.zhuoyi.sdk.callback.ZhuoyiCallback
 com.zhuoyi.sdk.model.ApiResponse
@@ -28070,7 +28084,7 @@ androidx.core.provider.FontsContractCompat:
     public static java.lang.reflect.Method sSetWindowLayoutTypeMethod
     public static boolean sSetWindowLayoutTypeMethodAttempted
     public static void apply()
-    public static void checkArgumentNonnegative(java.lang.String,int)
+    public static void checkArgumentNonnegative(int,java.lang.String)
     public static java.lang.Object checkNotNull()
     public static void checkState(java.lang.String,boolean)
     public static android.widget.EdgeEffect create(android.content.Context,android.util.AttributeSet)
@@ -31253,7 +31267,7 @@ androidx.versionedparcelable.VersionedParcel:
     public abstract int readInt()
     public abstract android.os.Parcelable readParcelable()
     public abstract java.lang.String readString()
-    public final java.lang.String readString(java.lang.String,int)
+    public final java.lang.String readString(int,java.lang.String)
     public abstract androidx.versionedparcelable.VersionedParcelable readVersionedParcelable()
     public abstract void setSerializationFlags()
     public abstract void writeBoolean()
@@ -31266,8 +31280,8 @@ androidx.versionedparcelable.VersionedParcel:
     public final void writeInt(int,int)
     public abstract void writeParcelable()
     public final void writeParcelable(android.os.Parcelable,int)
+    public final void writeString(int,java.lang.String)
     public abstract void writeString(java.lang.String)
-    public final void writeString(java.lang.String,int)
     public abstract void writeToParcel()
     public abstract void writeVersionedParcelable()
     public abstract void writeVersionedParcelableCreator()
@@ -33502,19 +33516,38 @@ com.google.android.material.transformation.FabTransformationSheetBehavior:
 com.google.android.material.transformation.TransformationChildCard
 com.google.android.material.transformation.TransformationChildLayout
 com.zhuoyi.custom.MainActivity$$InternalSyntheticLambda$1$683a317bdf84b14a853f22495b53a670aad729f1a76254a4352299bd02226a27$0
+com.zhuoyi.custom.MainActivity$$InternalSyntheticLambda$1$e4fcc60ab60618622cec7d6882f3088be62c06883b1a7b88db5a1ee314a41e03$1
 com.zhuoyi.custom.MainActivity$$InternalSyntheticLambda$2$338f002f0f6133d2541eba2d2f20fdd1e4be31828debbd8442f78549a928b006$0
 com.zhuoyi.custom.MainActivity$$InternalSyntheticLambda$2$797fbfbd134c80c0d28ec4150511f31ad1a4e676028b6b223f9700b5a31c1c2b$0
 com.zhuoyi.custom.MainActivity$$InternalSyntheticLambda$2$797fbfbd134c80c0d28ec4150511f31ad1a4e676028b6b223f9700b5a31c1c2b$1
+com.zhuoyi.custom.MainActivity$1
+com.zhuoyi.custom.MainActivity$WeChatJsInterface$$InternalSyntheticLambda$2$727e247c1c0a86758521faa12e3b4837705c10ae769de107f1e38dd90c5d0a7c$0
 com.zhuoyi.custom.MainActivity:
-    public static synthetic android.widget.ProgressBar access$100()
-    public static synthetic android.webkit.ValueCallback access$200()
+    public static synthetic android.widget.ProgressBar access$300()
+    public static synthetic android.webkit.ValueCallback access$400()
+    public static void handleWeChatLoginResult()
     public static void setupSwipeRefresh()
     public static void setupWebView()
     public static void showErrorDialog()
     public static void showExitDialog()
+com.zhuoyi.custom.PrivacyActivity$$InternalSyntheticLambda$1$cb80b68ace478dae17f13e1ef4f4ebfb8e547451f49b449f53410894dd580ef4$0
+com.zhuoyi.custom.PrivacyActivity$1
+com.zhuoyi.custom.PrivacyActivity:
+    public static synthetic android.widget.ProgressBar access$000()
+    public static android.view.View createLayout()
+    public static void setupWebView()
 com.zhuoyi.custom.R$id
 com.zhuoyi.custom.R$layout
 com.zhuoyi.custom.SplashActivity$$InternalSyntheticLambda$1$06ae5bd42da77e4e09679ea964cf0d662e472a3fd5a8a366863ce0fcdb6d191b$0
+com.zhuoyi.custom.SplashActivity$$InternalSyntheticLambda$2$399afca093d52fa6b838fb01d87a9092462485415af32193f65c34a8fa3f4852$1
+com.zhuoyi.custom.SplashActivity:
+    public final void goToMain()
+    public static boolean isPrivacyAgreed()
+    public static void setPrivacyAgreed()
+    public static void showPrivacyDialog()
+com.zhuoyi.custom.WeChatAuthHelper:
+    public static com.tencent.mm.opensdk.openapi.IWXAPI getApi()
+    public static boolean isWeChatInstalled()
 kotlin.ExceptionsKt
 kotlin.ExceptionsKt__ExceptionsKt
 kotlin.Pair

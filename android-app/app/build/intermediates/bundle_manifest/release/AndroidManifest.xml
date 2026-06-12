@@ -50,6 +50,30 @@
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait" />
 
+        <!-- Privacy Policy Activity -->
+        <activity
+            android:name="com.zhuoyi.custom.PrivacyActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait" />
+
+        <!-- WeChat Open Platform Callback Activity -->
+        <activity
+            android:name="com.zhuoyi.custom.wxapi.WXEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            <intent-filter>
+                <data android:scheme="wx187d6ca3a6da9ca3" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="com.zhuoyi.custom.androidx-startup"

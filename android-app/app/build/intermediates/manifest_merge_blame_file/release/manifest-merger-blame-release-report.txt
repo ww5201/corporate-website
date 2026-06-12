@@ -30,7 +30,7 @@
 19-->[androidx.core:core:1.9.0] D:\Android\.gradle\caches\transforms-3\6b8f70eacaea457f2c8ec8c1d2a003d3\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
 20
 21    <application
-21-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:9:5-38:19
+21-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:9:5-60:19
 22        android:allowBackup="true"
 22-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:10:9-35
 23        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -86,27 +86,71 @@
 51            android:screenOrientation="portrait" />
 51-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:35:13-49
 52
-53        <provider
-53-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
-54            android:name="androidx.startup.InitializationProvider"
-54-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
-55            android:authorities="com.zhuoyi.custom.androidx-startup"
-55-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
-56            android:exported="false" >
-56-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
-57            <meta-data
-57-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
-58                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-58-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
-59                android:value="androidx.startup" />
-59-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
-60            <meta-data
-60-->[androidx.lifecycle:lifecycle-process:2.4.1] D:\Android\.gradle\caches\transforms-3\ba5053356ffa33d8297422aafd261bf5\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
-61                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-61-->[androidx.lifecycle:lifecycle-process:2.4.1] D:\Android\.gradle\caches\transforms-3\ba5053356ffa33d8297422aafd261bf5\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
-62                android:value="androidx.startup" />
-62-->[androidx.lifecycle:lifecycle-process:2.4.1] D:\Android\.gradle\caches\transforms-3\ba5053356ffa33d8297422aafd261bf5\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
-63        </provider>
-64    </application>
-65
-66</manifest>
+53        <!-- Privacy Policy Activity -->
+54        <activity
+54-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:39:9-44:50
+55            android:name="com.zhuoyi.custom.PrivacyActivity"
+55-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:40:13-44
+56            android:configChanges="orientation|screenSize|keyboardHidden"
+56-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:42:13-74
+57            android:exported="false"
+57-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:41:13-37
+58            android:hardwareAccelerated="true"
+58-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:44:13-47
+59            android:screenOrientation="portrait" />
+59-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:43:13-49
+60
+61        <!-- WeChat Open Platform Callback Activity -->
+62        <activity
+62-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:47:9-58:20
+63            android:name="com.zhuoyi.custom.wxapi.WXEntryActivity"
+63-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:48:13-50
+64            android:exported="true"
+64-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:49:13-36
+65            android:launchMode="singleTask"
+65-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:50:13-44
+66            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+66-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:51:13-72
+67            <intent-filter>
+67-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:52:13-57:29
+68                <data android:scheme="wx187d6ca3a6da9ca3" />
+68-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:53:17-61
+68-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:53:23-58
+69
+70                <action android:name="android.intent.action.VIEW" />
+70-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:54:17-69
+70-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:54:25-66
+71
+72                <category android:name="android.intent.category.DEFAULT" />
+72-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:55:17-76
+72-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:55:27-73
+73                <category android:name="android.intent.category.BROWSABLE" />
+73-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:56:17-78
+73-->D:\tokai\android-app\app\src\main\AndroidManifest.xml:56:27-75
+74            </intent-filter>
+75        </activity>
+76
+77        <provider
+77-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+78            android:name="androidx.startup.InitializationProvider"
+78-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
+79            android:authorities="com.zhuoyi.custom.androidx-startup"
+79-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
+80            android:exported="false" >
+80-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
+81            <meta-data
+81-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+82                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+82-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
+83                android:value="androidx.startup" />
+83-->[androidx.emoji2:emoji2:1.2.0] D:\Android\.gradle\caches\transforms-3\33b86a1459d939fb864d200f62747636\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
+84            <meta-data
+84-->[androidx.lifecycle:lifecycle-process:2.4.1] D:\Android\.gradle\caches\transforms-3\ba5053356ffa33d8297422aafd261bf5\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+85                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+85-->[androidx.lifecycle:lifecycle-process:2.4.1] D:\Android\.gradle\caches\transforms-3\ba5053356ffa33d8297422aafd261bf5\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+86                android:value="androidx.startup" />
+86-->[androidx.lifecycle:lifecycle-process:2.4.1] D:\Android\.gradle\caches\transforms-3\ba5053356ffa33d8297422aafd261bf5\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+87        </provider>
+88    </application>
+89
+90</manifest>
