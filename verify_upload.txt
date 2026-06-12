@@ -1,0 +1,17 @@
+File size on disk: 81636 /var/www/frontend/index.html
+Curl size: 81636
+Actual chars: 74259
+Ends with </html>: True
+
+No duplicates
+handleWechatClick: uses Android bridge
+<script> count: 1
+
+Last 100 chars:
+==== 启动 =====
+    loadCases();
+    setLang(currentLang);
+    loadData();
+  </script>
+</body>
+</html>

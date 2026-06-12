@@ -1,0 +1,13 @@
+id="settingsDropdown" style="display:none;position:absolute;right:0;top:100%;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.12);min-width:200px;z-index:9999;overflow:hidden">
+          <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0">
+            <div style="font-size:0.75rem;color:#999;margin-bottom:8px">语言 / Language</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px">
+              <button onclick="setLang('zh')" style="padding:4px 8px;border:1px solid #e0e0e0;border-radius:6px;background:none;cursor:pointer;font-size:0.8rem">🇨🇳 中文</button>
+              <button onclick="setLang('en')" style="padding:4px 8px;border:1px solid #e0e0e0;border-radius:6px;background:none;cursor:pointer;font-size:0.8rem">🇺🇸 EN</button>
+              <button onclick="setLang('ja')" style="padding:4px 8px;border:1px solid #e0e0e0;border-radius:6px;background:none;cursor:pointer;font-size:0.8rem">🇯🇵 日本語</button>
+              <button onclick="setLang('ko')" style="padding:4px 8px;border:1px solid #e0e0e0;border-radius:6px;background:none;cursor:pointer;font-size:0.8rem">🇰🇷 한국어</button>
+              <button onclick="setLang('th')" style="padding:4px 8px;border:1px solid #e0e0e0;border-radius:6px;background:none;cursor:pointer;font-size:0.8rem">🇹🇭 ไทย</button>
+              <button onclick="setLang('vi')" style="padding:4px 8px;border:1px solid #e0e0e0;border-radius:6px;background:none;cursor:pointer;font-size:0.8rem">🇻🇳 Tiếng Việt</button>
+              <button onclick="setLang('ms')" style="padding:4px 8px;border:1px solid #e0e0e0;border-radius:6px;background:none;cursor:pointer;font-size:0.8rem">🇲🇾 Melayu</button>
+            </div>
+          </div>

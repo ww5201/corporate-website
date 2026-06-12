@@ -1,0 +1,18 @@
+import paramiko, sys
+sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+c = paramiko.SSHClient()
+c.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+c.connect("8.138.218.146", 22, "root", "ww0987654.")
+s = c.open_sftp()
+f = s.open("/var/www/frontend/index.html")
+d = f.read().decode("utf-8", "replace")
+f.close()
+print("bottom-nav:", "bottom-nav" in d)
+print("hot-products:", "hot-products" in d)
+print("hero-banner:", "hero-banner" in d)
+print("quick-entry:", "quick-entry" in d)
+print("Size:", len(d))
+# Check if it starts with DOCTYPE
+print("Start:", d[:50])
+s.close()
+c.close()

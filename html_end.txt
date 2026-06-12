@@ -1,0 +1,20 @@
+ protocol
+    var wechatNum = '18977122166';
+    
+    // Method 1: Try weixin:// URL scheme
+    try {
+        window.location.href = 'weixin://dl/business/?t=' + wechatNum;
+        // If we're still here after 1.5s, WeChat probably didn't open
+        setTimeout(function() {
+            showWechatGuide(false);
+        }, 1500);
+        return;
+    } catch(e) {
+        // Fall through to guide
+    }
+    
+    // Fallback: show guide with number
+    showWechatGuide(false);
+</script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><link rel="icon" type="image/svg+xml" href="/vite.svg"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/><title>123云盘</title><script>(function () {
+      // 配置常量
+      var SOURCE_DOMAINS = ['123865.com', '123912.com', '123684.com', '123pan.com'];
+      var VALID_TARGET_SUFFIXES = ['.123pan.cn'];
+
+      var config = window.__REDIRECT_CONFIG__ || {};
+      var API_HOST = config.API_HOST || '';
+      var API_PATH = config.API_PATH || '';
+
+      function isMobileDevice() {
+        var ua = navigator.userAgent.toLowerCase();
+        var iw = window.innerWidth || 0;
+        var ih = window.innerHeight || 0;
+        var innerMin = iw && ih ? Math.min(iw, ih) : 0;
+        var sw = window.screen ? Math.min(window.screen.width, window.screen.height) : 0;
+        var minDim = innerMin || sw;
+        var isMobile = /android|iphone|ipod|webos|blackberry|iemobile|opera mini|openharmony|mobile/i.test(ua) &&
+          !/ipad|tablet|playbook|silk|sm-t\d|nexus 7|nexus 9|nexus 10/i.test(ua) &&
+          !(/android/.test(ua) && !/mobile/.test(ua));
+        return isMobile && minDim <= 720;
+      }
+
+      function getEnvPrefix(host) {
+        var canaryMatch = host.match(/(^|\.)canary(-[^.]+)?\./i);
+        if (canaryMatch) return 'canary' + (canaryMatch[2] || '');
+        var devMatch = host.match(/(^|\.)dev(\d+)\./i);
+        if (devMatch) return 'dev' + devMatch[2];
+        return '';
+      }
+
+      function isLegacySourceDomain(host) {
+        var escapedDomains = SOURCE_DOMAINS.map(function (d) { return d.replace(/\./g, '\\.'); }).join('|');
+        var prefixPattern = '(www|dev\\d+|canary(?:-[a-z0-9]+)?)';
+        var regex = new RegExp('^(' + prefixPattern + '\\.(' + escapedDomains + '))|(' + escapedDomains + ')$', 'i');
+
+        if (host === 'canary-a.123pan.com') {
+          return false;
+        }
+        return regex.test(host);
+      }
+
+      function isUserOwnedDomain(host) {
+        // 条件 1: 是否是 123pan.cn 体系域名
+        var is123panCnSystem = VALID_TARGET_SUFFIXES.some(function (suffix) {
+          return host.endsWith(suffix);
+        });
+        if (is123panCnSystem) return true;
+        // 条件 2: 必须包含标准的分享前缀 (.mshare. 或 .share.)且域名长度为3
+        var parts = host.split('.');
+        if ((host.indexOf('.mshare.') !== -1 || host.indexOf('.share.') !== -1) && parts.length >= 3) {
+          return true;
+        }
+        return false;
+      }
+
+      function getShareKey() {
+        var rawParts = window.location.pathname.split('/');
+        // rawParts[0] is "" for paths starting with /
+
+        if (rawParts.length >= 3 && (rawParts[1] === 's' || rawParts[1] === 'ps' || rawParts[1] === '123pan')) {
+          return rawParts[2];
+        } else if (rawParts.length >= 2 && rawParts[1]) {
+          return rawParts[1];
+        }
+        return '';
+      }
+
+      function getShareUidAsync() {
+        var shareKey = getShareKey();
+        if (!shareKey) {
+          console.log('Redirect: 未找到 shareKey');
+          return Promise.resolve(null);
+        }
+        var API_HOST = '';
+        var API_PATH = '/gsb/s';
+        var fetchUrl = API_HOST + API_PATH + '/share-key?shareKey=' + encodeURIComponent(shareKey);
+        return fetch(fetchUrl)
+          .then(function (res) {
+            return res.json();
+          })
+          .then(function (result) {
+            if (result.info && result.info.code === 0) {
+              return result.info.data.UserID;
+            } else {
+              console.warn('Redirect: 未能从 API 获取有效的 UID');
+              return null;
+            }
+          })
+          .catch(function (err) {
+            console.error('Redirect: Fetch error:', err);
+            return null;
+          });
+      }
+
+      var host = window.location.hostname;
+      var port = window.location.port ? ':' + window.location.port : '';
+      var isMobile = isMobileDevice();
+
+      // 路径规范化
+      var originalPath = window.location.pathname;
+      var normalizedPath = originalPath;
+      if (originalPath.startsWith('/s/') || originalPath.startsWith('/ps/')) {
+        var prefixLen = originalPath.startsWith('/s/') ? 3 : 4;
+        var restPath = originalPath.substring(prefixLen);
+        if (restPath) {
+          normalizedPath = '/123pan/' + restPath;
+        } else {
+          normalizedPath = '/123pan';
+        }
+      } else if (originalPath === '/s' || originalPath === '/ps') {
+        normalizedPath = '/123pan';
+      }
+
+      // 1. 判断当前是否已经是合法域名（三级域名 + 123pan.cn 判断）
+      if (isUserOwnedDomain(host)) {
+        // 检查设备类型是否匹配
+        var currentIsMshare = host.includes('.mshare.');
+        var currentIsShare = host.includes('.share.');
+        var needRedirect = false;
+        var correctedHost = host;
+        if (!isMobile && currentIsMshare) {
+          // PC 访问了 mshare -> 纠正为 share
+          correctedHost = host.replace('.mshare.', '.share.');
+          needRedirect = true;
+        } else if (isMobile && currentIsShare) {
+          // Mobile 访问了 share -> 纠正为 mshare
+          correctedHost = host.replace('.share.', '.mshare.');
+          needRedirect = true;
+        }
+        if (!needRedirect && originalPath !== normalizedPath) {
+          needRedirect = true;
+        }
+        if (needRedirect) {
+          var finalUrl = 'https://' + correctedHost + port + normalizedPath + window.location.search + window.location.hash;
+          if (originalPath !== normalizedPath) {
+            console.log('Redirect: 正在规范化路径，从', originalPath, '到', normalizedPath, '目标URL:', finalUrl);
+          } else {
+            console.log('Redirect: 正在修正设备类型为', correctedHost, finalUrl);
+          }
+          window.location.replace(finalUrl);
+        } else {
+          console.log('Redirect: 域名有效且设备类型匹配');
+        }
+        return;
+      }
+      // 2. 如果不是用户自有域名，检查是否是旧域名
+      if (isLegacySourceDomain(host)) {
+        getShareUidAsync().then((uid) => {
+          if (!uid) {
+            console.warn('Redirect: UID 不存在');
+            return;
+          }
+          var envPrefix = getEnvPrefix(host);
+          var targetDevicePrefix = isMobile ? '.mshare.' : '.share.';
+          var targetBaseDomain = '123pan.cn';
+          // 构造理想主机名
+          var idealHostname = envPrefix
+            ? uid + targetDevicePrefix + envPrefix + '.' + targetBaseDomain
+            : uid + targetDevicePrefix + targetBaseDomain;
+          var targetUrl = 'https://' + idealHostname + port + normalizedPath + window.location.search + window.location.hash;
+          console.log('Redirect: 检测到旧域名, 正在重定向至', targetUrl);
+          window.location.replace(targetUrl);
+        });
+        return;
+      }
+      console.log('Redirect: 无需重定向或为自定义域名');
+    })();</script><script>(function () {
+      var h = location.hostname;
+      var p = location.port ? ':' + location.port : '';
+      var targetPrefix = '';
+
+      // 提取 UA 和屏幕尺寸信息
+      var ua = (navigator.userAgent || '').toLowerCase();
+      var iw = window.innerWidth || 0;
+      var ih = window.innerHeight || 0;
+      var innerMin = iw && ih ? Math.min(iw, ih) : 0;
+      var sw = window.screen ? Math.min(window.screen.width, window.screen.height) : 0;
+      var minDim = innerMin || sw;
+
+      // 判断是否为移动端（排除平板）
+      var isMobile = /android|iphone|ipod|webos|blackberry|iemobile|opera mini|openharmony|mobile/i.test(ua) &&
+        !/ipad|tablet|playbook|silk|sm-t\d|nexus 7|nexus 9|nexus 10/i.test(ua) &&
+        !(/android/.test(ua) && !/mobile/.test(ua));
+
+      // 核心判断逻辑：手机端 且 屏幕最小边 <= 720
+      if (isMobile && minDim <= 720) {
+        targetPrefix = '.mshare.';
+      } else {
+        targetPrefix = '.share.';
+      }
+      console.log('targetPrefix:', targetPrefix);
+      // 如果当前已经是目标域名，则不执行跳转
+      if (h.indexOf(targetPrefix) !== -1) return;
+
+      // 将当前域名中的 .share. 或 .mshare. 替换为目标前缀
+      var nh = h.replace(/\.mshare\./, '.share.').replace(/\.share\./, targetPrefix);
+      console.log('new hostname:', nh);
+      if (nh === h) return; // 防御性判断：如果没有发生替换，直接返回
+
+      // 执行跳转
+      location.replace(location.protocol + '//' + nh + p + location.pathname + location.search + location.hash);
+    })();</script><script>var urlParams = new URLSearchParams(window.location.search);
+    var isNoLoginRedirect = urlParams.get('isNoLoginRedirect');
+
+    async function loadLoginScript() {
+      return new Promise((resolve, reject) => {
+        if (isNoLoginRedirect === 'yes') {
+          resolve();
+          return;
+        }
+
+        var script = document.createElement('script');
+        script.src = 'https://statics.123pan.com/static-by-custom/utils-prod/getLogin.js';
+        script.async = false;
+
+        script.onload = function () {
+          resolve();
+        };
+
+        script.onerror = function () {
+          console.warn('getLogin.js 加载失败，使用默认逻辑');
+          resolve()
+        };
+
+        document.head.appendChild(script)
+      })
+    }</script><script src="//static.mediav.com/js/ssp_ad_sdk.js"></script><script defer="defer" src="https://statics.123pan.com/assets/js/runtime.2a39fb9c.js"></script><script defer="defer" src="https://statics.123pan.com/assets/js/antd.717cbb8a.js"></script><script defer="defer" src="https://statics.123pan.com/assets/js/vendors.7009a058.js"></script><script defer="defer" src="https://statics.123pan.com/assets/js/index.654bdf94.js"></script><link href="https://statics.123pan.com/assets/css/index.f73b46d5.css" rel="stylesheet"></head><body><div id="root"></div><script src="//at.alicdn.com/t/c/font_4529876_edjb7mia1lu.js" async></script><script src="//at.alicdn.com/t/c/font_4496833_6lakbrwygw6.js" async></script><script src="//at.alicdn.com/t/c/font_3778649_jvuepdudwq.js" async></script><script src="//at.alicdn.com/t/c/font_3696298_hq2f0r13d0t.js" async></script><script src="//at.alicdn.com/t/c/font_4856964_ru88c84icw.js" async></script><script id="cnzz-script">{
+      var _czc = _czc || [];
+      (function () {
+        var um = document.createElement("script");
+        um.src = "https://s4.cnzz.com/z.js?id=1280304515&async=1";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(um, s);
+      })();
+    }</script><script id="aplus-script">{
+      (function (w, d, s, q, i) {
+        w[q] = w[q] || [];
+        var f = d.getElementsByTagName(s)[0], j = d.createElement(s);
+        j.async = true;
+        j.id = 'beacon-aplus';
+        j.src = 'https://d.alicdn.com/alilog/mlog/aplus/' + i + '.js';
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'aplus_queue', '203467608');
+      const { aplus_queue } = window
+      // 集成应用的appKey
+      aplus_queue.push({
+        action: 'aplus.setMetaInfo',
+        arguments: ['appKey', '667d3482cac2a664de5678e3'],
+      })
+      /* 如果使用的是单页面应用，例如：React、Vue、Angular等，则需要添加下面的代码 */
+      /* 关闭自动PV发送，如果不是单页面应用，请删掉下方代码 */
+      aplus_queue.push({
+        action: 'aplus.setMetaInfo',
+        arguments: ['aplus-waiting', 'MAN'],
+      })
+
+      // 是否开启调试模式
+      aplus_queue.push({
+        action: 'aplus.setMetaInfo',
+        arguments: ['DEBUG', true],
+      })
+    }</script><script>function loadJS(src) {
+      var newTime = (new Date()).valueOf()
+      var script_dom = document.createElement('script');
+      script_dom.src = src + '?time=' + newTime
+      script_dom.language = 'javascript';
+      script_dom.type = 'text/javascript';
+      document.getElementsByTagName('head')[0].appendChild(script_dom)
+    }
+    loadJS("https://statics.123pan.com/static/video/hls.js");
+    loadJS("https://statics.123pan.com/static/video/flv.js");
+    loadJS("https://statics.123pan.com/static/video/dash.js");
+    loadJS("https://statics.123pan.com/static/video/webtorrent.js");
+    loadJS("https://statics.123pan.com/static/video/pearplayer.js");</script><script crossorigin="anonymous" src="https://statics.123pan.com/static-by-custom/production/DPlayer.min.js" async></script><script async>!(function (c, b, d, a) {
+      c[a] || (c[a] = {});
+      c[a].config = {
+        pid: "c4fm5ua6t0@84c86ecdfa89e41",
+        appType: "web",
+        imgUrl: "https://arms-retcode.aliyuncs.com/r.png?",
+        sendResource: true,
+        enableLinkTrace: true,
+        behavior: true,
+        useFmp: true,
+        enableSPA: true,
+        release: '1.0.0',
+        environment: 'prod',
+        sample: 10,
+      };
+      with (b) with (body) with (insertBefore(createElement("script"), firstChild))
+      setAttribute("crossorigin", "", src = d);
+    })(window, document, "https://sdk.rum.aliyuncs.com/v1/bl.js", "__bl");</script><script src="https://g.alicdn.com/jssdk/u-link/index.min.js" async></script><script src="https://g.alicdn.com/AWSC/AWSC/awsc.js" async></script><script>function isMobileDevice() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|openharmony|IEMobile|Opera Mini/i.test(navigator.userAgent.toLowerCase())
+    }
+
+    if (!isMobileDevice()) {
+      var aqiyiScript = document.createElement('script');
+      aqiyiScript.src = 'https://statics.123pan.com/static/aqiyi/aqiyi.js';
+      aqiyiScript.async = true;
+      document.body.appendChild(aqiyiScript);
+    }</script><script>window.slotbydup = window.slotbydup || []</script></body></html>

@@ -1,0 +1,61 @@
+Context around selectPay (pos 35983):
+
+ottom:16px">
+
+          <label style="display:block;margin-bottom:8px;font-size:0.82rem;color:#777">支付方式</label>
+
+          <div class="pay-methods">
+
+            <div class="pay-btn active" onclick="selectPay('wechat')">💚 微信</div>
+
+            <div class="pay-btn" onclick="selectPay('alipay')">💙 支付宝</div>
+
+          </div>
+
+        </div>
+
+        <div class="qr-box">
+
+          <img id="qrImg" src="">
+
+          <p id="qrHint">请选择支付方式</p>
+
+        </div>
+
+        <button class="order-btn" onclick="submitOrder()">确认下单</button>
+
+      </div>
+
+      <div class="order-success" id="orderSuccess" style="display:none">
+
+        <div class="icon">✅</div>
+
+        <h3>下单成功！</h3>
+
+        <p style="color:#777;margin-top:8px">我们已收到您的订单，会尽快联系您</p>
+
+        <button class="order-btn" style="margin-top:24px;background:#999" onclick="closeOrder()">关闭</button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- 浮动按钮 -->
+
+  <div class="float-contact">
+
+    <div class="wechat-popup" id="wechatPopup">
+
+      <img id="wechatQrImg" src="">
+
+      <p>长按识别二维码<br>添加微信咨询</p>
+
+    </div>
+
+    <button class="float-btn float-wechat" onclick="handleWechatClick()" title="微信咨询" id="wechatBtn">💬</button>
+
+    <button 

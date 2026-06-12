@@ -1,0 +1,9 @@
+Added missing payment functions
+New size: 76598
+selectPay defined: True
+submitOrder defined: True
+openOrder defined: True
+closeOrder defined: True
+Braces: 155:155
+
+Uploaded and nginx reloaded

@@ -1,0 +1,11 @@
+import paramiko
+c=paramiko.SSHClient()
+c.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+c.connect('8.138.218.146',22,'root','ww0987654.',timeout=15)
+sftp=c.open_sftp()
+sftp.put('D:/tokai/index-fixed-final.html','/var/www/frontend/index.html')
+print('Uploaded!')
+sftp.close()
+stdin,stdout,stderr=c.exec_command('wc -c /var/www/frontend/index.html && nginx -s reload && echo DONE')
+print(stdout.read().decode())
+c.close()

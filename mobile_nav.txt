@@ -1,0 +1,15 @@
+<nav class="mobile-nav">
+
+    <div class="mobile-nav-inner">
+
+      <a href="#home" class="active"><span class="icon">🏠</span>首页</a>
+
+      <a href="#products"><span class="icon">📦</span>产品</a>
+
+      <a href="#contact"><span class="icon">💬</span>咨询</a>
+
+      
+
+    </div>
+
+      </nav>

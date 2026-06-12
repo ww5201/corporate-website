@@ -1,0 +1,10 @@
+import paramiko
+c = paramiko.SSHClient()
+c.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+c.connect('8.138.218.146', username='root', password='ww0987654.')
+sftp = c.open_sftp()
+f = sftp.file('/root/backend/routes/auth.js', 'r')
+content = f.read().decode('utf-8', errors='ignore')
+f.close()
+print(content)
+c.close()

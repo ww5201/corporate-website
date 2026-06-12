@@ -1,0 +1,28 @@
+File: 80250 bytes
+JS: 41747 chars, braces: 180:180
+
+=== Critical Functions ===
+  [OK] toggleMenu
+  [OK] toggleLang
+  [OK] toggleSettings
+  [OK] setLang
+  [OK] loadData
+  [OK] loadCases
+  [OK] renderProducts
+  [OK] handleWechatClick
+  [OK] selectPay
+  [OK] submitOrder
+
+=== Mobile Nav ===
+  mobile_mine in nav: False (should be False)
+  showMinePanel in js: False (should be False)
+
+=== Mine Panel ===
+  minePanel in HTML: False (should be False)
+
+=== Startup ===
+// ===== 启动 =====
+    loadCases();
+    setLang(currentLang);
+    loadData();
+  

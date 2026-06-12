@@ -1,0 +1,63 @@
+onclick call:
+onclick="openOrder('${p._id}','${p.name.replace(/'/g,"\\'")}',${p.price},'${imgs[0]||''}')">立即咨询</button>
+
+            </div>
+
+          </div>
+
+        `;
+
+        grid.appendChild(card);
+
+        ob
+
+openOrder function:
+function openOrder(pid) {
+      curProd = products.find(p => p._id === pid);
+      if (!curProd) return;
+      document.getElementById('orderTitle').textContent = curProd.name;
+      document.getElementById('orderPrice').textContent = '¥' + curProd.price;
+      document.getElementById('orderModal').style.display = 'flex';
+      selectPay('wechat');
+    }
+
+    function closeOrder() {
+      document.getElementById('orderModal').style.display = 'none';
+      document.getElementById('orderSuccess').
+
+orderModal HTML:
+ass="lb-thumbs" id="lbThumbs"></div>
+
+  </div>
+
+
+
+  <!-- 下单弹窗 -->
+
+  <div class="modal-overlay" id="orderModal" onclick="if(event.target===this)closeOrder()">
+
+    <div class="modal">
+
+      <div class="modal-header"><h3>确认下单</h3><button class="modal-close" onclick="closeOrder()">×</button></div>
+
+      <div class="modal-body" id="orderForm">
+
+        <div class="modal-product">
+
+          <img id
+
+mobile_consult context:
+  footer_a1: '公司介绍', footer_a2: '精选案例', footer_a3: '联系我们',
+
+        copyright: '<span data-i18n="copyright">© 2026 卓翌定制 All Rights Reserved</span>',
+
+        mobile_home: '首页', mobile_products: '产品', mobile_consult: '咨询'
+
+      },
+
+      en: {
+
+        nav_home: 'Home', nav_about: 'About', nav_services: 'Services', nav_products: 'Products', nav_portfolio: 'Portfolio', nav_contact: 'Contact',
+
+    
+

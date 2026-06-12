@@ -1,0 +1,11 @@
+Before (50 chars):
+ction loadCases() {
+
+  try {
+
+    const r = await 
+
+After (50 chars):
+fetch(API + '/cases');
+
+    cases = await r.json()

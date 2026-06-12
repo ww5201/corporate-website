@@ -1,0 +1,88 @@
+=== CSS Media Queries ===
+
+@media (max-width:900px) {
+
+      .services-grid { grid-template-columns:repeat(2,1fr); }
+
+      .products-grid { grid-template-columns:repeat(2,1fr); }
+
+      .portfolio-grid { grid-template-columns:repeat(2,1fr); }
+
+      .reviews-grid { grid-template-columns:1fr; }
+
+      .footer-grid { grid-template-columns:1fr 1fr; }
+
+      .about-grid { gap:40px; }
+
+    }
+
+@media (max-width:768px) {
+
+      :root { --nav-h:56px; --bottom-nav-h:64px; }
+
+      .menu { display:none; }
+
+      .menu-toggle { display:block; }
+
+      .menu.open { display:flex; flex-direction:column; position:absolute; top:var(--nav-h); left:0; right:0; background:rgba(250,248,245,0.98); backdrop-filter:blur(20px); padding:16px 24px; border-bottom:1px solid rgba(0,0,0,0.06); box-shadow:0 8px 32px rgba(0,0,0,0.08); }
+
+      section { padding:60px 0; }
+
+      .about-grid, .contact-grid { grid-template-columns:1fr; }
+
+      .services-grid, .products-grid, .portfolio-grid { grid-template-columns:1fr; }
+
+      .stats { grid-template-columns:repeat(3,1fr); gap:12px; }
+
+      .stat { padding:16px 8px; }
+
+      .stat-num { font-size:1.5rem; }
+
+      .hero-actions { flex-direction:column; width:100%; max-width:300px; }
+
+      .btn { justify-content:center; }
+
+      .form-row { grid-template-columns:1fr; }
+
+      .footer-grid { grid-template-columns:1fr; gap:28px; }
+
+      .about-float { position:relative; bottom:auto; right:auto; margin-top:16px; }
+
+      .mobile-nav { display:block; }
+
+      body { padding-bottom:var(--bottom-nav-h); }
+
+      .float-contact { bottom:80px; right:16px; }
+
+    }
+
+=== Nav CSS ===
+
+.nav { position:fixed; top:0; left:0; right:0; z-index:100; height:var(--nav-h); background:rgba(250,248,245,0.85); backdrop-filter:blur(20px) saturate(1.5); border-bottom:1px solid rgba(0,0,0,0.04); transition:all 0.3s; }
+
+.nav.scrolled { box-shadow:0 2px 20px rgba(0,0,0,0.06); }
+
+.nav .container { display:flex; justify-content:space-between; align-items:center; height:100%; }
+
+=== Settings CSS ===
+
+=== Lang CSS ===
+
+lang-switch { position:relative; margin-left:16px; padding-left:16px; border-left:1px solid rgba(0,0,0,0.08); }
+
+lang-toggle { background:none; border:none; cursor:pointer; font-size:0.88rem; padding:6px 12px; border-radius:8px; transition:all 0.3s; color:var(--text2); display:flex; align-items:center; gap:6px; }
+
+lang-toggle:hover { background:rgba(0,0,0,0.04); }
+
+lang-toggle .arrow { font-size:0.6rem; transition:transform 0.3s; }
+
+lang-dropdown { position:absolute; top:100%; right:0; background:#fff; border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.12); min-width:140px; padding:8px 0; opacity:0; visibility:hidden; transform:translateY(-8px); transition:all 0.3s; z-index:100; }
+
+lang-dropdown.open { opacity:1; visibility:visible; transform:translateY(4px); }
+
+lang-dropdown button { display:block; width:100%; padding:10px 16px; background:none; border:none; cursor:pointer; font-size:0.88rem; text-align:left; transition:all 0.2s; color:var(--text1); }
+
+lang-dropdown button:hover { background:rgba(184,149,106,0.08); color:var(--accent-dark); }
+
+lang-dropdown button.active { color:var(--accent-dark); font-weight:600; background:rgba(184,149,106,0.1); }
+

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>卓翌定制 | 高端定制家居</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* 动态轮播图样式 */
+    .hero-slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    .hero-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .hero-slide.active {
+      opacity: 1;
+    }
+    .hero-slider-dots {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+    .slider-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .slider-dot.active {
+      background: #fff;
+      width: 30px;
+      border-radius: 5px;
+    }
+    
+    /* 产品图片 */
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .product-image {
+      position: relative;
+      overflow: hidden;
+    }
+    .product-image-slider {
+      display: flex;
+      transition: transform 0.3s ease;
+      height: 100%;
+    }
+    .product-image-slider img {
+      min-width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .product-img-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      display: none;
+      z-index: 5;
+    }
+    .product-image:hover .product-img-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .product-img-nav.prev { left: 8px; }
+    .product-img-nav.next { right: 8px; }
+    .product-img-dots {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 4px;
+      z-index: 5;
+    }
+    .img-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.6);
+    }
+    .img-dot.active {
+      background: #fff;
+    }
+    
+    /* 图片加载占位 */
+    .image-loading {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/index-D_o_inZM.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BVzk-nFx.css">
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">卓翌<span>定制</span></div>
+      <ul class="nav-menu">
+        <li><a href="#home">首页</a></li>
+        <li><a href="#about">关于我们</a></li>
+        <li><a href="#services">服务</a></li>
+        <li><a href="#products">产品</a></li>
+        <li><a href="#portfolio">案例</a></li>
+        <li><a href="#contact">联系</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero 区域 - 动态轮播 -->
+  <section id="home" class="hero">
+    <div class="hero-background">
+      <div class="hero-slider" id="hero-slider">
+        <!-- 动态加载轮播图 -->
+      </div>
+      <div class="gradient-overlay"></div>
+      <div class="hero-slider-dots" id="hero-dots"></div>
+    </div>
+    <div class="container hero-content">
+      <h1 class="hero-title">匠心定制<br><span>卓尔不群</span></h1>
+      <p class="hero-subtitle">专注高端家居定制，为您打造梦想生活空间</p>
+      <a href="#contact" class="cta-button">预约设计</a>
+    </div>
+    <div class="scroll-indicator">
+      <span>探索更多</span>
+    </div>
+  </section>
+
+  <!-- 关于我们 -->
+  <section id="about" class="about">
+    <div class="container">
+      <div class="section-header">
+        <h2>关于我们</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="about-content">
+        <div class="about-text">
+          <p class="lead">十年匠心，只为定制您的理想生活</p>
+          <p>卓翌定制专注于高端家居定制领域，以精湛工艺和创新设计，为每一位客户打造独一无二的生活空间。我们相信，家不仅是居住的场所，更是生活态度的体现。</p>
+          <div class="stats">
+            <div class="stat">
+              <span class="stat-number">10+</span>
+              <span class="stat-label">行业经验</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">1000+</span>
+              <span class="stat-label">服务家庭</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">99%</span>
+              <span class="stat-label">客户满意度</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-image">
+          <div class="image-frame">
+            <img src="/uploads/about-showcase.jpg" alt="关于我们" id="about-img" style="width:100%;height:100%;object-fit:cover;display:none;" onload="this.style.display='block'">
+            <div class="image-placeholder" id="about-placeholder"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 服务 -->
+  <section id="services" class="services">
+    <div class="container">
+      <div class="section-header">
+        <h2>我们的服务</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">◆</div>
+          <h3>整体衣柜</h3>
+          <p>根据空间量身定制，完美收纳，彰显品味</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">◆</div>
+          <h3>衣帽间设计</h3>
+          <p>奢华衣帽间定制，分区合理，体验非凡</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">◆</div>
+          <h3>橱柜定制</h3>
+          <p>高端厨房解决方案，美观实用，品质生活</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">◆</div>
+          <h3>全屋定制</h3>
+          <p>一站式全屋定制服务，省心省力，拎包入住</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 产品展示 - 动态加载 -->
+  <section id="products" class="products">
+    <div class="container">
+      <div class="section-header">
+        <h2>产品展示</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="products-grid" id="products-grid">
+        <!-- 动态加载产品 -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 案例展示 - 动态加载 -->
+  <section id="portfolio" class="portfolio">
+    <div class="container">
+      <div class="section-header">
+        <h2>精选案例</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="portfolio-grid" id="portfolio-grid">
+        <!-- 动态加载案例 -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系我们 -->
+  <section id="contact" class="contact">
+    <div class="container">
+      <div class="section-header">
+        <h2>联系我们</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="contact-content">
+        <div class="contact-info">
+          <div class="contact-item">
+            <h5>地址</h5>
+            <p>广西壮族自治区南宁市江南区那洪大道留村路 1-2 号</p>
+          </div>
+          <div class="contact-item">
+            <h5>电话</h5>
+            <p>18977122166</p>
+          </div>
+          <div class="contact-item">
+            <h5>邮箱</h5>
+            <p>2841327487@qq.com</p>
+          </div>
+        </div>
+        <form class="contact-form" id="contact-form">
+          <input type="text" placeholder="您的姓名" class="form-input" id="contact-name" required>
+          <input type="tel" placeholder="联系电话" class="form-input" id="contact-phone" required>
+          <textarea placeholder="留言内容" class="form-textarea" id="contact-message" required></textarea>
+          <button type="submit" class="submit-btn">发送留言</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">卓翌<span>定制</span></div>
+        <p>&copy; 2026 卓翌定制。All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 图片灯箱 -->
+  <div id="lightbox" class="lightbox-overlay">
+    <button class="lightbox-close" id="lightbox-close-btn">×</button>
+    <button id="lightbox-prev" class="lightbox-nav lightbox-prev">‹</button>
+    <button id="lightbox-next" class="lightbox-nav lightbox-next">›</button>
+    <div class="lightbox-content">
+      <img id="lightbox-main-img" src="" alt="产品图片">
+    </div>
+    <div id="lightbox-thumbs" class="lightbox-thumbs"></div>
+    <div id="lightbox-title" class="lightbox-title"></div>
+  </div>
+
+  <!-- 下单弹窗 -->
+  <div id="order-modal" class="order-modal-overlay">
+    <div class="order-modal">
+      <div class="order-modal-header">
+        <h3>确认下单</h3>
+        <button class="order-modal-close" onclick="closeOrderModal()">×</button>
+      </div>
+      <div class="order-modal-body" id="order-form-content">
+        <div class="order-product-info">
+          <img id="order-product-img" src="" alt="" class="order-product-img">
+          <div class="order-product-detail">
+            <h4 id="order-product-name"></h4>
+            <span class="order-price" id="order-product-price"></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>您的姓名 *</label>
+          <input type="text" id="order-name" placeholder="请输入姓名">
+        </div>
+        <div class="form-group">
+          <label>联系电话 *</label>
+          <input type="tel" id="order-phone" placeholder="请输入手机号">
+        </div>
+        <div class="form-group">
+          <label>备注</label>
+          <textarea id="order-note" rows="2" placeholder="尺寸要求、特殊说明等"></textarea>
+        </div>
+
+        <div style="margin-bottom:16px">
+          <label style="display:block;margin-bottom:8px;font-size:0.9rem;color:#666">选择支付方式</label>
+          <div class="payment-methods">
+            <div class="payment-method-btn active" id="pay-wechat" onclick="selectPayment('wechat')">
+              <div class="pay-icon">💚</div>
+              <div>微信支付</div>
+            </div>
+            <div class="payment-method-btn" id="pay-alipay" onclick="selectPayment('alipay')">
+              <div class="pay-icon">💙</div>
+              <div>支付宝</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="qr-section">
+          <img id="order-qr-img" src="" style="display:none;max-width:200px;margin:0 auto;" alt="收款码">
+          <p id="order-qr-hint">请选择支付方式</p>
+        </div>
+
+        <button class="submit-order-btn" onclick="submitOrder()">确认下单</button>
+      </div>
+
+      <div class="order-success" id="order-success" style="display:none">
+        <div class="success-icon">✅</div>
+        <h3>下单成功！</h3>
+        <p>我们已收到您的订单，稍后将与您联系确认细节。</p>
+        <button class="submit-order-btn" style="margin-top:20px;background:#888" onclick="closeOrderModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==================== 动态轮播图 ====================
+    // Hero 轮播图配置
+    const heroImages = [
+      '/uploads/hero-1.jpg',
+      '/uploads/hero-2.jpg',
+      '/uploads/hero-3.jpg'
+    ];
+    let currentHeroSlide = 0;
+    let heroInterval;
+
+    function initHeroSlider() {
+      const slider = document.getElementById('hero-slider');
+      const dots = document.getElementById('hero-dots');
+      
+      // 创建轮播项
+      heroImages.forEach((img, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
+        slide.style.backgroundImage = `url(${img})`;
+        slider.appendChild(slide);
+        
+        // 创建指示点
+        const dot = document.createElement('div');
+        dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToHeroSlide(i);
+        dots.appendChild(dot);
+      });
+      
+      // 自动轮播
+      startHeroSlider();
+    }
+
+    function goToHeroSlide(index) {
+      const slides = document.querySelectorAll('.hero-slide');
+      const dots = document.querySelectorAll('.slider-dot');
+      
+      slides.forEach((s, i) => s.classList.toggle('active', i === index));
+      dots.forEach((d, i) => d.classList.toggle('active', i === index));
+      
+      currentHeroSlide = index;
+    }
+
+    function startHeroSlider() {
+      heroInterval = setInterval(() => {
+        const next = (currentHeroSlide + 1) % heroImages.length;
+        goToHeroSlide(next);
+      }, 5000);
+    }
+
+    // ==================== 产品动态加载 ====================
+    async function loadProducts() {
+      try {
+        const res = await fetch('http://8.138.218.146:3000/api/products');
+        const products = await res.json();
+        
+        const grid = document.getElementById('products-grid');
+        grid.innerHTML = '';
+        
+        if (products.length === 0) {
+          grid.innerHTML = '<p style="text-align:center;color:#999;padding:40px;">暂无产品，请前往后台添加</p>';
+          return;
+        }
+        
+        products.slice(0, 6).forEach(p => {
+          const images = p.images && p.images.length > 0 ? p.images : (p.image ? [p.image] : []);
+          const card = createProductCard(p, images);
+          grid.appendChild(card);
+        });
+      } catch (err) {
+        console.error('加载产品失败:', err);
+        document.getElementById('products-grid').innerHTML = '<p style="text-align:center;color:#999;padding:40px;">加载失败，请刷新重试</p>';
+      }
+    }
+
+    function createProductCard(product, images) {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      
+      // 图片轮播 HTML
+      let imgSliderHtml = '';
+      let dotsHtml = '';
+      
+      if (images.length > 0) {
+        const slides = images.map((img, i) => 
+          `<img src="${img}" alt="${product.name}" loading="lazy" onerror="this.style.display='none'">`
+        ).join('');
+        
+        imgSliderHtml = `
+          <div class="product-image-slider" id="slider-${product._id}" style="width:${images.length}00%">
+            ${slides}
+          </div>
+          ${images.length > 1 ? `
+            <button class="product-img-nav prev" onclick="prevImg('${product._id}', event)">‹</button>
+            <button class="product-img-nav next" onclick="nextImg('${product._id}', event)">›</button>
+          ` : ''}
+        `;
+        
+        if (images.length > 1) {
+          dotsHtml = `<div class="product-img-dots">${images.map((_, i) => 
+            `<span class="img-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></span>`
+          ).join('')}</div>`;
+        }
+      } else {
+        imgSliderHtml = `<div class="image-placeholder" style="height:200px;"></div>`;
+      }
+      
+      card.innerHTML = `
+        <div class="product-image" style="height:200px;">
+          ${imgSliderHtml}
+          ${dotsHtml}
+        </div>
+        <div class="product-info">
+          <h4>${product.name}</h4>
+          <p>${product.description || '暂无描述'}</p>
+          <span class="product-price">¥ ${product.price.toLocaleString()}</span>
+          <button class="product-btn" onclick="openOrderModal('${product._id}', '${product.name}', ${product.price}, '${images[0] || ''}')">立即咨询</button>
+        </div>
+      `;
+      
+      // 保存当前图片索引
+      card.dataset.currentImg = '0';
+      card.dataset.totalImg = images.length;
+      card.dataset.productId = product._id;
+      
+      return card;
+    }
+
+    function prevImg(productId, e) {
+      e.stopPropagation();
+      const slider = document.getElementById(`slider-${productId}`);
+      const card = slider.closest('.product-card');
+      const total = parseInt(card.dataset.totalImg);
+      let current = parseInt(card.dataset.currentImg);
+      
+      current = (current - 1 + total) % total;
+      card.dataset.currentImg = current;
+      slider.style.transform = `translateX(-${current * (100/total)}%)`;
+      
+      updateDots(card, current);
+    }
+
+    function nextImg(productId, e) {
+      e.stopPropagation();
+      const slider = document.getElementById(`slider-${productId}`);
+      const card = slider.closest('.product-card');
+      const total = parseInt(card.dataset.totalImg);
+      let current = parseInt(card.dataset.currentImg);
+      
+      current = (current + 1) % total;
+      card.dataset.currentImg = current;
+      slider.style.transform = `translateX(-${current * (100/total)}%)`;
+      
+      updateDots(card, current);
+    }
+
+    function updateDots(card, index) {
+      const dots = card.querySelectorAll('.img-dot');
+      dots.forEach((d, i) => d.classList.toggle('active', i === index));
+    }
+
+    // ==================== 案例展示 ====================
+    // 从产品中选择有图片的作为案例展示
+    async function loadPortfolio() {
+      try {
+        const res = await fetch('http://8.138.218.146:3000/api/products');
+        const products = await res.json();
+        
+        const grid = document.getElementById('portfolio-grid');
+        grid.innerHTML = '';
+        
+        // 筛选有图片的产品作为案例
+        const portfolioItems = products.filter(p => 
+          (p.images && p.images.length > 0) || p.image
+        ).slice(0, 6);
+        
+        if (portfolioItems.length === 0) {
+          grid.innerHTML = '<p style="text-align:center;color:#999;padding:40px;">暂无案例图片</p>';
+          return;
+        }
+        
+        portfolioItems.forEach(p => {
+          const img = (p.images && p.images[0]) || p.image;
+          const item = document.createElement('div');
+          item.className = 'portfolio-item';
+          item.innerHTML = `
+            <div class="portfolio-image" style="height:250px;overflow:hidden;">
+              <img src="${img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
+            </div>
+            <div class="portfolio-info">
+              <h4>${p.name}</h4>
+              <p>${p.category || '定制案例'}</p>
+            </div>
+          `;
+          grid.appendChild(item);
+        });
+      } catch (err) {
+        console.error('加载案例失败:', err);
+      }
+    }
+
+    // ==================== 支付配置 ====================
+    let paymentConfig = {};
+    let selectedPaymentMethod = 'wechat';
+
+    async function loadPaymentConfig() {
+      try {
+        const res = await fetch('http://8.138.218.146:3000/api/payment-config');
+        paymentConfig = await res.json();
+      } catch (err) {
+        console.error('加载支付配置失败:', err);
+      }
+    }
+
+    function selectPayment(method) {
+      selectedPaymentMethod = method;
+      document.querySelectorAll('.payment-method-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`pay-${method}`).classList.add('active');
+      
+      const qrImg = document.getElementById('order-qr-img');
+      const qrHint = document.getElementById('order-qr-hint');
+      
+      if (method === 'wechat' && paymentConfig.wechatQr) {
+        qrImg.src = paymentConfig.wechatQr;
+        qrImg.style.display = 'block';
+        qrHint.style.display = 'none';
+      } else if (method === 'alipay' && paymentConfig.alipayQr) {
+        qrImg.src = paymentConfig.alipayQr;
+        qrImg.style.display = 'block';
+        qrHint.style.display = 'none';
+      } else {
+        qrImg.style.display = 'none';
+        qrHint.style.display = 'block';
+        qrHint.textContent = method === 'wechat' ? '未配置微信收款码' : '未配置支付宝收款码';
+      }
+    }
+
+    // ==================== 下单弹窗 ====================
+    let currentOrderProduct = null;
+
+    function openOrderModal(id, name, price, image) {
+      currentOrderProduct = { id, name, price, image };
+      document.getElementById('order-product-name').textContent = name;
+      document.getElementById('order-product-price').textContent = `¥ ${price.toLocaleString()}`;
+      document.getElementById('order-product-img').src = image || '';
+      document.getElementById('order-modal').style.display = 'flex';
+      document.getElementById('order-success').style.display = 'none';
+      document.getElementById('order-form-content').style.display = 'block';
+      
+      // 重置表单
+      document.getElementById('order-name').value = '';
+      document.getElementById('order-phone').value = '';
+      document.getElementById('order-note').value = '';
+      
+      selectPayment('wechat');
+    }
+
+    function closeOrderModal() {
+      document.getElementById('order-modal').style.display = 'none';
+    }
+
+    async function submitOrder() {
+      const name = document.getElementById('order-name').value.trim();
+      const phone = document.getElementById('order-phone').value.trim();
+      const note = document.getElementById('order-note').value.trim();
+      
+      if (!name || !phone) {
+        alert('请填写姓名和联系电话');
+        return;
+      }
+      
+      try {
+        const res = await fetch('http://8.138.218.146:3000/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productId: currentOrderProduct.id,
+            productName: currentOrderProduct.name,
+            price: currentOrderProduct.price,
+            customerName: name,
+            phone: phone,
+            note: note,
+            paymentMethod: selectedPaymentMethod
+          })
+        });
+        
+        if (res.ok) {
+          document.getElementById('order-form-content').style.display = 'none';
+          document.getElementById('order-success').style.display = 'block';
+        } else {
+          alert('下单失败，请重试');
+        }
+      } catch (err) {
+        console.error('下单失败:', err);
+        alert('网络错误，请重试');
+      }
+    }
+
+    // ==================== 留言表单 ====================
+    document.getElementById('contact-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('contact-name').value.trim();
+      const phone = document.getElementById('contact-phone').value.trim();
+      const message = document.getElementById('contact-message').value.trim();
+      
+      if (!name || !phone || !message) {
+        alert('请填写完整信息');
+        return;
+      }
+      
+      try {
+        const res = await fetch('http://8.138.218.146:3000/api/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, contact: phone, message })
+        });
+        
+        if (res.ok) {
+          alert('留言已发送，我们会尽快联系您！');
+          document.getElementById('contact-form').reset();
+        } else {
+          alert('发送失败，请重试');
+        }
+      } catch (err) {
+        console.error('发送留言失败:', err);
+        alert('网络错误，请重试');
+      }
+    });
+
+    // ==================== 初始化 ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      initHeroSlider();
+      loadProducts();
+      loadPortfolio();
+      loadPaymentConfig();
+    });
+
+    // 点击弹窗外部关闭
+    document.getElementById('order-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'order-modal') closeOrderModal();
+    });
+  </script>
+</body>
+</html>

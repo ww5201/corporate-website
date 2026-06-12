@@ -1,0 +1,7 @@
+File size: 78697 chars, 1244 lines
+Script tags: 1 open, 1 close
+Functions: 38
+Brace balance: 0
+
+ISSUES:
+  - Line 162: odd double quotes

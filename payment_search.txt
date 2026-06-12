@@ -1,0 +1,42 @@
+payment-section HTML at: -1
+selectPay: 35983
+pay-wechat: -1
+pay-alipay: -1
+showPayQr: -1
+payBtn: -1
+payment: 66360
+
+payConfig context:
+payConfig = {};
+
+    let curPay = 'wechat';
+
+    let curProd = null;
+
+    let currentLang = localStorage.getItem('lang') || 'zh';
+
+    let cases = [];
+
+    
+
+    
+
+    
+
+    
+
+
+
+    // ===== 翻译字典 =====
+
+    const i18n = {
+
+      zh: {
+
+        nav_home: '首页', nav_about: '关于', nav_services: '服务', nav_products: '产品', nav_portfolio: '案例', nav_contact: '联系',
+
+        hero_badge: '始于匠心 · 卓尔不群', hero_title: '为您打造<br><em>梦想生活空间</em>', hero_sub: '专注高端家居定制 · 每一处细节都是艺术',
+
+        hero_btn_products: '浏览产品'
+
+payment id at: -1

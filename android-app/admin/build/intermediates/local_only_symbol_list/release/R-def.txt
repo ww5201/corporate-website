@@ -1,0 +1,16 @@
+R_DEF: Internal format may change without notice
+local
+color admin_accent
+color admin_bg
+color admin_primary
+color admin_primary_dark
+drawable admin_progress_bar
+drawable ic_launcher_admin
+id progressBar
+id swipeRefresh
+id webView
+layout activity_admin_main
+mipmap ic_launcher_admin
+string app_name_admin
+style Theme.ZhuoyiAdmin
+xml network_security_config

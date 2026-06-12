@@ -1,0 +1,8 @@
+Result:
+VALID: JS parsed successfully
+Length: 36786
+Lines: 1215
+Functions: 32
+loadData() call: FOUND
+loadCases() call: FOUND
+

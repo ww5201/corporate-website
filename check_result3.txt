@@ -1,0 +1,47 @@
+File size: 80521 bytes
+
+Nav: 3338 chars
+toggleSettings btn: True
+settingsDropdown id: True
+setLang zh btns: 11
+Gear icon: YES
+
+=== NAV ===
+<nav class="nav" id="nav">
+    <div class="container">
+      <a href="#home" class="logo">卓翌<em>定制</em></a>
+      <ul class="menu" id="menu">
+        <li><a href="#home" class="active" data-i18n="nav_home">首页</a></li>
+        <li><a href="#about" data-i18n="nav_about">关于</a></li>
+        <li><a href="#services" data-i18n="nav_services">服务</a></li>
+        <li><a href="#products" data-i18n="nav_products">产品</a></li>
+        <li><a href="#portfolio" data-i18n="nav_portfolio">案例</a></li>
+        <li><a href="#contact" data-i18n="nav_contact">联系</a></li>
+      </ul>
+      <div style="position:relative;margin-left:8px">
+        <button onclick="toggleSettings()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;padding:6px 10px;border-radius:8px;color:#555" title="设置">⚙</button>
+        <div class="settings-dropdown" id="settingsDropdown" style="display:none;position:absolute;right:0;top:100%;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.12);min-width:200px;z-index:9999;overflow:hidden">
+          <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0">
+            <div style="font-size:0.75rem;color:#999;margin-bottom:8px">语言 / Language</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px">
+              <button onclick="setLang('zh')" style="padding:4px 8px;border:1px solid #e0e0e0;border-radius:6px;background:none;cursor:pointer;font-size:0.8rem">🇨🇳 中文</button>
+              <button onclick="setLang('en')" style="padding:4px 8px;border:1px solid #e0e0e0;border-radius:6px;background:none;cursor:pointer;font-size:0.8rem">🇺🇸 EN</button>
+              <button onclick="setLang('ja')" style="padding:4px 8px;border:1px solid #e0e0e0;border-radius:6px;background:none;cursor:pointer;font-size:0.8rem">🇯🇵 日本語</button>
+              <button onclick="setLang('ko')" style="padding:4px 8px;border:1px solid #e0e0e0;border-radius:6px;background:none;cursor:pointer;font-size:0.8rem">🇰🇷 한국어</button>
+              <button oncli
+
+JS: 41032 chars, braces: 173:173
+
+toggleSettings function:
+function toggleSettings(e) {
+      if(e) e.stopPropagation();
+      var dd = document.getElementById('settingsDropdown');
+      if(dd) dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+    }
+    // Close settings when clicking outside
+    document.addEventListener('click', function(
+
+Click handler: document.querySelectorAll('#settingsDropdown button[onclick^="setLang"]').forEach(btn => {
+Click handler: // Close settings when clicking outside
+Click handler: if(dd && !ev.target.closest('.settings-dropdown') && !ev.target.closest('[onclick*="toggleSettings"]')) {
+Click handler: // Close settings dropdown when clicking outside

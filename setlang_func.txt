@@ -1,0 +1,29 @@
+    function setLang(lang) {
+
+      currentLang = lang;
+
+      localStorage.setItem('lang', lang);
+
+      // currentLangLabel removed in dropdown version
+
+      document.querySelectorAll('#langDropdown button').forEach(b => b.classList.toggle('active', b.textContent.includes(langLabels[lang])));
+
+      document.getElementById('langDropdown').classList.remove('open');
+
+      document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+
+        const key = el.dataset.i18n;
+
+        if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+
+      });
+
+      // 更新移动端导航
+
+      const mobileNav = document.querySelector('.mobile-nav');
+
+      if (mobileNav) {
+
+        mobileNav.innerHTML = `<div class="mobile-nav-inner">

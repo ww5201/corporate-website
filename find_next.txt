@@ -1,0 +1,58 @@
+=== Services ===
+
+
+=== Systemd files ===
+/etc/systemd/system/aegis.service
+/etc/systemd/system/aliyun.service
+/etc/systemd/system/AssistDaemon.service
+/etc/systemd/system/cloudmonitor.service
+/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
+/etc/systemd/system/dbus-org.freedesktop.timedate1.service
+/etc/systemd/system/hbrclient.service
+/etc/systemd/system/hbrclientupdater.service
+/etc/systemd/system/systemd-timedated.service
+
+=== PM2 ===
+/usr/local/bin/pm2
+┌────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 1  │ shophub     │ default     │ 0.1.0   │ fork    │ 12554    │ 39s    │ 6    │ online    │ 0%       │ 90.3mb   │ root     │ disabled │
+│ 0  │ yingdong    │ default     │ 0.1.0   │ fork    │ 12520    │ 40s    │ 34   │ online    │ 0%       │ 132.0mb  │ root     │ disabled │
+└────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+
+=== Crontab ===
+no crontab
+
+=== Next files ===
+/opt/yingdong/node_modules/next/node_modules/postcss/package.json
+/opt/yingdong/node_modules/next/package.json
+/opt/yingdong/node_modules/next/dist/compiled/tty-browserify/package.json
+/opt/yingdong/node_modules/next/dist/compiled/crypto-browserify/package.json
+/opt/yingdong/node_modules/next/dist/compiled/icss-utils/package.json
+/opt/yingdong/node_modules/next/dist/compiled/stream-browserify/package.json
+/opt/yingdong/node_modules/next/dist/compiled/web-vitals/package.json
+/opt/yingdong/node_modules/next/dist/compiled/safe-stable-stringify/package.json
+/opt/yingdong/node_modules/next/dist/compiled/sass-loader/package.json
+/opt/yingdong/node_modules/next/dist/compiled/jsonwebtoken/package.json
+
+=== Next process ===
+root       12520  2.6  7.0 13139856 135328 ?     Ssl  16:05   0:01 next-server (v16.2.6)
+root       12554  2.6  4.8 11813964 92432 ?      Ssl  16:05   0:01 next-server (v16.2.6)
+
+=== Next parents ===
+12520    1869 next-server (v16.2.6)
+  12554    1869 next-server (v16.2.6)
+
+=== /opt ===
+total 32
+drwxr-xr-x.  8 root root 4096 May 30 10:27 .
+dr-xr-xr-x. 21 root root 4096 May 30 09:53 ..
+drwxr-xr-x   2 root root 4096 May 30 09:53 .~aegis
+drwxr-xr-x   3 root root 4096 May 24 18:27 alibabacloud
+drwxr-xr-x   2 root root 4096 May 30 09:53 .maegis
+drwxr-xr-x   8 root root 4096 May 30 10:37 shophub
+drwxr-xr-x   6 root root 4096 May 30 15:43 yingdong
+drwxr-xr-x   2 root root 4096 May 30 09:53 .zaegis
+
+=== Next binary ===

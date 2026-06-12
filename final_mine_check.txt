@@ -1,0 +1,16 @@
+=== i18n Check ===
+  zh: mobile_mine=False, mine_title=False, mine_settings=False
+  en: mobile_mine=False, mine_title=False, mine_settings=False
+  ja: mobile_mine=False, mine_title=False, mine_settings=False
+  ko: mobile_mine=False, mine_title=False, mine_settings=False
+  th: mobile_mine=False, mine_title=False, mine_settings=False
+  vi: mobile_mine=False, mine_title=False, mine_settings=False
+  ms: mobile_mine=False, mine_title=False, mine_settings=False
+
+=== Feature Check ===
+  showMinePanel: True
+  hideMinePanel: True
+  minePanel HTML: True
+  mobile_mine in nav: True
+  JS braces: 184:184
+  File: 84097 bytes

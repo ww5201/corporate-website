@@ -1,0 +1,14 @@
+Lang 'zh' at pos 19972:
+'zh' ? 'zh-CN' : 'en';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+
+        cons
+
+Lang 'en' at pos 19989:
+'en';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+
+        const key = el.datase
+

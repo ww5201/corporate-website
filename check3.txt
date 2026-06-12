@@ -1,0 +1,2 @@
+{"status":"ok","time":"2026-06-10T06:42:44.222Z"}
+[{"name":"鱼缸柜","description":"111","price":500,"category":"整体衣柜","createdAt":"2026-05-26T11:42:03.848Z","_id":"0z7h9qTZ9eGa3MdX","images":[],"image":""},{"name":"柜子","description":"衣柜","price":455,"category":"整体衣柜","createdAt":"2026-05-26T10:44:42.101Z","_id":"Fgcwgtd5RNpaZdd7","images":["/uploads/1779937956958-7s3ftsk92.png","/uploads/1779938007705-orrdsqrx4.png","/uploads/1779938015075-yy1derdss.png","/uploads/1779938021499-uutmfq3ch.png","/uploads/1779938025492-l

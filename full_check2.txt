@@ -1,0 +1,41 @@
+Size: 74594
+Ends with </html>: True
+Has </body>: True
+Has </html>: True
+
+JS braces: {=142 }=142 diff=0
+
+function loadData: found at 66208
+function renderProducts: found at 67341
+function loadCases: found at 61387
+function handleWechatClick: found at 74412
+function showWechatGuide: found at 72715
+selectPay: found at 35983
+
+payment-config: 66360
+contact-form: 16163
+mobile_consult: 40268
+
+handleWechatClick:
+function handleWechatClick() {
+    window.location.href = 'weixin://';
+}
+
+    // ===== 启动 =====
+    loadCases();
+    setLang(currentLang);
+    loadData();
+  </script>
+</body>
+</html>
+
+weixin:// context:
+handleWechatClick() {
+    window.location.href = 'weixin://';
+}
+
+    // ===== 启动 =====
+    loadCases();
+    setLang(currentLang);
+    loadData();
+  </

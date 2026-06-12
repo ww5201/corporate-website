@@ -1,0 +1,21 @@
+File size: 76598
+JS functions: 36
+Braces: 155:155
+
+  [OK] loadData
+  [OK] renderProducts
+  [OK] loadCases
+  [OK] renderPortfolio
+  [OK] handleWechatClick
+  [OK] Android Bridge
+  [OK] selectPay
+  [OK] submitOrder
+  [OK] openOrder
+  [OK] closeOrder
+  [OK] Startup loadData
+  [OK] Startup loadCases
+  [OK] Startup setLang
+
+MISSING onclick functions: {'if'}
+
+No duplicates

@@ -1,0 +1,11 @@
+import paramiko
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+ssh.connect('8.138.218.146', username='root', password='ww0987654.', timeout=10)
+stdin, stdout, stderr = ssh.exec_command('curl -s http://localhost:3000/api/health')
+print('Health:', stdout.read().decode().strip())
+stdin, stdout, stderr = ssh.exec_command('ss -tlnp | grep 3000')
+print('Port:', stdout.read().decode().strip())
+stdin, stdout, stderr = ssh.exec_command('ps aux | grep server-v4 | grep -v grep')
+print('Process:', stdout.read().decode().strip())
+ssh.close()

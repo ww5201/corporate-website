@@ -1,0 +1,67 @@
+=== Port 80 listeners ===
+LISTEN 0      511          0.0.0.0:80         0.0.0.0:*    users:(("nginx",pid=13177,fd=6),("nginx",pid=13176,fd=6),("nginx",pid=770,fd=6))
+
+
+=== Apache/HTTPD packages ===
+alinux-logos-httpd-82.0-1.1.al8.noarch
+check rpm only
+
+
+=== iptables NAT ===
+Chain PREROUTING (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain POSTROUTING (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+
+=== netstat ===
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      770/nginx: master p 
+
+
+=== nginx error log ===
+2026/06/02 18:24:05 [notice] 10458#0: signal process started
+2026/06/02 18:25:36 [notice] 10530#0: signal process started
+2026/06/02 18:26:49 [notice] 10615#0: signal process started
+2026/06/02 18:40:37 [notice] 10715#0: signal process started
+2026/06/02 18:50:43 [notice] 10992#0: signal process started
+2026/06/02 19:03:10 [notice] 11103#0: signal process started
+2026/06/02 19:03:18 [notice] 11160#0: signal process started
+2026/06/02 19:04:24 [notice] 11215#0: signal process started
+2026/06/02 19:05:38 [notice] 11439#0: signal process started
+2026/06/02 19:07:12 [notice] 11600#0: signal process started
+2026/06/02 19:14:01 [notice] 11752#0: signal process started
+2026/06/02 20:52:01 [notice] 12052#0: signal process started
+2026/06/02 20:56:35 [notice] 12118#0: signal process started
+2026/06/02 21:03:36 [notice] 12276#0: signal process started
+2026/06/02 21:27:03 [notice] 12805#0: signal process started
+2026/06/02 22:58:16 [notice] 13161#0: signal process started
+
+
+=== nginx access log ===
+116.9.176.92 - - [02/Jun/2026:22:17:01 +0800] "GET /uploads/1779937956958-7s3ftsk92.png HTTP/1.1" 304 0 "http://8.138.218.146/admin.html" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:01 +0800] "GET /uploads/1780042839937-23e6xitcp.png HTTP/1.1" 304 0 "http://8.138.218.146/admin.html" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:04 +0800] "GET / HTTP/1.1" 200 82505 "-" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:04 +0800] "GET /uploads/about-showcase.jpg HTTP/1.1" 404 165 "http://8.138.218.146/" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:04 +0800] "GET /api/cases HTTP/1.1" 200 2 "http://8.138.218.146/" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:04 +0800] "GET /api/products HTTP/1.1" 200 870 "http://8.138.218.146/" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:04 +0800] "GET /api/payment-config HTTP/1.1" 200 196 "http://8.138.218.146/" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:05 +0800] "GET /uploads/1779938015075-yy1derdss.png HTTP/1.1" 200 195311 "http://8.138.218.146/" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:05 +0800] "GET /uploads/1779938007705-orrdsqrx4.png HTTP/1.1" 200 696848 "http://8.138.218.146/" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:05 +0800] "GET /favicon.ico HTTP/1.1" 200 82505 "http://8.138.218.146/" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:05 +0800] "GET /uploads/1779938025492-ll0xcgv6x.png HTTP/1.1" 200 286695 "http://8.138.218.146/" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:06 +0800] "GET /uploads/1780042865733-yrawlxu7s.png HTTP/1.1" 200 10318 "http://8.138.218.146/" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:06 +0800] "GET /uploads/1780042839937-23e6xitcp.png HTTP/1.1" 200 9857 "http://8.138.218.146/" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:07 +0800] "GET /uploads/1779938021499-uutmfq3ch.png HTTP/1.1" 200 287594 "http://8.138.218.146/" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:09 +0800] "GET /uploads/1779937956958-7s3ftsk92.png HTTP/1.1" 200 1272577 "http://8.138.218.146/" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+116.9.176.92 - - [02/Jun/2026:22:17:11 +0800] "GET /uploads/1779938030170-vqlxb88uk.png HTTP/1.1" 200 786882 "http://8.138.218.146/" "Mozilla/5.0 (Linux; Android 16; 25053RT47C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/147.0.7727.137 Mobile Safari/537.36" "-"
+106.54.62.156 - - [02/Jun/2026:22:41:03 +0800] "GET / HTTP/1.1" 200 0 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1" "-"
+127.0.0.1 - - [02/Jun/2026:22:58:17 +0800] "GET / HTTP/1.1" 200 81636 "-" "curl/7.61.1" "-"
+127.0.0.1 - - [02/Jun/2026:22:58:29 +0800] "GET / HTTP/1.1" 200 81636 "-" "curl/7.61.1" "-"
+127.0.0.1 - - [02/Jun/2026:22:59:49 +0800] "GET / HTTP/1.1" 200 81636 "-" "curl/7.61.1" "-"

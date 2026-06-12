@@ -1,0 +1,35 @@
+Nginx: 200
+Backend: /api/health/
+File size: 86464 /var/www/frontend/index.html
+
+First 30 lines:
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>卓翌定制 | 高端定制家居</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf8f5;
+      --bg2: #f2efe9;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --text2: #777;
+      --accent: #b8956a;
+      --accent2: #d4b896;
+      --accent-dark: #96754a;
+      --gold: linear-gradient(135deg, #b8956a, #d4b896, #b8956a);
+      --shadow: 0 4px 24px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 48px rgba(0,0,0,0.1);
+      --radius: 16px;
+      --nav-h: 64px;
+      --bottom-nav-h: 0px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top: var(--nav-h); }
+    body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background:var(--bg); color:var(--text); line-height:1.6; overflow-x:hidden; }
+    .container { max-width:1100px; margin:0 auto; padding:0 20px; }
+

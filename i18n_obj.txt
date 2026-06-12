@@ -1,0 +1,9 @@
+Found 'i18n = {' at 293:
+i18n = {
+
+      zh: {
+
+        nav_home: '首页', nav_about: '关于', nav_services: '服务', nav_products: '产品', nav_portfolio: '案例', nav_contact: '联系',
+
+        hero_badge: '始于匠心 · 卓尔不群', hero_title: '为您打造<br
+

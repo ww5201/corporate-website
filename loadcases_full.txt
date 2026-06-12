@@ -1,0 +1,48 @@
+=== loadCases context ===
+Position: 23809
+
+--- 100 chars before ---
+ssList.toggle('active', j === i));
+
+      heroIdx = i;
+
+    }
+
+
+
+    // ===== 加载数据 =====
+
+    async 
+
+--- 400 chars after ---
+function loadCases() {
+
+  try {
+
+    const r = await fetch(API + '/cases');
+
+    cases = await r.json();
+
+    if (cases.length > 0) {
+
+      renderCarousel(cases[0]);
+
+    }
+
+    renderPortfolio();
+
+  } catch (e) {
+
+    console.error('Load cases failed:', e);
+
+  }
+
+}
+
+
+
+function renderCarousel(firstCase) {
+
+  const container = document.getElementById('portfolioCarousel');
+
+  const slides = documen

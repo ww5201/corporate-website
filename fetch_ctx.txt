@@ -1,0 +1,23 @@
+lectorAll('.hero-slide').forEach((s, j) => s.classList.toggle('active', j === i));
+
+      document.querySelectorAll('.dot').forEach((d, j) => d.classList.toggle('active', j === i));
+
+      heroIdx = i;
+
+    }
+
+
+
+    // ===== 加载数据 =====
+
+    async function loadCases() {
+
+  try {
+
+    const r = await fetch(API + '/cases');
+
+    cases = await r.json();
+
+    if (cases.length > 0) {
+
+      renderCarous

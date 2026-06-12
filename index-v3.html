@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>卓翌定制 | 高端定制家居</title>
+  <style>
+    :root {
+      --bg-primary: #faf9f7;
+      --bg-secondary: #f5f3ef;
+      --bg-card: #ffffff;
+      --text-primary: #2c2c2c;
+      --text-secondary: #666666;
+      --accent: #8b7355;
+      --accent-light: #c4a77d;
+      --accent-dark: #6b5a45;
+      --border-color: #e8e4de;
+      --transition: all 0.3s ease;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    /* 导航 */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); }
+    .nav .container { display: flex; justify-content: space-between; align-items: center; height: 60px; }
+    .logo { font-size: 1.4rem; font-weight: 700; }
+    .logo span { color: var(--accent); }
+    .menu { display: flex; gap: 24px; list-style: none; }
+    .menu a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: var(--transition); }
+    .menu a:hover { color: var(--accent); }
+
+    /* Hero 轮播 */
+    .hero { height: 100vh; position: relative; overflow: hidden; background: #1a1a1a; }
+    .hero-slider { position: absolute; inset: 0; }
+    .hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1s; background-size: cover; background-position: center; }
+    .hero-slide.active { opacity: 1; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.3)); z-index: 2; }
+    .hero-content { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 3; color: #fff; text-align: center; padding: 0 20px; }
+    .hero-title { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 20px; letter-spacing: 4px; }
+    .hero-title span { color: var(--accent-light); }
+    .hero-sub { font-size: 1.1rem; opacity: 0.9; margin-bottom: 30px; letter-spacing: 2px; }
+    .hero-btn { display: inline-block; padding: 12px 36px; background: var(--accent); color: #fff; text-decoration: none; border-radius: 4px; transition: var(--transition); }
+    .hero-btn:hover { background: var(--accent-dark); }
+    .hero-dots { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 5; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: var(--transition); }
+    .dot.active { background: #fff; width: 30px; border-radius: 5px; }
+
+    /* 区块 */
+    section { padding: 80px 0; }
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .section-title h2 { font-size: 2rem; margin-bottom: 10px; }
+    .section-title hr { width: 60px; border: none; border-top: 2px solid var(--accent); margin: 0 auto; }
+
+    /* 关于 */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .about-text h3 { color: var(--accent); font-size: 1.3rem; margin-bottom: 20px; }
+    .about-text p { color: var(--text-secondary); margin-bottom: 16px; }
+    .stats { display: flex; gap: 40px; margin-top: 30px; }
+    .stat-num { display: block; font-size: 2rem; color: var(--accent); font-weight: 700; }
+    .stat-label { font-size: 0.85rem; color: var(--text-secondary); }
+    .about-img { height: 400px; background: linear-gradient(135deg, var(--accent-light), var(--accent)); border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .about-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* 服务 */
+    .services { background: var(--bg-secondary); }
+    .services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .service-card { background: #fff; padding: 30px 20px; text-align: center; border: 1px solid var(--border-color); border-radius: 4px; transition: var(--transition); }
+    .service-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+    .service-icon { font-size: 2rem; color: var(--accent); margin-bottom: 16px; }
+    .service-card h4 { margin-bottom: 10px; }
+    .service-card p { color: var(--text-secondary); font-size: 0.9rem; }
+
+    /* 产品 */
+    .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .product-card { background: #fff; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; transition: var(--transition); }
+    .product-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+    .product-img { position: relative; height: 240px; overflow: hidden; background: #f5f5f5; }
+    .product-img-track { display: flex; height: 100%; transition: transform 0.4s ease; }
+    .product-img-track img { min-width: 100%; height: 100%; object-fit: cover; }
+    .product-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: #fff; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; opacity: 0; transition: opacity 0.3s; z-index: 5; }
+    .product-card:hover .product-nav { opacity: 1; }
+    .product-nav.prev { left: 8px; }
+    .product-nav.next { right: 8px; }
+    .product-nav:hover { background: rgba(0,0,0,0.8); }
+    .product-count { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; z-index: 5; }
+    .product-info { padding: 16px; }
+    .product-info h4 { margin-bottom: 8px; font-size: 1.1rem; }
+    .product-info p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px; }
+    .product-price { display: block; color: var(--accent); font-size: 1.2rem; font-weight: 600; margin-bottom: 12px; }
+    .product-btn { display: inline-block; padding: 8px 20px; border: 1px solid var(--accent); color: var(--accent); background: transparent; cursor: pointer; border-radius: 4px; transition: var(--transition); }
+    .product-btn:hover { background: var(--accent); color: #fff; }
+
+    /* 案例 */
+    .portfolio { background: var(--bg-secondary); }
+    .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .portfolio-item { position: relative; height: 260px; overflow: hidden; border-radius: 4px; cursor: pointer; }
+    .portfolio-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .portfolio-item:hover img { transform: scale(1.08); }
+    .portfolio-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%); }
+    .portfolio-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; z-index: 2; color: #fff; transform: translateY(10px); transition: var(--transition); }
+    .portfolio-item:hover .portfolio-info { transform: translateY(0); }
+    .portfolio-info h4 { margin-bottom: 4px; }
+    .portfolio-info p { font-size: 0.85rem; color: var(--accent-light); }
+
+    /* 联系 */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; }
+    .contact-item { margin-bottom: 24px; }
+    .contact-item h5 { color: var(--accent); margin-bottom: 8px; }
+    .contact-item p { color: var(--text-secondary); }
+    .contact-form { display: flex; flex-direction: column; gap: 12px; }
+    .form-input, .form-textarea { padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95rem; font-family: inherit; }
+    .form-input:focus, .form-textarea:focus { outline: none; border-color: var(--accent); }
+    .form-textarea { min-height: 100px; resize: vertical; }
+    .submit-btn { padding: 12px 24px; background: var(--accent); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+    .submit-btn:hover { background: var(--accent-dark); }
+
+    /* 页脚 */
+    .footer { background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; }
+    .footer p { color: var(--text-secondary); font-size: 0.85rem; }
+
+    /* 灯箱 */
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
+    .lightbox.open { display: flex; }
+    .lb-close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 2rem; cursor: pointer; background: none; border: none; }
+    .lb-img { max-width: 90vw; max-height: 80vh; object-fit: contain; }
+    .lb-thumbs { display: flex; gap: 8px; margin-top: 16px; }
+    .lb-thumbs img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; opacity: 0.5; border: 2px solid transparent; }
+    .lb-thumbs img.active { opacity: 1; border-color: var(--accent); }
+    .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); color: #fff; border: none; font-size: 2rem; padding: 10px 16px; cursor: pointer; }
+    .lb-prev { left: 20px; }
+    .lb-next { right: 20px; }
+
+    /* 下单弹窗 */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 10000; justify-content: center; align-items: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: #fff; border-radius: 12px; width: 90%; max-width: 460px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid #eee; }
+    .modal-header h3 { margin: 0; font-size: 1.1rem; }
+    .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
+    .modal-body { padding: 20px; }
+    .modal-product { display: flex; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid #eee; margin-bottom: 16px; }
+    .modal-product img { width: 80px; height: 64px; object-fit: cover; border-radius: 6px; }
+    .modal-product h4 { margin: 0 0 4px; font-size: 0.95rem; }
+    .modal-product .price { color: var(--accent); font-size: 1.1rem; font-weight: 600; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; margin-bottom: 6px; font-size: 0.85rem; color: var(--text-secondary); }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.9rem; font-family: inherit; }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); }
+    .pay-methods { display: flex; gap: 10px; margin-bottom: 16px; }
+    .pay-btn { flex: 1; padding: 10px; border: 2px solid var(--border-color); border-radius: 6px; background: #fff; cursor: pointer; text-align: center; font-size: 0.85rem; }
+    .pay-btn.active { border-color: var(--accent); background: rgba(139,115,85,0.05); }
+    .qr-box { text-align: center; padding: 16px; background: #fafafa; border-radius: 8px; margin-bottom: 16px; }
+    .qr-box img { width: 160px; height: 160px; object-fit: contain; display: none; }
+    .qr-box p { color: var(--text-secondary); font-size: 0.85rem; margin: 0; }
+    .order-btn { width: 100%; padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 6px; font-size: 0.95rem; cursor: pointer; }
+    .order-btn:hover { background: var(--accent-dark); }
+    .order-success { text-align: center; padding: 40px 20px; }
+    .order-success .icon { font-size: 3rem; margin-bottom: 16px; }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .menu { display: none; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .services-grid, .products-grid, .portfolio-grid { grid-template-columns: 1fr; }
+      .stats { flex-direction: column; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 导航 -->
+  <nav class="nav">
+    <div class="container">
+      <div class="logo">卓翌<span>定制</span></div>
+      <ul class="menu">
+        <li><a href="#home">首页</a></li>
+        <li><a href="#about">关于</a></li>
+        <li><a href="#services">服务</a></li>
+        <li><a href="#products">产品</a></li>
+        <li><a href="#portfolio">案例</a></li>
+        <li><a href="#contact">联系</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero 轮播 -->
+  <section id="home" class="hero">
+    <div class="hero-slider" id="heroSlider"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">匠心定制<br><span>卓尔不群</span></h1>
+      <p class="hero-sub">专注高端家居定制，为您打造梦想生活空间</p>
+      <a href="#contact" class="hero-btn">预约设计</a>
+    </div>
+    <div class="hero-dots" id="heroDots"></div>
+  </section>
+
+  <!-- 关于 -->
+  <section id="about">
+    <div class="container">
+      <div class="section-title"><h2>关于我们</h2><hr></div>
+      <div class="about-grid">
+        <div class="about-text">
+          <h3>十年匠心，只为定制您的理想生活</h3>
+          <p>卓翌定制专注于高端家居定制领域，以精湛工艺和创新设计，为每一位客户打造独一无二的生活空间。</p>
+          <div class="stats">
+            <div><span class="stat-num">10+</span><span class="stat-label">行业经验</span></div>
+            <div><span class="stat-num">1000+</span><span class="stat-label">服务家庭</span></div>
+            <div><span class="stat-num">99%</span><span class="stat-label">客户满意度</span></div>
+          </div>
+        </div>
+        <div class="about-img">
+          <img id="aboutImg" src="/uploads/about-showcase.jpg" alt="" onerror="this.style.display='none'">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 服务 -->
+  <section id="services" class="services">
+    <div class="container">
+      <div class="section-title"><h2>我们的服务</h2><hr></div>
+      <div class="services-grid">
+        <div class="service-card"><div class="service-icon">◆</div><h4>整体衣柜</h4><p>根据空间量身定制，完美收纳</p></div>
+        <div class="service-card"><div class="service-icon">◆</div><h4>衣帽间设计</h4><p>奢华衣帽间定制，体验非凡</p></div>
+        <div class="service-card"><div class="service-icon">◆</div><h4>橱柜定制</h4><p>高端厨房解决方案</p></div>
+        <div class="service-card"><div class="service-icon">◆</div><h4>全屋定制</h4><p>一站式全屋定制服务</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 产品 -->
+  <section id="products">
+    <div class="container">
+      <div class="section-title"><h2>产品展示</h2><hr></div>
+      <div class="products-grid" id="productsGrid"></div>
+    </div>
+  </section>
+
+  <!-- 案例 -->
+  <section id="portfolio" class="portfolio">
+    <div class="container">
+      <div class="section-title"><h2>精选案例</h2><hr></div>
+      <div class="portfolio-grid" id="portfolioGrid"></div>
+    </div>
+  </section>
+
+  <!-- 联系 -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-title"><h2>联系我们</h2><hr></div>
+      <div class="contact-grid">
+        <div>
+          <div class="contact-item"><h5>地址</h5><p>广西南宁市江南区那洪大道留村路 1-2 号</p></div>
+          <div class="contact-item"><h5>电话</h5><p>18977122166</p></div>
+          <div class="contact-item"><h5>邮箱</h5><p>2841327487@qq.com</p></div>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <input type="text" class="form-input" placeholder="您的姓名" id="cName" required>
+          <input type="tel" class="form-input" placeholder="联系电话" id="cPhone" required>
+          <textarea class="form-textarea" placeholder="留言内容" id="cMsg" required></textarea>
+          <button type="submit" class="submit-btn">发送留言</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <p>&copy; 2026 卓翌定制。All rights reserved.</p>
+  </footer>
+
+  <!-- 灯箱 -->
+  <div class="lightbox" id="lightbox">
+    <button class="lb-close" onclick="closeLb()">×</button>
+    <button class="lb-nav lb-prev" onclick="navLb(-1)">‹</button>
+    <button class="lb-nav lb-next" onclick="navLb(1)">›</button>
+    <img class="lb-img" id="lbImg" src="">
+    <div class="lb-thumbs" id="lbThumbs"></div>
+  </div>
+
+  <!-- 下单弹窗 -->
+  <div class="modal-overlay" id="orderModal" onclick="if(event.target===this)closeOrder()">
+    <div class="modal">
+      <div class="modal-header"><h3>确认下单</h3><button class="modal-close" onclick="closeOrder()">×</button></div>
+      <div class="modal-body" id="orderForm">
+        <div class="modal-product">
+          <img id="oImg" src="" alt="">
+          <div><h4 id="oName"></h4><span class="price" id="oPrice"></span></div>
+        </div>
+        <div class="form-group"><label>姓名 *</label><input type="text" id="oName2" placeholder="请输入姓名"></div>
+        <div class="form-group"><label>电话 *</label><input type="tel" id="oPhone" placeholder="请输入手机号"></div>
+        <div class="form-group"><label>备注</label><textarea id="oNote" rows="2" placeholder="尺寸要求等"></textarea></div>
+        <div style="margin-bottom:14px">
+          <label style="display:block;margin-bottom:8px;font-size:0.85rem;color:#666">支付方式</label>
+          <div class="pay-methods">
+            <div class="pay-btn active" onclick="selectPay('wechat')">💚 微信</div>
+            <div class="pay-btn" onclick="selectPay('alipay')">💙 支付宝</div>
+          </div>
+        </div>
+        <div class="qr-box">
+          <img id="qrImg" src="">
+          <p id="qrHint">请选择支付方式</p>
+        </div>
+        <button class="order-btn" onclick="submitOrder()">确认下单</button>
+      </div>
+      <div class="order-success" id="orderSuccess" style="display:none">
+        <div class="icon">✅</div>
+        <h3>下单成功！</h3>
+        <p style="color:#666">我们已收到您的订单</p>
+        <button class="order-btn" style="margin-top:20px;background:#888" onclick="closeOrder()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = '/api';
+    const IMG = '';
+    let products = [];
+    let payConfig = {};
+    let curPay = 'wechat';
+    let curProd = null;
+
+    // ===== Hero 轮播 =====
+    let heroIdx = 0, heroTimer;
+
+    function initHero() {
+      const slider = document.getElementById('heroSlider');
+      const dots = document.getElementById('heroDots');
+
+      // 用产品图片做轮播，如果没有就用纯色背景
+      const heroImgs = [];
+      products.forEach(p => {
+        const imgs = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
+        imgs.forEach(img => heroImgs.push(img));
+      });
+
+      // 如果没有产品图，用3个纯色背景
+      if (heroImgs.length === 0) {
+        heroImgs.push(''); heroImgs.push(''); heroImgs.push('');
+      }
+
+      // 最多显示5张
+      const showImgs = heroImgs.slice(0, 5);
+
+      showImgs.forEach((src, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
+        if (src) {
+          slide.style.backgroundImage = `url(${IMG}${src})`;
+        } else {
+          // 纯色背景
+          const colors = ['#3a3a3a', '#4a4a4a', '#2a2a2a'];
+          slide.style.background = colors[i % colors.length];
+        }
+        slider.appendChild(slide);
+
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goHero(i);
+        dots.appendChild(dot);
+      });
+
+      heroTimer = setInterval(() => goHero((heroIdx + 1) % showImgs.length), 4000);
+    }
+
+    function goHero(i) {
+      document.querySelectorAll('.hero-slide').forEach((s, j) => s.classList.toggle('active', j === i));
+      document.querySelectorAll('.dot').forEach((d, j) => d.classList.toggle('active', j === i));
+      heroIdx = i;
+    }
+
+    // ===== 加载数据 =====
+    async function loadData() {
+      try {
+        const [prodRes, payRes] = await Promise.all([
+          fetch(`${API}/products`),
+          fetch(`${API}/payment-config`)
+        ]);
+        products = await prodRes.json();
+        payConfig = await payRes.json();
+        renderProducts();
+        renderPortfolio();
+        initHero();
+      } catch (e) { console.error(e); }
+    }
+
+    // ===== 产品自动轮播 =====
+    let productTimers = {};
+
+    function renderProducts() {
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = '';
+      // 清除旧的定时器
+      Object.values(productTimers).forEach(t => clearInterval(t));
+      productTimers = {};
+      if (!products.length) { grid.innerHTML = '<p style="text-align:center;color:#999;padding:40px">暂无产品</p>'; return; }
+
+      products.forEach(p => {
+        const imgs = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.dataset.pid = p._id;
+
+        let track = imgs.map(img => `<img src="${IMG}${img}" loading="lazy">`).join('');
+        if (!track) track = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ccc;font-size:3rem">📦</div>';
+
+        card.innerHTML = `
+          <div class="product-img" data-idx="0" data-total="${imgs.length}" data-pid="${p._id}">
+            <div class="product-img-track">${track}</div>
+            ${imgs.length > 1 ? `
+              <span class="product-count">1/${imgs.length}</span>
+              <button class="product-nav prev" onclick="imgNav(this,-1)">‹</button>
+              <button class="product-nav next" onclick="imgNav(this,1)">›</button>
+            ` : ''}
+          </div>
+          <div class="product-info">
+            <h4>${p.name}</h4>
+            <p>${p.description || ''}</p>
+            <span class="product-price">¥ ${p.price.toLocaleString()}</span>
+            <button class="product-btn" onclick="openOrder('${p._id}','${p.name.replace(/'/g,"\\'")}',${p.price},'${imgs[0]||''}')">立即咨询</button>
+          </div>
+        `;
+        grid.appendChild(card);
+
+        // 多图自动轮播
+        if (imgs.length > 1) {
+          productTimers[p._id] = setInterval(() => {
+            imgNavAuto(p._id, 1);
+          }, 3000);
+        }
+      });
+
+      // 鼠标悬停暂停，移出恢复
+      grid.querySelectorAll('.product-card').forEach(card => {
+        const pid = card.dataset.pid;
+        if (!productTimers[pid]) return;
+        card.addEventListener('mouseenter', () => { clearInterval(productTimers[pid]); productTimers[pid] = null; });
+        card.addEventListener('mouseleave', () => {
+          productTimers[pid] = setInterval(() => imgNavAuto(pid, 1), 3000);
+        });
+      });
+    }
+
+    function imgNav(btn, dir) {
+      const box = btn.closest('.product-img');
+      const track = box.querySelector('.product-img-track');
+      const total = parseInt(box.dataset.total);
+      let idx = (parseInt(box.dataset.idx) + dir + total) % total;
+      box.dataset.idx = idx;
+      track.style.transform = `translateX(-${idx * 100}%)`;
+      const count = box.querySelector('.product-count');
+      if (count) count.textContent = `${idx + 1}/${total}`;
+    }
+
+    function imgNavAuto(pid, dir) {
+      const box = document.querySelector(`.product-img[data-pid="${pid}"]`);
+      if (!box) return;
+      imgNav(box.querySelector('.product-nav.next') || box, dir);
+    }
+
+    // ===== 案例 =====
+    function renderPortfolio() {
+      const grid = document.getElementById('portfolioGrid');
+      grid.innerHTML = '';
+      const items = products.filter(p => (p.images && p.images.length) || p.image).slice(0, 6);
+      if (!items.length) { grid.innerHTML = '<p style="text-align:center;color:#999;padding:40px">暂无案例</p>'; return; }
+
+      items.forEach(p => {
+        const img = (p.images && p.images[0]) || p.image;
+        const el = document.createElement('div');
+        el.className = 'portfolio-item';
+        el.innerHTML = `<img src="${IMG}${img}" loading="lazy"><div class="portfolio-info"><h4>${p.name}</h4><p>${p.category || '定制案例'}</p></div>`;
+        el.onclick = () => openLb(p);
+        grid.appendChild(el);
+      });
+    }
+
+    // ===== 灯箱 =====
+    let lbData = { imgs: [], idx: 0, name: '' };
+
+    function openLb(p) {
+      const imgs = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
+      if (!imgs.length) return;
+      lbData = { imgs, idx: 0, name: p.name };
+      renderLb();
+      document.getElementById('lightbox').classList.add('open');
+    }
+
+    function closeLb() { document.getElementById('lightbox').classList.remove('open'); }
+
+    function navLb(dir) {
+      lbData.idx = (lbData.idx + dir + lbData.imgs.length) % lbData.imgs.length;
+      renderLb();
+    }
+
+    function renderLb() {
+      document.getElementById('lbImg').src = `${IMG}${lbData.imgs[lbData.idx]}`;
+      document.getElementById('lbThumbs').innerHTML = lbData.imgs.map((img, i) =>
+        `<img src="${IMG}${img}" class="${i === lbData.idx ? 'active' : ''}" onclick="lbData.idx=${i};renderLb()">`
+      ).join('');
+    }
+
+    // ===== 支付 =====
+    function selectPay(m) {
+      curPay = m;
+      document.querySelectorAll('.pay-btn').forEach(b => b.classList.remove('active'));
+      event.target.closest('.pay-btn').classList.add('active');
+      const qr = document.getElementById('qrImg');
+      const hint = document.getElementById('qrHint');
+      const src = m === 'wechat' ? payConfig.wechatQr : payConfig.alipayQr;
+      if (src) { qr.src = `${IMG}${src}`; qr.style.display = 'block'; hint.style.display = 'none'; }
+      else { qr.style.display = 'none'; hint.style.display = 'block'; hint.textContent = m === 'wechat' ? '未配置微信收款码' : '未配置支付宝收款码'; }
+    }
+
+    // ===== 下单 =====
+    function openOrder(id, name, price, img) {
+      curProd = { id, name, price, img };
+      document.getElementById('oName').textContent = name;
+      document.getElementById('oPrice').textContent = `¥ ${price.toLocaleString()}`;
+      document.getElementById('oImg').src = img ? `${IMG}${img}` : '';
+      document.getElementById('oName2').value = '';
+      document.getElementById('oPhone').value = '';
+      document.getElementById('oNote').value = '';
+      document.getElementById('orderForm').style.display = 'block';
+      document.getElementById('orderSuccess').style.display = 'none';
+      document.getElementById('orderModal').classList.add('open');
+      selectPay('wechat');
+    }
+
+    function closeOrder() { document.getElementById('orderModal').classList.remove('open'); }
+
+    async function submitOrder() {
+      const name = document.getElementById('oName2').value.trim();
+      const phone = document.getElementById('oPhone').value.trim();
+      const note = document.getElementById('oNote').value.trim();
+      if (!name || !phone) { alert('请填写姓名和电话'); return; }
+
+      try {
+        const res = await fetch(`${API}/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId: curProd.id, productName: curProd.name, price: curProd.price, customerName: name, phone, note, paymentMethod: curPay })
+        });
+        if (res.ok) {
+          document.getElementById('orderForm').style.display = 'none';
+          document.getElementById('orderSuccess').style.display = 'block';
+        } else { alert('下单失败'); }
+      } catch (e) { alert('网络错误'); }
+    }
+
+    // ===== 留言 =====
+    document.getElementById('contactForm').onsubmit = async e => {
+      e.preventDefault();
+      const name = document.getElementById('cName').value.trim();
+      const phone = document.getElementById('cPhone').value.trim();
+      const msg = document.getElementById('cMsg').value.trim();
+      if (!name || !phone || !msg) { alert('请填写完整'); return; }
+
+      try {
+        const res = await fetch(`${API}/messages`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, contact: phone, message: msg })
+        });
+        if (res.ok) { alert('留言已发送！'); document.getElementById('contactForm').reset(); }
+        else { alert('发送失败'); }
+      } catch (e) { alert('网络错误'); }
+    };
+
+    // ===== 启动 =====
+    loadData();
+  </script>
+</body>
+</html>

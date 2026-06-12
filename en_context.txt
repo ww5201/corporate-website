@@ -1,0 +1,7 @@
+选案例', footer_a3: '联系我们',
+        copyright: '<span data-i18n="copyright">© 2026 卓翌定制 All Rights Reserved</span>',
+        mobile_home: '首页', mobile_products: '产品', mobile_consult: '咨询',
+      }
+      en: {
+
+        nav_home: 'Home', nav_about: 'About', nav_services: 'Services', nav_products: 'Produc

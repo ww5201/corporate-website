@@ -1,0 +1,11 @@
+onclick functions called: 16
+JS functions defined: 32
+
+MISSING FUNCTIONS:
+  - closeOrder
+  - if
+  - openOrder
+  - selectPay
+  - submitOrder
+
+All onclick handlers: 30

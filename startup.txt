@@ -1,0 +1,33 @@
+// ===== 翻译字典 =====
+
+    const i18n = {
+
+      zh: {
+
+        nav_home: '首页', nav_about: '关于', nav_services: '服务', nav_products: '产品', nav_portfolio: '案例', nav_contact: '联系',
+
+        hero_badge: '始于匠心 · 卓尔不群', hero_title: '为您打造<br><em>梦想生活空间</em>', hero_sub: '专注高端家居定制 · 每一处细节都是艺术',
+
+        hero_btn_products: '浏览产品', hero_btn_contact: '预约设计 →',
+
+        about_badge: '关于我们', about_title: '十年匠心<br>只为定制您的理想生活', about_desc: '卓翌定制专注于高端家居定制领域，以精湛工艺和创新设计，为每一位客户打造独一无二的生活空间。我们相信，家不只是居住的地方，更是生活态度的表达。',
+
+        stat_years: '年行业经验', stat_clients: '服务家庭', stat_satisfaction: '满意度 %',
+
+        quality_title: '品质保证', quality_desc: '三年质保',
+
+        services_label: 'OUR SERVICES', services_title: '我们的服务', services_desc: '从设计到安装，全程一对一专属服务',
+
+        service_wardrobe: '<span data-i18n="footer_p1">整体衣柜</span>', service_wardrobe_desc: '根据空间量身定制<br>完美收纳方案',
+
+        service_cloakroom: '<span data-i18n="footer_p2">衣帽间</span>设计', service_cloakroom_desc: '奢华<span data-i18n="footer_p2">衣帽间</span>定制<br>体验非凡品质',
+
+        service_kitchen: '<span data-i18n="footer_p3">橱柜定制</span>', service_kitchen_desc: '高端厨房解决方案<br>功能与美学兼备',
+
+        service_whole: '<span data-i18n="footer_p4">全屋定制</span>', service_whole_desc: '一站式<span data-i18n="footer_p4">全屋定制</span><br>打造理想之家',
+
+        products_label: 'PRODUCTS', products_title: '产品展示', products_desc: '每一件作品，都是匠心与美学的融合',
+
+        portfolio_label: 'PORTFOLIO', portfolio_title: '精选案例', portfolio_desc: '看看我们为客户打造的梦想空间',
+
+        contact_label: 'CONTACT US', contact_ti

@@ -1,0 +1,25 @@
+[TAILING] Tailing last 10 lines for [tokai-backend] process (change the value with --lines option)
+/root/.pm2/logs/tokai-backend-out.log last 10 lines:
+0|tokai-ba | Server running on port 3000
+0|tokai-ba | Admin: http://localhost:3000/admin.html
+0|tokai-ba | Server running on port 3000
+0|tokai-ba | Admin: http://localhost:3000/admin.html
+0|tokai-ba | Server running on port 3000
+0|tokai-ba | Admin: http://localhost:3000/admin.html
+0|tokai-ba | Server running on port 3000
+0|tokai-ba | Admin: http://localhost:3000/admin.html
+0|tokai-ba | Server running on port 3000
+0|tokai-ba | Admin: http://localhost:3000/admin.html
+
+/root/.pm2/logs/tokai-backend-error.log last 10 lines:
+0|tokai-ba |     at process (/root/backend/node_modules/path-to-regexp/src/index.ts:466:52)
+0|tokai-ba |     at pathToRegexp (/root/backend/node_modules/path-to-regexp/src/index.ts:478:3)
+0|tokai-ba |     at Object.match (/root/backend/node_modules/path-to-regexp/src/index.ts:416:28)
+0|tokai-ba |     at matcher (/root/backend/node_modules/router/lib/layer.js:86:23)
+0|tokai-ba |     at new Layer (/root/backend/node_modules/router/lib/layer.js:93:62)
+0|tokai-ba |     at Function.route (/root/backend/node_modules/router/index.js:428:17)
+0|tokai-ba |     at Function.route (/root/backend/node_modules/express/lib/application.js:257:22)
+0|tokai-ba |     at app.<computed> [as get] (/root/backend/node_modules/express/lib/application.js:478:22) {
+0|tokai-ba |   originalPath: '*'
+0|tokai-ba | }
+

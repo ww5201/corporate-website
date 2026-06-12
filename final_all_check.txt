@@ -1,0 +1,27 @@
+=== ALL CHECKS ===
+
+  [OK] toggleMenu function
+  [OK] toggleLang function
+  [OK] toggleSettings function
+  [OK] setLang function
+  [OK] showMinePanel function
+  [OK] hideMinePanel function
+  [OK] .menu.show CSS
+  [OK] minePanel HTML
+  [OK] langDropdown HTML
+  [OK] settingsDropdown HTML
+  [OK] loadData function
+  [OK] loadCases function
+  [OK] renderProducts function
+  [OK] JS syntax OK
+  [OK] JS braces balanced
+  [MISSING!] i18n.zh.mobile_mine
+  [MISSING!] i18n.en.mobile_mine
+  [MISSING!] i18n.ja.mobile_mine
+  [MISSING!] i18n.ko.mobile_mine
+  [MISSING!] i18n.th.mobile_mine
+  [MISSING!] i18n.vi.mobile_mine
+  [MISSING!] i18n.ms.mobile_mine
+
+JS: 44366 chars, braces: 184:184
+File: 85637 bytes

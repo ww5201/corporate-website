@@ -1,0 +1,6 @@
+JS: 200 application/javascript
+CSS: 200 text/css; charset=utf-8
+Router: 200
+/**
+ * Hash-based SPA Router
+ * 支持: /home, /category, /product/:id, /login, /chat, /chat/:id, /profile, /orders, /payment/:orderId

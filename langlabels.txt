@@ -1,0 +1,16 @@
+235: 
+236: 
+237:     // Old langDropdown removed - language selection now in settings dropdown
+238: 
+239: 
+240: 
+241:     const langLabels = { zh:'中文', en:'English', ja:'日本語', ko:'한국어', th:'ไทย', vi:'Tiếng Việt', ms:'Melayu' };
+242: 
+243:     function setLang(lang) {
+244: 
+245:       currentLang = lang;
+246: 
+247:       localStorage.setItem('lang', lang);
+248: 
+249:       // currentLangLabel removed in dropdown version
+250: 

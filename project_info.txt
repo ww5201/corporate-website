@@ -1,0 +1,289 @@
+=== 服务器项目信息 ===
+
+Backend 目录:
+total 136
+drwxr-xr-x    8 root root  4096 May 27 10:54 .
+dr-xr-x---.  13 root root  4096 May 27 10:48 ..
+drwxr-xr-x    2 root root  4096 May 27 10:48 admin
+-rw-r--r--    1 root root 23464 May 27 12:04 admin.html
+drwxr-xr-x    2 root root  4096 May 27 12:05 data
+-rw-r--r--    1 root root   273 May 24 15:17 .env
+drwxr-xr-x    2 root root  4096 May 26 11:47 models
+drwxr-xr-x  133 root root  4096 May 27 10:54 node_modules
+-rw-r--r--    1 root root   500 May 27 10:54 package.json
+-rw-r--r--    1 root root 59356 May 27 10:54 package-lock.json
+drwxr-xr-x    2 root root  4096 May 26 11:47 routes
+-rw-r--r--    1 root root  2017 May 26 18:18 server.js
+-rw-r--r--    1 root root  6474 May 27 12:04 server-v4.js
+drwxr-xr-x    2 root root  4096 May 27 21:02 uploads
+
+=== server.js 内容 ===
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
+const Datastore = require("nedb");
+const fs = require("fs");
+const app = express();
+const PORT = 3000;
+const d = path.join(__dirname, "data");
+if (!fs.existsSync(d)) fs.mkdirSync(d);
+const pDB = new Datastore({ filename: path.join(d, "products.db"), autoload: true });
+const mDB = new Datastore({ filename: path.join(d, "messages.db"), autoload: true });
+const oDB = new Datastore({ filename: path.join(d, "orders.db"), autoload: true });
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.get("/admin", (req, res) => res.sendFile(path.join(__dirname, "admin.html")));
+app.get("/admin.html", (req, res) => res.sendFile(path.join(__dirname, "admin.html")));
+app.get("/api/products", (req, res) => pDB.find({}, (e, r) => res.json(r || [])));
+app.post("/api/products", (req, res) => pDB.insert({ ...req.body, createdAt: new Date() }, (e, r) => res.json(r)));
+app.put("/api/products/:id", (req, res) => pDB.update({ _id: req.params.id }, { $set: req.body }, {}, (e, r) => res.json({ ok: 1 })));
+app.delete("/api/products/:id", (req, res) => pDB.remove({ _id: req.params.id }, {}, (e, r) => res.json({ ok: 1 })));
+app.get("/api/messages", (req, res) => mDB.find({}).sort({ createdAt: -1 }).exec((e, r) => res.json(r || [])));
+app.post("/api/messages", (req, res) => mDB.insert({ ...req.body, createdAt: new Date(), read: false }, (e, r) => res.json(r)));
+app.delete("/api/messages/:id", (req, res) => mDB.remove({ _id: req.params.id }, {}, (e, r) => res.json({ ok: 1 })));
+app.get("/api/orders", (req, res) => oDB.find({}).sort({ createdAt: -1 }).exec((e, r) => res.json(r || [])));
+app.post("/api/orders", (req, res) => oDB.insert({ ...req.body, createdAt: new Date(), status: "pending" }, (e, r) => res.json(r)));
+app.get("/api/health", (req, res) => res.json({ status: "ok", time: new Date() }));
+app.listen(PORT, "0.0.0.0", () => console.log("Server running on port " + PORT));
+
+=== admin.html (前200行) ===
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>卓翌定制 - 后台管理</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Microsoft YaHei', sans-serif; background: #f5f5f5; min-height: 100vh; }
+    .header { background: linear-gradient(135deg, #8b7355, #6b5a45); color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+    .header h1 { font-size: 1.4rem; }
+    .stats { display: flex; gap: 1rem; max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem; }
+    .stat { flex: 1; background: #fff; border-radius: 8px; padding: 1rem; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .stat h3 { font-size: 2rem; color: #8b7355; }
+    .stat p { color: #888; font-size: 0.8rem; margin-top: 0.3rem; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem 2rem; }
+    .tabs { display: flex; background: #fff; border-radius: 8px; overflow: hidden; margin-bottom: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .tab { flex: 1; padding: 0.8rem; border: none; background: none; cursor: pointer; font-size: 0.95rem; color: #666; }
+    .tab.on { color: #8b7355; font-weight: 600; background: #f9f7f4; border-bottom: 2px solid #8b7355; }
+    .panes > div { display: none; }
+    .panes > div.show { display: block; }
+    .card { background: #fff; border-radius: 8px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .btn { padding: 0.5rem 1rem; background: #8b7355; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+    .btn:hover { background: #6b5a45; }
+    .btn-d { background: #ff4d4f; }
+    .btn-d:hover { background: #e03e3f; }
+    .btn-p { background: #1890ff; }
+    .btn-s { background: #52c41a; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 0.6rem 0.8rem; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; }
+    th { background: #fafafa; color: #666; font-size: 0.8rem; }
+    tr:hover { background: #fafafa; }
+    .badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; }
+    .badge-y { background: #fff7e6; color: #d48806; }
+    .badge-g { background: #f6ffed; color: #52c41a; }
+    .empty { text-align: center; padding: 2rem; color: #bbb; }
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999; justify-content: center; align-items: center; }
+    .modal.on { display: flex; }
+    .box { background: #fff; padding: 1.5rem; border-radius: 8px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
+    .box h2 { margin-bottom: 1rem; color: #333; font-size: 1.1rem; }
+    .fg { margin-bottom: 0.8rem; }
+    .fg label { display: block; margin-bottom: 0.2rem; font-size: 0.85rem; color: #333; }
+    .fg input, .fg textarea, .fg select { width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; }
+    .fg input:focus, .fg textarea:focus { border-color: #8b7355; outline: none; }
+    .fg textarea { height: 80px; resize: vertical; }
+    .acts { text-align: right; margin-top: 1rem; }
+    /* 图片上传区域 */
+    .img-upload-area { border: 2px dashed #ddd; border-radius: 8px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.3s; }
+    .img-upload-area:hover { border-color: #8b7355; background: #faf9f7; }
+    .img-upload-area.dragover { border-color: #8b7355; background: #f5f3ef; }
+    .img-upload-area p { color: #999; font-size: 0.85rem; }
+    .img-upload-area .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .img-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 0.8rem; }
+    .img-thumb { position: relative; width: 100%; aspect-ratio: 1; border-radius: 4px; overflow: hidden; border: 1px solid #eee; }
+    .img-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .img-thumb .del { position: absolute; top: 4px; right: 4px; background: rgba(255,0,0,0.8); color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; }
+    .img-thumb .cover { position: absolute; bottom: 4px; left: 4px; background: rgba(139,115,85,0.9); color: #fff; border: none; border-radius: 4px; padding: 2px 6px; font-size: 11px; cursor: pointer; }
+    .img-thumb.is-cover { border: 2px solid #8b7355; }
+    .upload-progress { display: none; margin-top: 0.5rem; }
+    .upload-progress.show { display: block; }
+    .progress-bar { height: 4px; background: #eee; border-radius: 2px; overflow: hidden; }
+    .progress-bar .fill { height: 100%; background: #8b7355; transition: width 0.3s; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🏆 卓翌定制 - 后台管理</h1>
+    <span id="status" style="font-size:0.85rem">● 检测中...</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><h3 id="s-p">0</h3><p>📦 产品</p></div>
+    <div class="stat"><h3 id="s-m">0</h3><p>💬 留言</p></div>
+    <div class="stat"><h3 id="s-o">0</h3><p>🛒 订单</p></div>
+  </div>
+  <div class="container">
+    <div class="tabs">
+      <button class="tab on" onclick="go('p',this)">📦 产品管理</button>
+      <button class="tab" onclick="go('m',this)">💬 客户留言</button>
+      <button class="tab" onclick="go('o',this)">🛒 订单管理</button>
+      <button class="tab" onclick="go('pay',this)">💰 支付设置</button>
+    </div>
+    <div class="panes">
+      <div id="p" class="show">
+        <div class="card">
+          <div class="top"><h2>产品列表</h2><button class="btn" onclick="addP()">+ 添加产品</button></div>
+          <table><thead><tr><th>产品图片</th><th>名称</th><th>类别</th><th>价格</th><th>操作</th></tr></thead><tbody id="tb-p"></tbody></table>
+          <div id="ep" class="empty">暂无产品，点击上方按钮添加</div>
+        </div>
+      </div>
+      <div id="m">
+        <div class="card">
+          <div class="top"><h2>客户留言</h2></div>
+          <table><thead><tr><th>姓名</th><th>联系方式</th><th>留言</th><th>时间</th><th>操作</th></tr></thead><tbody id="tb-m"></tbody></table>
+          <div id="em" class="empty">暂无留言</div>
+        </div>
+      </div>
+      <div id="o">
+        <div class="card">
+          <div class="top"><h2>咨询订单</h2></div>
+          <table><thead><tr><th>姓名</th><th>电话</th><th>产品</th><th>金额</th><th>支付方式</th><th>状态</th><th>时间</th><th>操作</th></tr></thead><tbody id="tb-o"></tbody></table>
+          <div id="eo" class="empty">暂无订单</div>
+        </div>
+      </div>
+      <div id="pay">
+        <div class="card">
+          <div class="top"><h2>💰 收款码设置</h2></div>
+          <p style="color:#888;font-size:0.85rem;margin-bottom:1rem">上传您的微信/支付宝收款二维码，客户下单后可扫码支付。</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+            <div>
+              <h3 style="font-size:1rem;margin-bottom:0.8rem">💚 微信收款码</h3>
+              <div class="img-upload-area" onclick="uploadQr('wechat')" id="qr-wechat-area">
+                <div id="qr-wechat-preview" style="text-align:center">
+                  <div class="icon">📱</div>
+                  <p>点击上传微信收款码</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 style="font-size:1rem;margin-bottom:0.8rem">💙 支付宝收款码</h3>
+              <div class="img-upload-area" onclick="uploadQr('alipay')" id="qr-alipay-area">
+                <div id="qr-alipay-preview" style="text-align:center">
+                  <div class="icon">📱</div>
+                  <p>点击上传支付宝收款码</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <input type="file" id="qr-input" accept="image/*" style="display:none">
+          <div style="margin-top:1.5rem;text-align:right">
+            <button class="btn" onclick="savePaymentConfig()">💾 保存设置</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 产品编辑弹窗 -->
+  <div id="mp" class="modal">
+    <div class="box">
+      <h2 id="mt">添加产品</h2>
+      <form id="pf">
+        <input type="hidden" id="pid">
+        <div class="fg"><label>产品名称 *</label><input id="pn" required placeholder="例如：整体衣柜定制"></div>
+        <div class="fg"><label>类别</label><select id="pc"><option>整体衣柜</option><option>衣帽间</option><option>橱柜</option><option>全屋定制</option><option>书柜</option><option>鞋柜</option><option>酒柜</option></select></div>
+        <div class="fg"><label>价格 (元) *</label><input type="number" id="pp" required placeholder="例如：12999"></div>
+        <div class="fg"><label>产品描述</label><textarea id="pd" placeholder="输入产品描述、特点、材质等"></textarea></div>
+        <div class="fg">
+          <label>产品图片（最多6张，第一张为主图）</label>
+          <div class="img-upload-area" id="dropArea" onclick="document.getElementById('fileInput').click()">
+            <div class="icon">📁</div>
+            <p>点击选择图片或拖拽到这里</p>
+            <p style="font-size:0.75rem;color:#bbb">支持 JPG、PNG、GIF、WebP，单张最大 10MB</p>
+          </div>
+          <input type="file" id="fileInput" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)">
+          <div class="upload-progress" id="uploadProgress">
+            <p style="font-size:0.8rem;color:#888" id="uploadText">上传中...</p>
+            <div class="progress-bar"><div class="fill" id="progressFill"></div></div>
+          </div>
+          <div class="img-grid" id="imgGrid"></div>
+        </div>
+        <div class="acts">
+          <button type="button" class="btn" onclick="cls()" style="margin-right:0.5rem;background:#999">取消</button>
+          <button type="submit" class="btn">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 留言详情弹窗 -->
+  <div id="mm" class="modal">
+    <div class="box">
+      <h2>留言详情</h2>
+      <div id="md"></div>
+      <div class="acts"><button class="btn" onclick="document.getElementById('mm').classList.remove('on')" style="background:#999">关闭</button></div>
+    </div>
+  </div>
+
+  <script>
+    let imgUrls = [];
+    let dragCounter = 0;
+
+    function go(id, el) {
+      document.querySelectorAll('.panes > div').forEach(e => e.classList.remove('show'));
+      document.querySelectorAll('.tab').forEach(e => e.classList.remove('on'));
+      document.getElementById(id).classList.add('show');
+      el.classList.add('on');
+      if (id === 'p') loadP();
+      else if (id === 'm') loadM();
+      else if (id === 'o') loadO();
+      else if (id === 'pay') loadPaymentCfg();
+    }
+
+    // 检测 API
+    fetch('/api/health').then(r => r.json()).then(() => {
+      document.getElementById('status').innerHTML = '<span style="color:#52c41a">● 服务正常</span>';
+    }).catch(() => {
+      document.getElementById('status').innerHTML = '<span style="color:#ff4d4f">● 连接失败</span>';
+    });
+
+
+=== varwwwfrontend 目录 ===
+total 8
+drwxr-xr-x   2 root root 4096 May 24 21:54 .
+dr-xr-x---. 13 root root 4096 May 27 10:48 ..
+
+=== 运行中的 Node 进程 ===
+root       22637  0.9 14.8 22473152 283748 ?     Ssl  May27  13:47 /usr/local/share/aliyun-assist/plugin/ACS-ECS-OpenClaw/current/node-runtime/bin/node /usr/local/share/aliyun-assist/plugin/ACS-ECS-OpenClaw/current/node-runtime/lib/node_modules/openclaw/dist/index.js gateway --port 18789
+root       24772  0.0  0.0 222120  1372 ?        S    May27   0:00 bash -c cd /root/backend && nohup node server-v4.js > /tmp/backend.log 2>&1 &
+root       24773  0.0  1.8 1102420 34980 ?       Sl   May27   0:00 node server-v4.js
+root       28413  0.0  0.1 222120  3272 ?        Ss   09:46   0:00 bash -c ps aux | grep node
+root       28429  0.0  0.0 221524   896 ?        S    09:46   0:00 grep node
+
+=== package.json ===
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.6.2",
+    "multer": "^2.1.1",
+    "nedb": "^1.8.0",
+    "nodemon": "^3.1.14"
+  }
+}
+

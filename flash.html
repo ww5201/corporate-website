@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>限时秒杀 | 卓翌定制</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+
+<div class="flash-page">
+  <!-- 秒杀头部 -->
+  <div class="flash-page-header">
+    <h2>⚡ <span data-i18n="flash.title">限时秒杀</span></h2>
+    <div class="flash-countdown-inline">
+      <span data-i18n="flash.ends">距结束</span>
+      <span class="cd-block" id="cdH">00</span>:
+      <span class="cd-block" id="cdM">00</span>:
+      <span class="cd-block" id="cdS">00</span>
+    </div>
+  </div>
+
+  <!-- 秒杀商品网格 -->
+  <div class="flash-grid" id="flashGrid">
+    <!-- 动态加载 -->
+  </div>
+
+  <!-- 万人拼团区域 -->
+  <div class="group-section" id="group">
+    <div class="group-section-header">
+      <span style="font-size:24px">🔥</span>
+      <h3 data-i18n="group.title">万人拼团</h3>
+      <span class="pdd-group-badge" data-i18n="group.badge">超值低价</span>
+    </div>
+    <div class="group-list" id="groupList">
+      <!-- 动态加载 -->
+    </div>
+  </div>
+</div>
+
+<script type="module" src="./src/flash.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+renderPortfolio positions: [26268, 33414]
+
+--- renderPortfolio #1 at 26268 ---
+function renderPortfolio() {
+
+  const grid = document.getElementById('portfolioGrid');
+
+  if (cases.length <= 1) {
+
+    grid.innerHTML = '';
+
+    return;
+
+  }
+
+  grid.innerHTML = cases.slice(1).map(c => {
+
+    const img = c.images && c.images[0] ? IMG + c.images[0] : '';
+
+    return `<div class="portfolio-item" onclick="openPortfolioLightbox('${c._id}')">
+
+      <img src="${img}" alt="${c.name || '案例'}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%
+
+--- renderPortfolio #2 at 33414 ---
+function renderPortfolio() {
+
+      const grid = document.getElementById('portfolioGrid');
+
+      grid.innerHTML = '';
+
+      const items = products.filter(p => (p.images && p.images.length) || p.image).slice(0, 6);
+
+      if (!items.length) { grid.innerHTML = '<p style="text-align:center;color:#999;padding:40px;grid-column:1/-1">暂无案例</p>'; return; }
+
+      items.forEach(p => {
+
+        const img = (p.images && p.images[0]) || p.image;
+
+        const el = document.createElement('div');
+
+        
+

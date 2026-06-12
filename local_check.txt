@@ -1,0 +1,69 @@
+Local size: 75102
+JS length: 37624
+Braces: open=145 close=145
+
+Functions defined: 33
+  - toggleLangMenu
+  - setLang
+  - animateCounters
+  - initHero
+  - goHero
+  - loadCases
+  - renderCarousel
+  - startCarousel
+  - updateCarousel
+  - prevSlide
+  - nextSlide
+  - goToSlide
+  - renderPortfolio
+  - openPortfolioLightbox
+  - openLightbox
+  - showLightbox
+  - closeLightbox
+  - prevLightbox
+  - nextLightbox
+  - loadData
+  - renderFilters
+  - filterProd
+  - renderProducts
+  - imgNav
+  - imgNavAuto
+  - openProductLb
+  - renderPortfolio
+  - openLb
+  - closeLb
+  - navLb
+  - renderLb
+  - showWechatGuide
+  - handleWechatClick
+
+[OK] handleWechatClick uses Android bridge
+
+handleWechatClick function:
+function handleWechatClick() {
+    var num = '18977122166';
+    // Method 1: APK JavaScript Bridge
+    if (window.Android && window.Android.openWechat) {
+        window.Android.openWechat();
+        return;
+    
+
+loadData() call context:
+==
+    loadCases();
+    setLang(currentLang);
+    loadData();
+  
+
+Last 200 chars of JS:
+document.execCommand('copy');
+        document.body.removeChild(ta);
+    } catch(e) {}
+    showWechatGuide(true);
+}
+
+    // ===== 启动 =====
+    loadCases();
+    setLang(currentLang);
+    loadData();
+  

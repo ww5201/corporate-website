@@ -1,0 +1,15 @@
+menu-toggle in HTML: True
+toggleMenu in HTML: True
+toggleMenu function: False
+
+menu-toggle CSS: True
+.menu { display:none } CSS: True
+mobile-nav CSS: True
+
+mobile-nav in HTML: True
+bottom-nav in HTML: True
+
+toggleMenu function NOT FOUND!
+
+All onclick handlers: ['checkAppUpdate', 'clearCache', 'closeLb', 'closeOrder', 'filterProd', 'goToSlide', 'handleWechatClick', 'if', 'imgNav', 'navLb', 'openLightbox', 'openOrder', 'openPortfolioLightbox', 'openProductLb', 'selectPay', 'setLang', 'submitOrder', 'toggleLang', 'toggleMenu', 'toggleSettings']
+  MISSING function: toggleMenu

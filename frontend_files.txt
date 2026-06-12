@@ -1,0 +1,43 @@
+=== 查找前端文件 ===
+
+HTML文件:
+/root/.openclaw/canvas/index.html
+/root/admin-new.html
+/root/backend/node_modules/nedb/browser-version/test/playground.html
+/root/backend/node_modules/nedb/browser-version/test/testPersistence2.html
+/root/backend/node_modules/nedb/browser-version/test/index.html
+/root/backend/node_modules/nedb/browser-version/test/testLoad.html
+/root/backend/node_modules/nedb/browser-version/test/testPersistence.html
+/root/backend/node_modules/underscore/index.html
+/root/backend/admin.html
+/root/backend/admin/admin.html
+/var/www/frontend/admin.html
+/var/www/frontend/index.html
+
+
+/var/www/:
+total 12
+drwxr-xr-x   3 root root 4096 May 26 10:57 .
+drwxr-xr-x. 25 root root 4096 May 24 19:48 ..
+drwxr-xr-x   3 root root 4096 May 27 10:48 frontend
+
+
+前端相关文件:
+/var/www/frontend/admin.html
+/var/www/frontend/index.html
+/var/www/frontend/assets/index-B2RshGO7.js
+/var/www/frontend/assets/index-Dg7YTUeT.js
+/var/www/frontend/assets/index-BVzk-nFx.css
+/var/www/frontend/assets/index-nenmQvGd.js
+/var/www/frontend/assets/index-DnyHXUWK.js
+/var/www/frontend/assets/index-D_o_inZM.js
+/var/www/frontend/assets/index-JMECDrvb.css
+/var/www/frontend/assets/index-CRXe9dML.css
+/var/www/frontend/assets/index-D3GOkNyY.css
+
+
+Nginx配置:
+total 12
+drwxr-xr-x 2 root root 4096 May 27 11:22 .
+drwxr-xr-x 4 root root 4096 May 26 11:15 ..
+-rw-r--r-- 1 root root  627 May 27 11:05 site.conf

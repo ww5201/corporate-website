@@ -1,0 +1,21 @@
+Found 2 occurrences of selectPay:
+
+--- #1 at 35983 ---
+
+            <div class="pay-btn active" onclick="selectPay('wechat')">💚 微信</div>
+
+            <div class="pay-btn" onclick="selectPay('alipay')">💙 支付
+
+--- #2 at 36058 ---
+</div>
+
+            <div class="pay-btn" onclick="selectPay('alipay')">💙 支付宝</div>
+
+          </div>
+
+        </div>
+
+        <div class="qr-box">
+
+  
+

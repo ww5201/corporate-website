@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>商品分类 | 卓翌定制</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+
+<div class="cat-page">
+  <div class="cat-sidebar-layout">
+    <!-- 左侧分类 -->
+    <div class="cat-sidebar" id="catSidebar">
+      <div class="cat-sidebar-item active" data-cat="all">
+        <span class="cat-sb-icon">📦</span>
+        <span data-i18n="cat.all">全部</span>
+      </div>
+      <div class="cat-sidebar-item" data-cat="cabinet">
+        <span class="cat-sb-icon">🗄️</span>
+        <span data-i18n="cat.cabinet">柜类</span>
+      </div>
+      <div class="cat-sidebar-item" data-cat="wardrobe">
+        <span class="cat-sb-icon">👔</span>
+        <span data-i18n="cat.wardrobe">衣柜</span>
+      </div>
+      <div class="cat-sidebar-item" data-cat="kitchen">
+        <span class="cat-sb-icon">🍳</span>
+        <span data-i18n="cat.kitchen">橱柜</span>
+      </div>
+      <div class="cat-sidebar-item" data-cat="custom">
+        <span class="cat-sb-icon">✨</span>
+        <span data-i18n="cat.custom">定制</span>
+      </div>
+    </div>
+
+    <!-- 右侧商品列表 -->
+    <div class="cat-content">
+      <!-- 分类Tab筛选 -->
+      <div class="pdd-filter-tabs" id="filterTabs" style="padding: 0 0 12px;">
+        <button class="pdd-filter-tab active" data-sort="default">综合</button>
+        <button class="pdd-filter-tab" data-sort="price-asc">价格↑</button>
+        <button class="pdd-filter-tab" data-sort="price-desc">价格↓</button>
+        <button class="pdd-filter-tab" data-sort="newest">最新</button>
+      </div>
+      <div class="cat-product-list" id="catProductList">
+        <!-- 动态加载 -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="./src/category.js"></script>
+</body>
+</html>

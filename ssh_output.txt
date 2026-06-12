@@ -1,0 +1,40 @@
+Connected!
+Output: root
+iZ7xv9l4awz756t6zatq6rZ
+/root
+
+Root dir:
+total 136
+dr-xr-x---. 13 root root  4096 May 27 10:48 .
+dr-xr-xr-x. 21 root root  4096 May 24 19:40 ..
+-rw-r--r--   1 root root 14397 May 27 10:48 admin-new.html
+drwxr-xr-x   2 root root  4096 May 24 19:40 .~aegis
+drwxr-xr-x   8 root root  4096 May 27 10:54 backend
+-rw-r--r--   1 root root  7888 May 26 11:26 backend-code.zip
+drwxr-xr-x   2 root root  4096 May 26 18:04 backend-v3.zip
+-rw-------   1 root root 10717 May 24 22:19 .bash_history
+-rw-r--r--.  1 root root    18 May 18  2020 .bash_logout
+-rw-r--r--.  1 root root   176 May 18  2020 .bash_profile
+-rw-r--r--.  1 root root   176 May 18  2020 .bashrc
+drwxr-xr-x   3 root root  4096 May 27 10:07 .config
+-rw-r--r--.  1 root root   100 May 18  2020 .cshrc
+-rw-r--r--   1 root root  6351 May 27 10:48 frontend-new.zip
+-rw-r--r--   1 root root  6814 May 26 10:53 frontend.zip
+drwxr-xr-x   2 root root  4096 May 24 19:40 .maegis
+drwxr-xr-x   4 root root  4096 May 26 12:10 .npm
+-rw-------   1 root root    40 May 26 12:09 .npmrc
+drwx------   9 root root  4096 May 27 10:14 .openclaw
+drwxr-xr-x   2 root root  4096 May  3 10:15 .pip
+-rw-r--r--   1 root root    72 May  3 10:15 .pydistutils.cfg
+-rw-r--r--   1 root root  2575 May 26 14:04 server-nedb.js
+drwx------   2 root root  4096 May  3 10:13 .ssh
+-rw-r--r--.  1 root root   129 May 18  2020 .tcshrc
+drwxr-xr-x   2 root root  4096 May 24 21:54 varwwwfrontend
+drwxr-xr-x   2 root root  4096 May 24 19:40 .zaegis
+
+Project files:
+/root/backend/admin.html
+/root/backend/server.js
+/root/backend/admin/admin.html
+/var/www/frontend/admin.html
+

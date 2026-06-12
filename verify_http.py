@@ -1,0 +1,10 @@
+import urllib.request
+r = urllib.request.urlopen('http://8.138.218.146/', timeout=10)
+d = r.read()
+print(f"HTTP size: {len(d)} bytes")
+print(f"Has loadData: {b'loadData' in d}")
+print(f"Has toggleMenu: {b'toggleMenu' in d}")
+print(f"Has showContact: {b'showContact' in d}")
+print(f"Has langLabels: {b'langLabels' in d}")
+print(f"Has hero_badge: {b'hero_badge' in d}")
+print(f"Has footer_p1: {b'footer_p1' in d}")

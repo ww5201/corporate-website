@@ -1,0 +1,95 @@
+id="products">
+
+    <div class="container">
+
+      <div class="sec-head reveal">
+
+        <div class="sec-label" data-i18n="products_label">PRODUCTS</div>
+
+        <h2 class="sec-title" data-i18n="products_title">产品展示</h2>
+
+        <div class="sec-line"></div>
+
+        <p class="sec-desc" data-i18n="products_desc">每一件作品，都是匠心与美学的融合</p>
+
+      </div>
+
+      <div class="prod-filters" id="prodFilters"></div>
+
+      <div class="products-grid" id="productsGrid"></div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- 案例 -->
+
+  <section id="portfolio" class="portfolio">
+
+    <div class="container">
+
+      <div class="sec-head reveal">
+
+        <div class="sec-label" data-i18n="portfolio_label">PORTFOLIO</div>
+
+        <h2 class="sec-title" data-i18n="portfolio_title">精选案例</h2>
+
+        <div class="sec-line"></div>
+
+        <p class="sec-desc" data-i18n="portfolio_desc">看看我们为客户打造的梦想空间</p>
+
+      </div>
+
+      
+
+      <div class="portfolio-grid" id="portfolioGrid"></div>
+
+    
+
+    </div>
+
+  </section>
+
+
+
+  <!-- 联系 -->
+
+  <section id="contact" class="contact">
+
+    <div class="container">
+
+      <div class="sec-head reveal">
+
+        <div class="sec-label" data-i18n="contact_label">CONTACT US</div>
+
+        <h2 class="sec-title" data-i18n="contact_title">联系我们</h2>
+
+        <div class="sec-line"></div>
+
+      </div>
+
+      <div class="contact-grid">
+
+        <div class="reveal">
+
+          <div class="contact-card">
+
+            <div class="contact-icon">📍</div>
+
+            <div><h5 data-i18n="contact_addr_title">地址</h5><p><span data-i18n="contact_addr">广西南宁市江南区那洪大道<br>留村路 1-2 号</span></p></div>
+
+          </div>
+
+          <div class="contact-card">
+
+            <div class="contact-icon">📞</div>
+
+            <div><h5 data-i18n="contact_phone_title">电话</h5><p><a href="tel:18977122166" style="color:inherit;text-decoration:none"><a href="tel:18977122166" style="color:inherit;text-decoration:none">18977122166</a></a></p></div>
+
+          </div>
+
+          <div class="contact-card">
+
+        

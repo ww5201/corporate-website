@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#1A1A2E"
+    android:padding="16dp">
+
+    <!-- 早点休息 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="早点休息"
+        android:textSize="36sp"
+        android:textColor="#E0E0E0"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- 时间 -->
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="20sp"
+        android:textColor="#888888"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 上传状态 -->
+    <TextView
+        android:id="@+id/tvUploadStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="上传服务: 未启动"
+        android:textSize="12sp"
+        android:textColor="#666666"
+        android:gravity="center"
+        android:layout_marginBottom="12dp" />
+
+    <!-- 启动/停止按钮 -->
+    <Button
+        android:id="@+id/btnToggleService"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:text="▶ 启动上传"
+        android:textSize="14sp"
+        android:backgroundTint="#4CAF50"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 分割线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#333333"
+        android:layout_marginBottom="12dp" />
+
+    <!-- 正在运行的应用标题 -->
+    <TextView
+        android:id="@+id/tvAppsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="正在运行的应用"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:gravity="center"
+        android:layout_marginBottom="8dp" />
+
+    <!-- 应用列表 -->
+    <TextView
+        android:id="@+id/tvAppsList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="加载中..."
+        android:textSize="12sp"
+        android:textColor="#AAAAAA"
+        android:fontFamily="monospace"
+        android:lineSpacingExtra="4dp"
+        android:scrollbars="vertical" />
+
+    <!-- 底部提示 -->
+    <TextView
+        android:id="@+id/tvHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="11sp"
+        android:textColor="#555555"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
+
+</LinearLayout>

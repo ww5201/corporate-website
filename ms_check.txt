@@ -1,0 +1,13 @@
+Found 'ms: {' at 56129:
+ms: {
+
+        nav_home: 'Utama', nav_about: 'Tentang Kami', nav_services: 'Perkhidmatan', nav_products: 'Produk', nav_portfolio: 'Portfolio', nav_contact: 'Hubungi',
+
+        hero_badge: 'Kraf Tangan · Kecemerlangan', hero_title: 'Mencipta<br><em>Ruang Hidup Impian</em> Anda', hero_sub: 'Perabot Tersuai Premium · Setiap Butiran Adalah Seni',
+
+        hero_btn_products: 'Lihat Produk', hero_btn_contact: 'Tempah Reka Bentuk →',
+
+        about_badge: 'Tentang Kami', about_title: 'Dekad Kraf Tangan
+
+mobile_mine in ms section: False
+i18n close not found

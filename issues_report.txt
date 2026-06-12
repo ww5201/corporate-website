@@ -1,0 +1,23 @@
+Total JS length: 40577
+Total lines: 1320
+Braces: 169:169
+
+Issues found:
+  Found: currentLangLabel ref
+  Found: closest settings-dropdown
+
+First 10 lines of startup code:
+// ===== 翻译字典 =====
+
+    const i18n = {
+
+      zh: {
+
+        nav_home: '首页', nav_about: '关于', nav_services: '服务', nav_products: '产品', nav_portfolio: '案例', nav_contact: '联系',
+
+        hero_badge: '始于匠心 · 卓尔不群', hero_title: '为您打造<br><em>梦想生活空间</em>', hero_sub: '专注高端家居定制 · 每一处细节都是艺术',
+
+        hero_btn_products: '浏览产品', hero_btn_contact: '预约设计 →',
+
+        about_badge: '关于我们', about_title: '十年匠心<br>只为定制您的理想生活', about_desc: '卓翌定制专注于高端家居定制领域，以精湛工艺和创新设计，为每一位客户打造独一无二的生活空间。我们相信，家不只是居住的地方，更是生活态度的表达。',
+

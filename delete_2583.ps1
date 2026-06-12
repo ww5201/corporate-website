@@ -1,0 +1,1 @@
+Remove-Item -Path 'D:\腾讯应用宝\Androws\Image\5.10.6000.2583' -Recurse -Force -ErrorAction Stop

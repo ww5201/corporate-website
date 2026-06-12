@@ -1,0 +1,6 @@
+File size: 79659
+Braces: 172:172
+submitOrder count: 1
+  Added ☰ button inside nav before lang-switch
+Server validation: JS OK, len=40732
+

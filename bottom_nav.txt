@@ -1,0 +1,64 @@
+Found 'mobile-nav' at char 23254
+
+wechat-popup img { width:160px; height:160px; border-radius:8px; margin-bottom:10px; }
+
+    .wechat-popup p { font-size:0.82rem; color:var(--text2); margin:0; }
+
+
+
+    /* ===== 移动端底部导航 ===== */
+
+    .mobile-nav { display:none; position:fixed; bottom:0; left:0; right:0; z-index:100; background:rgba(255,255,255,0.95); backdrop-filter:blur(20px); border-top:1px solid rgba(0,0,0,0.06); padding:6px 0 env(safe-area-inset-bottom,8px); }
+
+    .mobile-nav-inner { display:flex; justify-content:space-around; }
+
+    .mobile-nav a { display:flex; flex-direction:column; align-items:center; gap:2px; text-decoration:none; color:var(--text2); font-size:0.68rem; padding:6px 12px; border-radius:12px; transition:all 0.3s; }
+
+    .mobile-nav a.active { color:var(--accent); }
+
+    .mobile-nav a .icon { font-size:1.3rem; }
+
+
+
+    /* ===== 响应式 ===== */
+
+    @media (max-width:900px) {
+
+      .services-grid { grid-template-columns:repeat(2,1fr); }
+
+      .products-grid { grid-template-columns:repeat(2,1fr); }
+
+      .portfolio-grid { grid-template-columns:repeat(2,1fr); }
+
+      .reviews-grid { grid-template-columns:1fr; }
+
+      .footer-grid { grid-template-columns:1fr 1fr; }
+
+      .about-grid { gap:40px; }
+
+    }
+
+    @media (max-width:768px) {
+
+      :root { --nav-h:56px; --bottom-nav-h:64px; }
+
+      .menu { display:none; }
+      .menu.show { display:block; position:absolute; top:100%; left:0; right:0; background:#fff; box-shadow:0 8px 30px rgba(0,0,0,0.12); border-radius:0 0 16px 16px; z-index:999; padding:16px 24px; }
+
+      .menu-toggle { display:block; }
+
+      .menu.open { display:flex; flex-direction:column; position:absolute; top:var(--nav-h); left:0; right:0; background:rgba(250,248,245,0.98); backdrop-filter:blur(20px); padding:16px 24px; border-bottom:1px solid rgba(0,0,0,0.06); box-shadow:0 8px 32px rgba(0,0,0,0.08); }
+
+      section { padding:60px 0; }
+
+      .about-grid, .contact-grid { grid-template-columns:1fr; }
+
+      .services-grid, .products-grid, .portfolio-grid { grid-template-columns:1fr; }
+
+      .stats { grid-template-columns:repeat(3,1fr); gap:12px; }
+
+      .stat { padding:16px 8px; }
+
+      .stat-num { font-size:1.5rem; }
+
+      .hero-actions { flex-direct

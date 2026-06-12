@@ -1,0 +1,100 @@
+Found at pos 2854:
+</span>',
+
+        mobile_home: '首页', mobile_products: '产品', mobile_consult: '咨询',,,,,,,,,
+
+        mobile_mine: '我的', mine_title: '个人中心', mine_settings: '系统设置',
+        mine_login: '登录/注册', mine_bind
+
+---
+
+Found at pos 6036:
+       mobile_home: 'Home', mobile_products: 'Products', mobile_consult: 'Consult'
+
+      ,
+        mobile_mine: 'Mine', mine_title: 'My Account', mine_settings: 'Settings', mine_login: 'Login/Registe
+
+---
+
+Found at pos 8507:
+served.',
+
+        mobile_home: 'ホーム', mobile_products: '製品', mobile_consult: '相談'
+
+      ,
+        mobile_mine: '私', mine_title: 'マイページ', mine_settings: '設定', mine_login: 'ログイン', mine_bindwx: 'WeChat
+
+---
+
+Found at pos 10923:
+Reserved.',
+
+        mobile_home: '홈', mobile_products: '제품', mobile_consult: '상담'
+
+      ,
+        mobile_mine: '나', mine_title: '내 정보', mine_settings: '설정', mine_login: '로그인', mine_bindwx: '위챗 연동', 
+
+---
+
+Found at pos 13968:
+       mobile_home: 'หน้าแรก', mobile_products: 'สินค้า', mobile_consult: 'ปรึกษา'
+
+      ,
+        mobile_mine: 'ฉัน', mine_title: 'บัญชีของฉัน', mine_settings: 'ตั้งค่า', mine_login: 'เข้าสู่ระบบ', 
+
+---
+
+Found at pos 17294:
+   mobile_home: 'Trang chủ', mobile_products: 'Sản phẩm', mobile_consult: 'Tư vấn'
+
+      ,
+        mobile_mine: 'Tôi', mine_title: 'Tài khoản', mine_settings: 'Cài đặt', mine_login: 'Đăng nhập', mine
+
+---
+
+Found at pos 20586:
+.',
+
+        mobile_home: 'Utama', mobile_products: 'Produk', mobile_consult: 'Rundingan'
+,
+        mobile_mine: 'Saya', mine_title: 'Akaun Saya', mine_settings: 'Tetapan', mine_login: 'Log Masuk', mi
+
+---
+
+Found at pos 22542:
+     <a href="javascript:void(0)" onclick="showMinePanel()"><span class="icon">👤</span>${i18n[lang].mobile_mine}</a>
+          
+
+        </div>`;
+
+      }
+
+    }
+
+
+
+    // ===== 数字滚动 =====
+
+    functi
+
+---
+
+'zh:' at pos 309: zh: {
+
+        nav_home: '首页',
+'en:' at pos 1285: en: '<span data-i18n="footer_p
+'ja:' at pos 6307: ja: {
+
+        nav_home: 'ホーム'
+'ko:' at pos 8732: ko: {
+
+        nav_home: '홈', 
+'th:' at pos 11143: th: {
+
+        nav_home: 'หน้า
+'vi:' at pos 14266: vi: {
+
+        nav_home: 'Tran
+'ms:' at pos 17573: ms: {
+
+        nav_home: 'Utam

@@ -1,0 +1,23 @@
+=== Nginx ===
+● nginx.service - The nginx HTTP and reverse proxy server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; vendor preset: disabled)
+   Active: active (running) since Sun 2026-05-31 11:45:16 CST; 2min 40s ago
+  Process: 757 ExecStart=/usr/sbin/nginx (code=exited, status=0/SUCCESS)
+  Process: 743 ExecStartPre=/usr/sbin/nginx -t (code=exited, status=0/SUCCESS)
+
+=== Ports ===
+LISTEN 0      511          0.0.0.0:80         0.0.0.0:*    users:(("nginx",pid=773,fd=6),("nginx",pid=772,fd=6),("nginx",pid=770,fd=6))
+
+=== Health ===
+
+
+=== PM2 ===
+[PM2] Spawning PM2 daemon with pm2_home=/root/.pm2
+[PM2] PM2 Successfully daemonized
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+
+
+=== Swap ===
+Swap:         2.0Gi          0B       2.0Gi

@@ -1,0 +1,18 @@
+<lint-module
+    format="1"
+    dir="D:\tokai\android-app\admin"
+    name=":admin"
+    type="APP"
+    maven="卓翌定制:admin:"
+    agpVersion="8.1.0"
+    buildFolder="build"
+    bootClassPath="D:\android-sdk\platforms\android-34\android.jar;D:\android-sdk\build-tools\34.0.0\core-lambda-stubs.jar"
+    javaSourceLevel="1.8"
+    compileTarget="android-34">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>

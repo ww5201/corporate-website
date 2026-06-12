@@ -1,0 +1,15 @@
+Position: 39957
+Brace depth at this point: 0
+
+--- 200 chars before ---
+.closest('.settings-dropdown') && !ev.target.closest('[onclick*="toggleSettings"]')) {
+        dd.style.display = 'none';
+      }
+    });
+    function checkAppUpdate() {
+      toggleSettings();
+      
+
+--- 100 chars after ---
+fetch(API + '/app-version').then(function(r){return r.json()}).then(function(d){
+        var curVer 

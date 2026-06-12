@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="admin_accent">#E94560</color>
+    <color name="admin_bg">#F5F5F5</color>
+    <color name="admin_primary">#16213E</color>
+    <color name="admin_primary_dark">#0F3460</color>
+    <string name="app_name_admin">卓翌定制·管理后台</string>
+    <style name="Theme.ZhuoyiAdmin" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/admin_primary_dark</item>
+        <item name="android:navigationBarColor">@color/admin_primary_dark</item>
+        <item name="android:windowBackground">@color/admin_bg</item>
+    </style>
+</resources>

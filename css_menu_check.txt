@@ -1,0 +1,50 @@
+Found 'menu-toggle' at 2390:
+  ...dark); background:rgba(184,149,106,0.08); }
+
+    .menu-toggle { display:none; background:none; border:none; font-size:1.5rem; cursor:pointer; padding:8px; }
+
+    .lang-switch { position:relative; margin-left:16px; padding-left:16px; border-left:1px s...
+
+Found 'mobile-nav' at 22660:
+  ...argin:0; }
+
+
+
+    /* ===== 移动端底部导航 ===== */
+
+    .mobile-nav { display:none; position:fixed; bottom:0; left:0; right:0; z-index:100; background:rgba(255,255,255,0.95); backdrop-filter:blur(20px); border-top:1px solid rgba(0,0,0,0.06); padding:6px 0 e...
+
+Found 'bottom-nav' at 429:
+  ...   --radius: 16px;
+
+      --nav-h: 64px;
+
+      --bottom-nav-h: 0px;
+
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior:smooth; scroll-padding-top: var(--nav-h); }
+
+    body { font-family: -apple-system, 'PingFa...
+
+Found '@media' at 23306:
+  ...-size:1.3rem; }
+
+
+
+    /* ===== 响应式 ===== */
+
+    @media (max-width:900px) {
+
+      .services-grid { grid-template-columns:repeat(2,1fr); }
+
+      .products-grid { grid-template-columns:repeat(2,1fr); }
+
+      .portfolio-grid { grid-template-columns:...
+
+
+.menu.show: False
+.menu.active: False
+mobile-nav: 6

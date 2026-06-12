@@ -1,0 +1,23 @@
+ };
+
+
+
+    // Old langDropdown removed - language selection now in settings dropdown
+
+
+
+    const langLabels = { zh:'中文', en:'English', ja:'日本語', ko:'한국어', th:'ไทย', vi:'Tiếng Việt', ms:'Melayu' };
+
+    function setLang(lang) {
+
+      currentLang = lang;
+
+      localStorage.setItem('lang', lang);
+
+      // currentLangLabel removed in dropdown version
+
+      // Update lang label
+      var langLabel = document.getElementById('currentLangLabel');
+      if (langLabel) langLabel.textContent = langLabels[lang] || lang;
+      // Update active state on language buttons
+      document.querySelectorAll('#langDropdown button').forEac

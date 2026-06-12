@@ -1,0 +1,8 @@
+File size: 79483
+Braces: 172:172
+  Fixed openOrder ID refs (orderTitle->oName, orderPrice->oPrice)
+  Fixed submitOrder ID refs (orderName->oName2, orderPhone->oPhone, orderAddr->oNote)
+  Added settings menu (version update + clear cache)
+  Added toggleSettings/checkAppUpdate/clearCache functions
+Server validation: JS OK, len=40732
+

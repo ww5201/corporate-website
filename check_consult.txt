@@ -1,0 +1,53 @@
+
+=== 咨询 at 32658 ===
+    </div>
+
+          <div class="contact-card">
+
+            <div class="contact-icon">💬</div>
+
+            <div><h5 data-i18n="contact_wechat_title">微信</h5><p><span data-i18n="contact_wechat">扫码添加微信咨询</span></p></div>
+
+          </div>
+
+        </div>
+
+        <div class="contact-form-wrap reveal">
+
+          <h3 data-i18n="contact_form_title">在线留言</h3>
+
+          <form class="contact-form" id="
+
+=== consult at 40275 ===
+r_a1: '公司介绍', footer_a2: '精选案例', footer_a3: '联系我们',
+
+        copyright: '<span data-i18n="copyright">© 2026 卓翌定制 All Rights Reserved</span>',
+
+        mobile_home: '首页', mobile_products: '产品', mobile_consult: '咨询'
+
+      },
+
+      en: {
+
+        nav_home: 'Home', nav_about: 'About', nav_services: 'Services', nav_products: 'Products', nav_portfolio: 'Portfolio', nav_contact: 'Contact',
+
+        her
+
+=== openOrder at 69167 ===
+''}</div>
+
+            <div class="product-bottom">
+
+              <span class="product-price">¥${p.price.toLocaleString()} <small>起</small></span>
+
+              <button class="product-btn" onclick="openOrder('${p._id}','${p.name.replace(/'/g,"\\'")}',${p.price},'${imgs[0]||''}')">立即咨询</button>
+
+            </div>
+
+          </div>
+
+        `;
+
+        grid.appendChild(card);
+
+        observer.ob

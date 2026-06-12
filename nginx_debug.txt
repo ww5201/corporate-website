@@ -1,0 +1,58 @@
+=== Port 80 ===
+LISTEN 0      511          0.0.0.0:80         0.0.0.0:*    users:(("nginx",pid=13177,fd=6),("nginx",pid=13176,fd=6),("nginx",pid=770,fd=6))
+
+
+=== site.conf ===
+server {
+    listen 80;
+    server_name _;
+
+    root /var/www/frontend;
+    index index.html;
+
+    # 前端静态文件 - 不缓存
+    location / {
+        try_files $uri $uri/ /index.html;
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        add_header Pragma "no-cache";
+        add_header Expires "0";
+    }
+
+    # API 代理到后端
+    location /api/ {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    # 图片代理到后端
+    location /uploads/ {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+
+
+=== Web servers ===
+  nginx.service                                         loaded active running The nginx HTTP and reverse proxy server                           
+
+
+=== Nginx status ===
+● nginx.service - The nginx HTTP and reverse proxy server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; vendor preset: disabled)
+   Active: active (running) since Sun 2026-05-31 11:45:16 CST; 2 days ago
+ Main PID: 770 (nginx)
+    Tasks: 3 (limit: 11715)
+   Memory: 4.3M
+   CGroup: /system.slice/nginx.service
+           ├─  770 nginx: master process /usr/sbin/nginx
+           ├─13176 nginx: worker process
+           └─13177 nginx: worker process
+
+May 31 11:45:16 iZ7xv9l4awz756t6zatq6rZ systemd[1]: Starting The nginx HTTP and reverse proxy server...
+May 31 11:45:16 iZ7xv9l4awz756t6zatq6rZ nginx[743]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+May 31 11:45:16 iZ7xv9l4awz756t6zatq6rZ nginx[743]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+May 31 11:45:16 iZ7xv9l4awz756t6zatq6rZ systemd[1]: nginx.service: Failed to parse PID from file /run/nginx.pid: Invalid argument
+May 31 11:45:16 iZ7xv9l4awz756t6zatq6rZ systemd[1]: Started The nginx HTTP and reverse proxy server.

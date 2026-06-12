@@ -1,0 +1,9 @@
+12:    .stats { display: flex; gap: 1rem; max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem; }
+16:    .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem 2rem; }
+57:    .img-thumb .del { position: absolute; top: 4px; right: 4px; background: rgba(255,0,0,0.8); color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; }
+213:      if (imgUrls.length + files.length > 20) {
+214:        alert('最多只能上传20张图片！');
+362:        tb.innerHTML = d.map(m => '<tr><td>' + (m.name || '匿名') + '</td><td>' + (m.contact || m.email || m.phone || '-') + '</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (m.content || '-') + '</td><td>' + (m.createdAt ? new Date(m.createdAt).toLocaleString('zh-CN') : '-') + '</td><td><button class="btn btn-p" style="padding:2px 8px;margin-right:4px" onclick="viewM(\'' + m._id + '\')">查看</button><button class="btn btn-d" style="padding:2px 8px" onclick="delM(\'' + m._id + '\')">删除</button></td></tr>').join('');
+418:          document.getElementById('qr-wechat-preview').innerHTML = '<img src="' + paymentCfg.wechatQr + '" style="max-width:100%;max-height:200px;border-radius:8px"><p style="font-size:0.75rem;color:#888;margin-top:0.5rem">点击更换</p>';
+421:          document.getElementById('qr-alipay-preview').innerHTML = '<img src="' + paymentCfg.alipayQr + '" style="max-width:100%;max-height:200px;border-radius:8px"><p style="font-size:0.75rem;color:#888;margin-top:0.5rem">点击更换</p>';
+442:          preview.innerHTML = '<img src="' + d.urls[0] + '" style="max-width:100%;max-height:200px;border-radius:8px"><p style="font-size:0.75rem;color:#888;margin-top:0.5rem">点击更换</p>';

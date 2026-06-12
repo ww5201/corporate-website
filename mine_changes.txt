@@ -1,0 +1,4 @@
+Updated mobile nav template - added Mine tab
+Added user panel HTML
+Added mine panel CSS
+Added mine panel JS functions

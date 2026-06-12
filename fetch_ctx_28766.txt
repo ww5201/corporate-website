@@ -1,0 +1,29 @@
+Position: 28766
+Brace depth at this point: 1
+
+--- 200 chars before ---
+ox();
+
+  if (e.key === 'Escape') closeLightbox();
+
+});
+
+
+
+async function loadData() {
+
+      try {
+
+        const [prodRes, payRes] = await Promise.all([
+
+          fetch(`${API}/products`)
+          
+
+--- 100 chars after ---
+fetch(`${API}/payment-config`)
+
+        ]);
+
+        products = await prodRes.json();
+
+        payCo

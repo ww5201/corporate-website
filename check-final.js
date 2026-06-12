@@ -1,0 +1,1203 @@
+
+
+    const API = '/api';
+
+    const IMG = '';
+
+    let products = [];
+
+    let payConfig = {};
+
+    let curPay = 'wechat';
+
+    let curProd = null;
+
+    let currentLang = localStorage.getItem('lang') || 'zh';
+
+    let cases = [];
+
+    
+
+    
+
+    
+
+    
+
+
+
+    // ===== 翻译字典 =====
+
+    const i18n = {
+
+      zh: {
+
+        nav_home: '首页', nav_about: '关于', nav_services: '服务', nav_products: '产品', nav_portfolio: '案例', nav_contact: '联系',
+        hero_badge: '始于匠心 · 卓尔不群', hero_title: '为您打造<br><em>梦想生活空间</em>', hero_sub: '专注高端家居定制 · 每一处细节都是艺术',
+        hero_btn_products: '浏览产品', hero_btn_contact: '预约设计 →',
+        about_badge: '关于我们', about_title: '十年匠心<br>只为定制您的理想生活', about_desc: '卓翌定制专注于高端家居定制领域，以精湛工艺和创新设计，为每一位客户打造独一无二的生活空间。我们相信，家不只是居住的地方，更是生活态度的表达。',
+        stat_years: '年行业经验', stat_clients: '服务家庭', stat_satisfaction: '满意度 %',
+        quality_title: '品质保证', quality_desc: '三年质保',
+        services_label: 'OUR SERVICES', services_title: '我们的服务', services_desc: '从设计到安装，全程一对一专属服务',
+        service_wardrobe: '<span data-i18n="footer_p1">整体衣柜</span>', service_wardrobe_desc: '根据空间量身定制<br>完美收纳方案',
+        service_cloakroom: '<span data-i18n="footer_p2">衣帽间</span>设计', service_cloakroom_desc: '奢华<span data-i18n="footer_p2">衣帽间</span>定制<br>体验非凡品质',
+        service_kitchen: '<span data-i18n="footer_p3">橱柜定制</span>', service_kitchen_desc: '高端厨房解决方案<br>功能与美学兼备',
+        service_whole: '<span data-i18n="footer_p4">全屋定制</span>', service_whole_desc: '一站式<span data-i18n="footer_p4">全屋定制</span><br>打造理想之家',
+        products_label: 'PRODUCTS', products_title: '产品展示', products_desc: '每一件作品，都是匠心与美学的融合',
+        portfolio_label: 'PORTFOLIO', portfolio_title: '精选案例', portfolio_desc: '看看我们为客户打造的梦想空间',
+        contact_label: 'CONTACT US', contact_title: '联系我们',
+        contact_addr_title: '地址', contact_addr: '<span data-i18n="contact_addr">广西南宁市江南区那洪大道<br>留村路 1-2 号</span>',
+        contact_phone_title: '电话', contact_phone: '18977122166',
+        contact_email_title: '邮箱', contact_email: '2841327487@qq.com',
+        contact_wechat_title: '微信', contact_wechat: '<span data-i18n="contact_wechat">扫码添加微信咨询</span>',
+        contact_form_title: '在线留言', form_name: '您的姓名', form_phone: '联系电话', form_msg: '请描述您的需求，如户型面积、定制类型等...', form_submit: '<span data-i18n="form_submit">提交留言</span>',
+        footer_products: '产品服务', footer_about: '关于我们', footer_contact: '联系方式',
+        footer_p1: '<span data-i18n="footer_p1">整体衣柜</span>', footer_p2: '<span data-i18n="footer_p2">衣帽间</span>', footer_p3: '<span data-i18n="footer_p3">橱柜定制</span>', footer_p4: '<span data-i18n="footer_p4">全屋定制</span>',
+        footer_a1: '公司介绍', footer_a2: '精选案例', footer_a3: '联系我们',
+        copyright: '<span data-i18n="copyright">© 2026 卓翌定制 All Rights Reserved</span>',
+        mobile_home: '首页', mobile_products: '产品', mobile_consult: '咨询',
+      },
+      en: {
+
+        nav_home: 'Home', nav_about: 'About', nav_services: 'Services', nav_products: 'Products', nav_portfolio: 'Portfolio', nav_contact: 'Contact',
+        hero_badge: 'Craftsmanship · Excellence', hero_title: 'Create Your<br><em>Dream Living Space</em>', hero_sub: 'Premium Custom Furniture · Every Detail is Art',
+        hero_btn_products: 'Browse Products', hero_btn_contact: 'Book Design →',
+        about_badge: 'About Us', about_title: 'A Decade of Craftsmanship<br>Dedicated to Your Ideal Home', about_desc: 'Zhuoyi Custom focuses on high-end custom furniture, creating unique living spaces for every client with exquisite craftsmanship and innovative design. We believe home is not just a place to live, but an expression of lifestyle.',
+        stat_years: 'Years Experience', stat_clients: 'Families Served', stat_satisfaction: 'Satisfaction %',
+        quality_title: 'Quality Assurance', quality_desc: '3-Year Warranty',
+        services_label: 'OUR SERVICES', services_title: 'Our Services', services_desc: 'One-on-one exclusive service from design to installation',
+        service_wardrobe: 'Custom Wardrobe', service_wardrobe_desc: 'Tailored to your space<br>Perfect storage solution',
+        service_cloakroom: 'Walk-in Closet', service_cloakroom_desc: 'Luxury closet customization<br>Experience extraordinary quality',
+        service_kitchen: 'Kitchen Cabinets', service_kitchen_desc: 'Premium kitchen solutions<br>Function meets aesthetics',
+        service_whole: 'Whole House Custom', service_whole_desc: 'One-stop whole house custom<br>Create your ideal home',
+        products_label: 'PRODUCTS', products_title: 'Our Products', products_desc: 'Every piece is a fusion of craftsmanship and aesthetics',
+        portfolio_label: 'PORTFOLIO', portfolio_title: 'Featured Projects', portfolio_desc: 'See the dream spaces we created for our clients',
+        contact_label: 'CONTACT US', contact_title: 'Contact Us',
+        contact_addr_title: 'Address', contact_addr: '1-2 Liucun Road, Nanhong Avenue,<br>Jiangnan District, Nanning, Guangxi',
+        contact_phone_title: 'Phone', contact_phone: '+86 189 7712 2166',
+        contact_email_title: 'Email', contact_email: '2841327487@qq.com',
+        contact_wechat_title: 'WeChat', contact_wechat: 'Scan QR to add WeChat',
+        contact_form_title: 'Leave a Message', form_name: 'Your Name', form_phone: 'Phone Number', form_msg: 'Describe your needs, e.g., area size, custom type...', form_submit: 'Submit',
+        footer_products: 'Products', footer_about: 'About', footer_contact: 'Contact',
+        footer_p1: 'Wardrobe', footer_p2: 'Cloakroom', footer_p3: 'Kitchen', footer_p4: 'Whole House',
+        footer_a1: 'Company', footer_a2: 'Portfolio', footer_a3: 'Contact',
+        copyright: '© 2026 Zhuoyi Custom. All Rights Reserved.',
+        mobile_home: 'Home', mobile_products: 'Products', mobile_consult: 'Consult',
+
+
+},
+      ja: {
+
+        nav_home: 'ホーム', nav_about: '会社概要', nav_services: 'サービス', nav_products: '製品', nav_portfolio: '実績', nav_contact: 'お問い合わせ',
+        hero_badge: '匠の技 · 卓越', hero_title: 'あなたの<br><em>理想の生活空間</em>を創る', hero_sub: '高級カスタム家具 · 全てのディテールがアート',
+        hero_btn_products: '製品を見る', hero_btn_contact: 'デザイン予約 →',
+        about_badge: '会社概要', about_title: '十年の匠の技<br>理想の暮らしをカスタム', about_desc: '卓翌カスタムは高級カスタム家具に特化し、精湛な技術と革新的なデザインで、全てのお客様にユニークな生活空間を提供します。家は住む場所だけでなく、生活態度の表現だと信じています。',
+        stat_years: '年の経験', stat_clients: '世帯サービス', stat_satisfaction: '満足度 %',
+        quality_title: '品質保証', quality_desc: '3年保証',
+        services_label: 'OUR SERVICES', services_title: 'サービス内容', services_desc: 'デザインから設置まで、完全1対1の専属サービス',
+        service_wardrobe: 'ウォードローブ', service_wardrobe_desc: 'スペースに合わせた<br>完璧な収納ソリューション',
+        service_cloakroom: 'ウォークインクローゼット', service_cloakroom_desc: 'ラグジュアリークローゼット<br>非凡な品質を体験',
+        service_kitchen: 'キッチンキャビネット', service_kitchen_desc: 'ハイエンドキッチンソリューション<br>機能と美学の融合',
+        service_whole: '全屋カスタム', service_whole_desc: 'ワンストップ全屋カスタム<br>理想の家を創造',
+        products_label: 'PRODUCTS', products_title: '製品展示', products_desc: '全ての作品が匠の技と美学の融合',
+        portfolio_label: 'PORTFOLIO', portfolio_title: '主要プロジェクト', portfolio_desc: 'お客様のために創造した夢の空間をご覧ください',
+        contact_label: 'CONTACT US', contact_title: 'お問い合わせ',
+        contact_addr_title: '住所', contact_addr: '広西チワン族自治区南寧市江南区<br>那洪大道留村路 1-2 号',
+        contact_phone_title: '電話', contact_phone: '+86 189 7712 2166',
+        contact_email_title: 'メール', contact_email: '2841327487@qq.com',
+        contact_wechat_title: 'WeChat', contact_wechat: 'WeChatをスキャンして相談',
+        contact_form_title: 'メッセージを送る', form_name: 'お名前', form_phone: '電話番号', form_msg: 'お客様のニーズをお聞かせください（間取り、サイズ、カスタムタイプなど）...', form_submit: '送信',
+        footer_products: '製品', footer_about: '会社概要', footer_contact: 'お問い合わせ',
+        footer_p1: 'ウォードローブ', footer_p2: 'クローゼット', footer_p3: 'キッチン', footer_p4: '全屋',
+        footer_a1: '会社紹介', footer_a2: '実績', footer_a3: 'お問い合わせ',
+        copyright: '© 2026 卓翌カスタム All Rights Reserved.',
+        mobile_home: 'ホーム', mobile_products: '製品', mobile_consult: '相談',
+
+
+},
+      ko: {
+
+        nav_home: '홈', nav_about: '회사소개', nav_services: '서비스', nav_products: '제품', nav_portfolio: '실적', nav_contact: '문의',
+        hero_badge: '장인정신 · 탁월함', hero_title: '당신의<br><em>이상적인 생활 공간</em>을 만듭니다', hero_sub: '프리미엄 커스텀 가구 · 모든 디테일이 예술',
+        hero_btn_products: '제품 보기', hero_btn_contact: '디자인 예약 →',
+        about_badge: '회사소개', about_title: '10년의 장인정신<br>이상적인 생활을 커스터마이징', about_desc: '쭈이 커스텀은 고급 커스텀 가구 분야에 전문화되어 있으며, 정교한 기술과 혁신적인 디자인으로 모든 고객에게 독특한 생활 공간을 제공합니다. 집은 단순한 거주 공간이 아니라 생활 태도의 표현이라고 믿습니다.',
+        stat_years: '년 경력', stat_clients: '가정 서비스', stat_satisfaction: '만족도 %',
+        quality_title: '품질 보증', quality_desc: '3년 보증',
+        services_label: 'OUR SERVICES', services_title: '서비스 내용', services_desc: '디자인에서 설치까지 전담 1:1 서비스',
+        service_wardrobe: '워드로브', service_wardrobe_desc: '공간에 맞춘<br>완벽한 수납 솔루션',
+        service_cloakroom: '워크인 클로젯', service_cloakroom_desc: '럭셔리 클로젯 커스터마이징<br>뛰어난 품질 경험',
+        service_kitchen: '키장', service_kitchen_desc: '하이엔드 키친 솔루션<br>기능과 미학의 조화',
+        service_whole: '전체 홈 커스텀', service_whole_desc: '원스톱 전체 홈 커스텀<br>이상적인 집 만들기',
+        products_label: 'PRODUCTS', products_title: '제품 전시', products_desc: '모든 작품이 장인정신과 미학의 융합',
+        portfolio_label: 'PORTFOLIO', portfolio_title: '주요 프로젝트', portfolio_desc: '고객을 위해 만든 꿈의 공간을 확인하세요',
+        contact_label: 'CONTACT US', contact_title: '문의하기',
+        contact_addr_title: '주소', contact_addr: '광서壯族自治区 난닝시 장난구<br>나홍대로 류촌로 1-2호',
+        contact_phone_title: '전화', contact_phone: '+86 189 7712 2166',
+        contact_email_title: '이메일', contact_email: '2841327487@qq.com',
+        contact_wechat_title: '위챗', contact_wechat: '위챗 스캔하여 상담',
+        contact_form_title: '메시지 보내기', form_name: '이름', form_phone: '전화번호', form_msg: '고객의 니즈를 알려주세요 (평수, 크기, 커스텀 유형 등)...', form_submit: '전송',
+        footer_products: '제품', footer_about: '회사소개', footer_contact: '문의',
+        footer_p1: '워드로브', footer_p2: '클로젯', footer_p3: '키장', footer_p4: '전체 홈',
+        footer_a1: '회사 소개', footer_a2: '실적', footer_a3: '문의',
+        copyright: '© 2026 쭈이 커스텀 All Rights Reserved.',
+        mobile_home: '홈', mobile_products: '제품', mobile_consult: '상담',
+
+
+},
+      th: {
+
+        nav_home: 'หน้าแรก', nav_about: 'เกี่ยวกับเรา', nav_services: 'บริการ', nav_products: 'สินค้า', nav_portfolio: 'ผลงาน', nav_contact: 'ติดต่อ',
+        hero_badge: 'ฝีมือช่าง · ยอดเยี่ยม', hero_title: 'สร้าง<br><em>พื้นที่อยู่อาศัยในฝัน</em>ของคุณ', hero_sub: 'เฟอร์นิเจอร์สั่งทำระดับพรีเมียม · ทุกรายละเอียดคืองานศิลปะ',
+        hero_btn_products: 'ดูสินค้า', hero_btn_contact: 'จองออกแบบ →',
+        about_badge: 'เกี่ยวกับเรา', about_title: 'ฝีมือช่าง 10 ปี<br>สร้างบ้านในฝันของคุณ', about_desc: 'จ่วนอี้ คัสตอมเชี่ยวชาญเฟอร์นิเจอร์สั่งทำระดับไฮเอนด์ ด้วยฝีมือช่างที่ประณีตและออกแบบที่สร้างสรรค์ เพื่อมอบพื้นที่อยู่อาศัยที่ไม่เหมือนใครให้ลูกค้าทุกคน เราเชื่อว่าบ้านไม่ใช่แค่ที่อยู่อาศัย แต่เป็นการแสดงออกถึงวิถีชีวิต',
+        stat_years: 'ปีประสบการณ์', stat_clients: 'ครัวเรือนที่ให้บริการ', stat_satisfaction: 'ความพึงพอใจ %',
+        quality_title: 'รับประกันคุณภาพ', quality_desc: 'รับประกัน 3 ปี',
+        services_label: 'OUR SERVICES', services_title: 'บริการของเรา', services_desc: 'บริการเฉพาะด้าน ตั้งแต่การออกแบบจนถึงติดตั้ง',
+        service_wardrobe: 'ตู้เสื้อผ้า', service_wardrobe_desc: 'ออกแบบตามพื้นที่<br>โซลูชันจัดเก็บที่สมบูรณ์แบบ',
+        service_cloakroom: 'ตู้เสื้อผ้าแบบเดินเข้าได้', service_cloakroom_desc: 'ตู้เสื้อผ้าหรูสั่งทำ<br>ประสบการณ์คุณภาพเยี่ยม',
+        service_kitchen: 'ตู้ครัว', service_kitchen_desc: 'โซลูชันครัวระดับไฮเอนด์<br>ฟังก์ชันผสานความงาม',
+        service_whole: 'สั่งทำทั้งบ้าน', service_whole_desc: 'สั่งทำทั้งบ้านครบวงจร<br>สร้างบ้านในฝัน',
+        products_label: 'PRODUCTS', products_title: 'แสดงสินค้า', products_desc: 'ทุกชิ้นคือการผสานฝีมือช่างและความงาม',
+        portfolio_label: 'PORTFOLIO', portfolio_title: 'โครงการสำคัญ', portfolio_desc: 'ดูพื้นที่ในฝันที่เราสร้างให้ลูกค้า',
+        contact_label: 'CONTACT US', contact_title: 'ติดต่อเรา',
+        contact_addr_title: 'ที่อยู่', contact_addr: 'ถนนน่าหงง ตำบลหลิวชุน เขตเจียงหนาน<br>เมืองหนานหนิง มณฑลกว่างซี',
+        contact_phone_title: 'โทรศัพท์', contact_phone: '+86 189 7712 2166',
+        contact_email_title: 'อีเมล', contact_email: '2841327487@qq.com',
+        contact_wechat_title: 'WeChat', contact_wechat: 'สแกน WeChat เพื่อปรึกษา',
+        contact_form_title: 'ส่งข้อความ', form_name: 'ชื่อของคุณ', form_phone: 'หมายเลขโทรศัพท์', form_msg: 'กรุณาระบุความต้องการของคุณ (ขนาดห้อง, ประเภทสั่งทำ ฯลฯ)...', form_submit: 'ส่ง',
+        footer_products: 'สินค้า', footer_about: 'เกี่ยวกับเรา', footer_contact: 'ติดต่อ',
+        footer_p1: 'ตู้เสื้อผ้า', footer_p2: 'ตู้เสื้อผ้า', footer_p3: 'ตู้ครัว', footer_p4: 'ทั้งบ้าน',
+        footer_a1: 'เกี่ยวกับบริษัท', footer_a2: 'ผลงาน', footer_a3: 'ติดต่อ',
+        copyright: '© 2026 จ่วนอี้ คัสตอม สงวนลิขสิทธิ์',
+        mobile_home: 'หน้าแรก', mobile_products: 'สินค้า', mobile_consult: 'ปรึกษา',
+
+
+},
+      vi: {
+
+        nav_home: 'Trang chủ', nav_about: 'Giới thiệu', nav_services: 'Dịch vụ', nav_products: 'Sản phẩm', nav_portfolio: 'Dự án', nav_contact: 'Liên hệ',
+        hero_badge: 'Tay nghề thủ công · Xuất sắc', hero_title: 'Tạo ra<br><em>không gian sống mơ ước</em> của bạn', hero_sub: 'Nội thất đặt làm cao cấp · Mọi chi tiết là nghệ thuật',
+        hero_btn_products: 'Xem sản phẩm', hero_btn_contact: 'Đặt lịch thiết kế →',
+        about_badge: 'Giới thiệu', about_title: 'Thập kỷ tay nghề thủ công<br>Tạo nên ngôi nhà lý tưởng', about_desc: 'Trác Dĩ Chuyên sâu vào nội thất đặt làm cao cấp, với tay nghề thủ công tinh xảo và thiết kế sáng tạo, mang đến không gian sống độc đáo cho mỗi khách hàng. Chúng tôi tin rằng ngôi nhà không chỉ là nơi ở, mà còn là biểu hiện của phong cách sống.',
+        stat_years: 'năm kinh nghiệm', stat_clients: 'hộ gia đình phục vụ', stat_satisfaction: 'Độ hài lòng %',
+        quality_title: 'Bảo đảm chất lượng', quality_desc: 'Bảo hành 3 năm',
+        services_label: 'OUR SERVICES', services_title: 'Dịch vụ của chúng tôi', services_desc: 'Dịch vụ chuyên biệt 1-1 từ thiết kế đến lắp đặt',
+        service_wardrobe: 'Tủ quần áo', service_wardrobe_desc: 'Tùy chỉnh theo không gian<br>Giải pháp lưu trữ hoàn hảo',
+        service_cloakroom: 'Tủ quần áo đi bộ', service_cloakroom_desc: 'Tủ quần áo cao cấp đặt làm<br>Trải nghiệm chất lượng tuyệt vời',
+        service_kitchen: 'Tủ bếp', service_kitchen_desc: 'Giải pháp bếp cao cấp<br>Chức năng kết hợp thẩm mỹ',
+        service_whole: 'Nội thất toàn nhà', service_whole_desc: 'Nội thất toàn nhà một cửa<br>Tạo ngôi nhà lý tưởng',
+        products_label: 'PRODUCTS', products_title: 'Triển lãm sản phẩm', products_desc: 'Mỗi tác phẩm là sự kết hợp giữa tay nghề thủ công và nghệ thuật',
+        portfolio_label: 'PORTFOLIO', portfolio_title: 'Dự án tiêu biểu', portfolio_desc: 'Xem không gian mơ ước mà chúng tôi đã tạo cho khách hàng',
+        contact_label: 'CONTACT US', contact_title: 'Liên hệ với chúng tôi',
+        contact_addr_title: 'Địa chỉ', contact_addr: 'Đường Naphong, Thôn Lưu Thôn, Quận Giang Nam<br>Thành phố Nam Ninh, Quảng Tây',
+        contact_phone_title: 'Điện thoại', contact_phone: '+86 189 7712 2166',
+        contact_email_title: 'Email', contact_email: '2841327487@qq.com',
+        contact_wechat_title: 'WeChat', contact_wechat: 'Quét WeChat để tư vấn',
+        contact_form_title: 'Gửi tin nhắn', form_name: 'Họ tên', form_phone: 'Số điện thoại', form_msg: 'Vui lòng mô tả nhu cầu của bạn (diện tích phòng, loại đặt làm...)', form_submit: 'Gửi',
+        footer_products: 'Sản phẩm', footer_about: 'Giới thiệu', footer_contact: 'Liên hệ',
+        footer_p1: 'Tủ quần áo', footer_p2: 'Tủ quần áo', footer_p3: 'Tủ bếp', footer_p4: 'Toàn nhà',
+        footer_a1: 'Giới thiệu công ty', footer_a2: 'Dự án', footer_a3: 'Liên hệ',
+        copyright: '© 2026 Trác Dĩ Chuyênสง giữ bản quyền',
+        mobile_home: 'Trang chủ', mobile_products: 'Sản phẩm', mobile_consult: 'Tư vấn',
+
+
+},
+      ms: {
+
+        nav_home: 'Utama', nav_about: 'Tentang Kami', nav_services: 'Perkhidmatan', nav_products: 'Produk', nav_portfolio: 'Portfolio', nav_contact: 'Hubungi',
+        hero_badge: 'Kraf Tangan · Kecemerlangan', hero_title: 'Mencipta<br><em>Ruang Hidup Impian</em> Anda', hero_sub: 'Perabot Tersuai Premium · Setiap Butiran Adalah Seni',
+        hero_btn_products: 'Lihat Produk', hero_btn_contact: 'Tempah Reka Bentuk →',
+        about_badge: 'Tentang Kami', about_title: 'Dekad Kraf Tangan<br>Mencipta Rumah Impian Anda', about_desc: 'Zhuoyi Custom pakar dalam perabot tersuai mewah, dengan kraf tangan yang halus dan reka bentuk inovatif, menyediakan ruang hidup unik untuk setiap pelanggan. Kami percaya rumah bukan sahaja tempat tinggal, tetapi juga ekspresi gaya hidup.',
+        stat_years: 'Tahun Pengalaman', stat_clients: 'Keluarga Dilayani', stat_satisfaction: 'Kepuasan %',
+        quality_title: 'Jaminan Kualiti', quality_desc: 'Jaminan 3 Tahun',
+        services_label: 'OUR SERVICES', services_title: 'Perkhidmatan Kami', services_desc: 'Perkhidmatan eksklusif 1-1 dari reka bentuk hingga pemasangan',
+        service_wardrobe: 'Almiari', service_wardrobe_desc: 'Dilakukan mengikut ruang<br>Penyelesaian penyimpanan sempurna',
+        service_cloakroom: ' almari pakaian berjalan', service_cloakroom_desc: 'almari pakaian mewah tersuai<br>Pengalaman kualiti luar biasa',
+        service_kitchen: 'Kabinet Dapur', service_kitchen_desc: 'Penyelesaian dapur mewah<br>Fungsi bertemu estetika',
+        service_whole: 'Tersuai Rumah Penuh', service_whole_desc: 'Satu hentian tersuai rumah penuh<br>Cipta rumah impian',
+        products_label: 'PRODUCTS', products_title: 'Pameran Produk', products_desc: 'Setiap hasil adalah gabungan kraf tangan dan estetika',
+        portfolio_label: 'PORTFOLIO', portfolio_title: 'Projek Utama', portfolio_desc: 'Lihat ruang impian yang kami cipta untuk pelanggan',
+        contact_label: 'CONTACT US', contact_title: 'Hubungi Kami',
+        contact_addr_title: 'Alamat', contact_addr: 'Jalan Liucun, Dao Naphong, Daerah Jiangnan<br>Nanning, Guangxi',
+        contact_phone_title: 'Telefon', contact_phone: '+86 189 7712 2166',
+        contact_email_title: 'Emel', contact_email: '2841327487@qq.com',
+        contact_wechat_title: 'WeChat', contact_wechat: 'Imbas WeChat untuk bermesyuarat',
+        contact_form_title: 'Hantar Mesej', form_name: 'Nama Anda', form_phone: 'Nombor Telefon', form_msg: 'Sila nyatakan keperluan anda (saiz bilik, jenis tersuai...)', form_submit: 'Hantar',
+        footer_products: 'Produk', footer_about: 'Tentang Kami', footer_contact: 'Hubungi',
+        footer_p1: 'Almiari', footer_p2: 'Almari Pakaian', footer_p3: 'Kabinet Dapur', footer_p4: 'Rumah Penuh',
+        footer_a1: 'Tentang Syarikat', footer_a2: 'Portfolio', footer_a3: 'Hubungi',
+        copyright: '© 2026 Zhuoyi Custom Hak Cipta Terpelihara.',
+        mobile_home: 'Utama', mobile_products: 'Produk', mobile_consult: 'Rundingan',
+
+      }
+         };
+
+
+
+    // Old langDropdown removed - language selection now in settings dropdown
+
+
+
+    const langLabels = { zh:'中文', en:'English', ja:'日本語', ko:'한국어', th:'ไทย', vi:'Tiếng Việt', ms:'Melayu' };
+
+    function setLang(lang) {
+
+      currentLang = lang;
+
+      localStorage.setItem('lang', lang);
+
+      // currentLangLabel removed in dropdown version
+
+      // Update lang label
+      var langLabel = document.getElementById('currentLangLabel');
+      if (langLabel) langLabel.textContent = langLabels[lang] || lang;
+      // Update active state on language buttons
+      document.querySelectorAll('#langDropdown button').forEach(function(b) {
+        b.classList.toggle('active', b.textContent.includes(langLabels[lang]));
+      });
+      // Close dropdown
+      var ld = document.getElementById('langDropdown');
+      if (ld) ld.classList.remove('open');
+
+      document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+
+        const key = el.dataset.i18n;
+
+        if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+
+      });
+
+      // 更新移动端导航
+
+      const mobileNav = document.querySelector('.mobile-nav');
+
+      if (mobileNav) {
+
+        mobileNav.innerHTML = `<div class="mobile-nav-inner">
+
+          <a href="#home" class="active"><span class="icon">🏠</span>${i18n[lang].mobile_home}</a>
+
+          <a href="#products"><span class="icon">📦</span>${i18n[lang].mobile_products}</a>
+
+          <a href="#contact"><span class="icon">💬</span>${i18n[lang].mobile_consult}</a>
+          
+          
+
+        </div>`;
+
+      }
+
+    }
+
+
+
+    // ===== 数字滚动 =====
+
+    function animateCounters() {
+
+      document.querySelectorAll('.stat-num[data-count]').forEach(el => {
+
+        const target = parseInt(el.dataset.count);
+
+        let current = 0;
+
+        const step = Math.ceil(target / 40);
+
+        const timer = setInterval(() => {
+
+          current += step;
+
+          if (current >= target) { current = target; clearInterval(timer); }
+
+          el.textContent = current >= 1000 ? (current/1000).toFixed(0) + '00+' : current + (target === 99 ? '%' : '+');
+
+        }, 30);
+
+      });
+
+    }
+
+
+
+    // ===== 滚动动画 =====
+
+    const observer = new IntersectionObserver((entries) => {
+
+      entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+          entry.target.classList.add('visible');
+
+          if (entry.target.querySelector('.stat-num[data-count]')) animateCounters();
+
+        }
+
+      });
+
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+
+
+    // ===== 导航滚动效果 =====
+
+    window.addEventListener('scroll', () => {
+
+      const nav = document.getElementById('nav');
+
+      const topBtn = document.getElementById('topBtn');
+
+      if (window.scrollY > 50) { nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); }
+
+      if (window.scrollY > 600) { topBtn.style.display = 'flex'; } else { topBtn.style.display = 'none'; }
+
+
+
+      // active nav
+
+      const sections = ['home','about','services','products','portfolio','contact'];
+
+      let current = 'home';
+
+      sections.forEach(id => {
+
+        const el = document.getElementById(id);
+
+        if (el && el.getBoundingClientRect().top <= 120) current = id;
+
+      });
+
+      document.querySelectorAll('.menu a, .mobile-nav a').forEach(a => {
+
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+
+      });
+
+    });
+
+
+
+    // ===== Hero 轮播 =====
+
+    let heroIdx = 0, heroTimer;
+
+    function initHero() {
+
+      const slider = document.getElementById('heroSlider');
+
+      const dots = document.getElementById('heroDots');
+
+      const heroImgs = [];
+
+      products.forEach(p => {
+
+        const imgs = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
+
+        imgs.forEach(img => heroImgs.push(img));
+
+      });
+
+      if (!heroImgs.length) { heroImgs.push('','',''); }
+
+      const showImgs = heroImgs.slice(0, 5);
+
+      showImgs.forEach((src, i) => {
+
+        const slide = document.createElement('div');
+
+        slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
+
+        if (src) slide.style.backgroundImage = `url(${IMG}${src})`;
+
+        else slide.style.background = ['#1a1a1a','#2a2a2a','#333'][i % 3];
+
+        slider.appendChild(slide);
+
+        const dot = document.createElement('div');
+
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+
+        dot.onclick = () => goHero(i);
+
+        dots.appendChild(dot);
+
+      });
+
+      heroTimer = setInterval(() => goHero((heroIdx + 1) % showImgs.length), 5000);
+
+    }
+
+    function goHero(i) {
+
+      document.querySelectorAll('.hero-slide').forEach((s, j) => s.classList.toggle('active', j === i));
+
+      document.querySelectorAll('.dot').forEach((d, j) => d.classList.toggle('active', j === i));
+
+      heroIdx = i;
+
+    }
+
+
+
+    // ===== 加载数据 =====
+
+    async function loadCases() {
+
+  try {
+
+    const r = await fetch(API + '/cases');
+
+    cases = await r.json();
+
+    if (cases.length > 0) {
+
+      renderCarousel(cases[0]);
+
+    }
+
+    renderPortfolio();
+
+  } catch (e) {
+
+    console.error('Load cases failed:', e);
+
+  }
+
+}
+
+
+
+function renderCarousel(firstCase) {
+
+  const container = document.getElementById('portfolioCarousel');
+
+  const slides = document.getElementById('carouselSlides');
+
+  const nav = document.getElementById('carouselNav');
+
+  if (!firstCase.images || firstCase.images.length === 0) {
+
+    container.style.display = 'none';
+
+    return;
+
+  }
+
+  container.style.display = 'block';
+
+  slides.innerHTML = firstCase.images.map((img, i) => 
+
+    `<div class="carousel-slide ${i === 0 ? 'active' : ''}" onclick="openLightbox('${img}', ${i})">
+
+      <img src="${IMG + img}" alt="案例${i+1}">
+
+    </div>`
+
+  ).join('');
+
+  nav.innerHTML = firstCase.images.map((_, i) => 
+
+    `<button class="carousel-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></button>`
+
+  ).join('');
+
+  startCarousel(firstCase.images.length);
+
+}
+
+
+
+function startCarousel(len) {
+
+  if (carouselInterval) clearInterval(carouselInterval);
+
+  carouselInterval = setInterval(() => {
+
+    currentSlide = (currentSlide + 1) % len;
+
+    updateCarousel(len);
+
+  }, 3000);
+
+}
+
+
+
+function updateCarousel(len) {
+
+  document.querySelectorAll('.carousel-slide').forEach((s, i) => {
+
+    s.classList.toggle('active', i === currentSlide);
+
+  });
+
+  document.querySelectorAll('.carousel-dot').forEach((d, i) => {
+
+    d.classList.toggle('active', i === currentSlide);
+
+  });
+
+}
+
+
+
+function prevSlide() {
+
+  const len = document.querySelectorAll('.carousel-slide').length;
+
+  currentSlide = (currentSlide - 1 + len) % len;
+
+  updateCarousel(len);
+
+  if (carouselInterval) { clearInterval(carouselInterval); startCarousel(len); }
+
+}
+
+
+
+function nextSlide() {
+
+  const len = document.querySelectorAll('.carousel-slide').length;
+
+  currentSlide = (currentSlide + 1) % len;
+
+  updateCarousel(len);
+
+  if (carouselInterval) { clearInterval(carouselInterval); startCarousel(len); }
+
+}
+
+
+
+function goToSlide(i) {
+
+  const len = document.querySelectorAll('.carousel-slide').length;
+
+  currentSlide = i;
+
+  updateCarousel(len);
+
+  if (carouselInterval) { clearInterval(carouselInterval); startCarousel(len); }
+
+}
+
+
+
+function renderPortfolio() {
+
+  const grid = document.getElementById('portfolioGrid');
+
+  if (cases.length <= 1) {
+
+    grid.innerHTML = '';
+
+    return;
+
+  }
+
+  grid.innerHTML = cases.slice(1).map(c => {
+
+    const img = c.images && c.images[0] ? IMG + c.images[0] : '';
+
+    return `<div class="portfolio-item" onclick="openPortfolioLightbox('${c._id}')">
+
+      <img src="${img}" alt="${c.name || '案例'}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 250%22%3E%3Crect fill=%22%23f0f0f0%22 width=%22400%22 height=%22250%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22%3E 暂无图片%3C/text%3E%3C/svg%3E'">
+
+      <div class="portfolio-overlay">
+
+        <div class="portfolio-title">${c.name || '精选案例'}</div>
+
+        <div class="portfolio-desc">${c.description || ''}</div>
+
+      </div>
+
+    </div>`;
+
+  }).join('');
+
+}
+
+
+
+function openPortfolioLightbox(id) {
+
+  const c = cases.find(x => x._id === id);
+
+  if (!c || !c.images || c.images.length === 0) return;
+
+  lightboxImages = c.images.map(img => IMG + img);
+
+  currentLightbox = 0;
+
+  showLightbox();
+
+}
+
+
+
+function openLightbox(img, idx) {
+
+  const c = cases[0];
+
+  if (!c || !c.images) return;
+
+  lightboxImages = c.images.map(i => IMG + i);
+
+  currentLightbox = idx;
+
+  showLightbox();
+
+}
+
+
+
+function showLightbox() {
+
+  const lb = document.getElementById('lightbox');
+
+  const img = document.getElementById('lightboxImg');
+
+  const counter = document.getElementById('lightboxCounter');
+
+  img.src = lightboxImages[currentLightbox];
+
+  counter.textContent = `${currentLightbox + 1} / ${lightboxImages.length}`;
+
+  lb.classList.add('active');
+
+  document.body.style.overflow = 'hidden';
+
+}
+
+
+
+function closeLightbox() {
+
+  const lb = document.getElementById('lightbox');
+
+  lb.classList.remove('active');
+
+  document.body.style.overflow = '';
+
+}
+
+
+
+function prevLightbox() {
+
+  currentLightbox = (currentLightbox - 1 + lightboxImages.length) % lightboxImages.length;
+
+  showLightbox();
+
+}
+
+
+
+function nextLightbox() {
+
+  currentLightbox = (currentLightbox + 1) % lightboxImages.length;
+
+  showLightbox();
+
+}
+
+
+
+document.addEventListener('keydown', (e) => {
+
+  const lb = document.getElementById('lightbox');
+
+  if (!lb.classList.contains('active')) return;
+
+  if (e.key === 'ArrowLeft') prevLightbox();
+
+  if (e.key === 'ArrowRight') nextLightbox();
+
+  if (e.key === 'Escape') closeLightbox();
+
+});
+
+
+
+async function loadData() {
+
+      try {
+
+        const [prodRes, payRes] = await Promise.all([
+
+          fetch(`${API}/products`)
+          fetch(`${API}/payment-config`)
+
+        ]);
+
+        products = await prodRes.json();
+
+        payConfig = await payRes.json();
+
+        renderFilters();
+
+        renderProducts();
+
+        renderPortfolio();
+
+        initHero();
+
+      } catch (e) { console.error(e); }
+
+    }
+
+
+
+    // ===== 分类筛选 =====
+
+    function renderFilters() {
+
+      const cats = [...new Set(products.map(p => p.category).filter(Boolean))];
+
+      if (!cats.length) return;
+
+      const wrap = document.getElementById('prodFilters');
+
+      wrap.innerHTML = `<button class="filter-btn active" onclick="filterProd('all',this)">全部</button>` +
+
+        cats.map(c => `<button class="filter-btn" onclick="filterProd('${c}',this)">${c}</button>`).join('');
+
+    }
+
+    function filterProd(cat, btn) {
+
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+
+      btn.classList.add('active');
+
+      renderProducts(cat);
+
+    }
+
+
+
+    // ===== 产品 =====
+
+    let productTimers = {};
+
+    function renderProducts(cat) {
+
+      const grid = document.getElementById('productsGrid');
+
+      grid.innerHTML = '';
+
+      Object.values(productTimers).forEach(t => clearInterval(t));
+
+      productTimers = {};
+
+      let list = products;
+
+      if (cat && cat !== 'all') list = list.filter(p => p.category === cat);
+
+      if (!list.length) { grid.innerHTML = '<p style="text-align:center;color:#999;padding:40px;grid-column:1/-1">暂无产品</p>'; return; }
+
+
+
+      list.forEach(p => {
+
+        const imgs = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
+
+        const card = document.createElement('div');
+
+        card.className = 'product-card reveal';
+
+        card.dataset.pid = p._id;
+
+        let track = imgs.map(img => `<img src="${IMG}${img}" loading="lazy">`).join('');
+
+        if (!track) track = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ddd;font-size:3rem">📦</div>';
+
+
+
+        card.innerHTML = `
+
+          <div class="product-img" data-idx="0" data-total="${imgs.length}" data-pid="${p._id}" onclick="openProductLb('${p._id}')" style="cursor:pointer">
+
+            <div class="product-img-track">${track}</div>
+
+            ${imgs.length > 1 ? `
+
+              <span class="product-count">1/${imgs.length}</span>
+
+              <button class="product-nav prev" onclick="imgNav(this,-1)">‹</button>
+
+              <button class="product-nav next" onclick="imgNav(this,1)">›</button>
+
+            ` : ''}
+
+          </div>
+
+          <div class="product-info">
+
+            <h4>${p.name}</h4>
+
+            <div class="desc">${p.description || ''}</div>
+
+            <div class="product-bottom">
+
+              <span class="product-price">¥${p.price.toLocaleString()} <small>起</small></span>
+
+              <button class="product-btn" onclick="openOrder('${p._id}')">立即咨询</button>
+
+            </div>
+
+          </div>
+
+        `;
+
+        grid.appendChild(card);
+
+        observer.observe(card);
+
+
+
+        if (imgs.length > 1) {
+
+          productTimers[p._id] = setInterval(() => imgNavAuto(p._id, 1), 3000);
+
+        }
+
+      });
+
+
+
+      grid.querySelectorAll('.product-card').forEach(card => {
+
+        const pid = card.dataset.pid;
+
+        if (!productTimers[pid]) return;
+
+        card.addEventListener('mouseenter', () => { clearInterval(productTimers[pid]); productTimers[pid] = null; });
+
+        card.addEventListener('mouseleave', () => { productTimers[pid] = setInterval(() => imgNavAuto(pid, 1), 3000); });
+
+      });
+
+    }
+
+
+
+    function imgNav(btn, dir) {
+
+      const box = btn.closest('.product-img') || btn.closest ? btn : btn;
+
+      const track = box.querySelector('.product-img-track');
+
+      const total = parseInt(box.dataset.total);
+
+      let idx = (parseInt(box.dataset.idx) + dir + total) % total;
+
+      box.dataset.idx = idx;
+
+      track.style.transform = `translateX(-${idx * 100}%)`;
+
+      const count = box.querySelector('.product-count');
+
+      if (count) count.textContent = `${idx + 1}/${total}`;
+
+    }
+
+    function imgNavAuto(pid, dir) {
+
+      const box = document.querySelector(`.product-img[data-pid="${pid}"]`);
+
+      if (!box) return;
+
+      const navBtn = box.querySelector('.product-nav.next') || box;
+
+      imgNav(navBtn, dir);
+
+    }
+
+
+
+    // ===== 产品灯箱 =====
+
+    function openProductLb(pid) {
+
+      const p = products.find(x => x._id === pid);
+
+      if (!p) return;
+
+      openLb(p);
+
+    }
+
+
+
+    // ===== 案例 =====
+
+    
+
+
+
+    // ===== 灯箱 =====
+
+    let lbData = { imgs: [], idx: 0 };
+
+    function openLb(p) {
+
+      const imgs = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
+
+      if (!imgs.length) return;
+
+      lbData = { imgs, idx: 0 };
+
+      renderLb();
+
+      document.getElementById('lightbox').classList.add('open');
+
+      document.body.style.overflow = 'hidden';
+
+    }
+
+    function closeLb() { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow = ''; }
+
+    function navLb(dir) { lbData.idx = (lbData.idx + dir + lbData.imgs.length) % lbData.imgs.length; renderLb(); }
+
+    function renderLb() {
+
+      document.getElementById('lbImg').src = `${IMG}${lbData.imgs[lbData.idx]}`;
+
+      document.getElementById('lbThumbs').innerHTML = lbData.imgs.map((img, i) =>
+
+        `<img src="${IMG}${img}" class="${i === lbData.idx ? 'active' : ''}" onclick="lbData.idx=${i};renderLb()">`
+
+      ).join('');
+
+    }
+
+
+
+    // ===== 微信咨询 - 点击两次跳转 =====
+
+    function showWechatGuide(clipOk) {
+
+      var existing = document.getElementById('wechatGuide');
+
+      if (existing) existing.remove();
+
+      var overlay = document.createElement('div');
+
+      overlay.id = 'wechatGuide';
+
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99999;display:flex;align-items:center;justify-content:center;';
+
+      overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+
+      var box = document.createElement('div');
+
+      box.style.cssText = 'background:#fff;border-radius:16px;padding:32px 28px;max-width:320px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);';
+
+      box.innerHTML = '<div style="font-size:2.5rem;margin-bottom:12px">💬</div>' +
+
+        '<div style="font-size:1.1rem;font-weight:600;margin-bottom:8px">' + (clipOk ? '号码已复制！' : '请手动复制') + '</div>' +
+
+        '<div style="font-size:0.9rem;color:#666;margin-bottom:16px">打开微信 → 搜索 → 粘贴号码</div>' +
+
+        '<div style="background:#f5f5f5;border-radius:10px;padding:14px;margin-bottom:16px;font-size:1.3rem;font-weight:700;color:#07c160;letter-spacing:2px;user-select:all"><a href="tel:18977122166" style="color:inherit;text-decoration:none">18977122166</a></div>' +
+
+        '<div style="font-size:0.8rem;color:#999;margin-bottom:16px">长按上方号码可复制</div>' +
+
+        '<button onclick="this.closest(\'div[id=wechatGuide]\').remove()" style="background:#07c160;color:#fff;border:none;padding:12px 40px;border-radius:8px;font-size:1rem;cursor:pointer">知道了</button>';
+
+      overlay.appendChild(box);
+
+      document.body.appendChild(overlay);
+
+    }
+
+    let wechatClickCount = 0;
+
+    let wechatClickTimer = null;
+
+    function handleWechatClick() {
+    var num = '18977122166';
+    // Method 1: APK JavaScript Bridge
+    if (window.Android && window.Android.openWechat) {
+        window.Android.openWechat();
+        return;
+    }
+    // Method 2: Copy number + show guide
+    try {
+        var ta = document.createElement('textarea');
+        ta.value = num;
+        ta.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+    } catch(e) {}
+    showWechatGuide(true);
+}
+
+
+    // ===== 支付/订单 =====
+    function selectPay(method) {
+      curPay = method;
+      document.querySelectorAll('.pay-btn').forEach(b => b.classList.remove('active'));
+      if (method === 'wechat') {
+        document.querySelector('.pay-btn:first-child').classList.add('active');
+      } else {
+        document.querySelector('.pay-btn:last-child').classList.add('active');
+      }
+      if (payConfig[method + 'Qr']) {
+        document.getElementById('qrImg').src = payConfig[method + 'Qr'];
+        document.getElementById('qrHint').textContent = '请扫码支付';
+      } else {
+        document.getElementById('qrImg').src = '';
+        document.getElementById('qrHint').textContent = '暂未配置支付二维码';
+      }
+    }
+
+    function openOrder(pid) {
+      curProd = products.find(p => p._id === pid);
+      if (!curProd) { alert('Product not found'); return; }
+      document.getElementById('oName').textContent = curProd.name;
+      document.getElementById('oPrice').textContent = '¥' + curProd.price;
+      if (curProd.images && curProd.images.length > 0) {
+        document.getElementById('oImg').src = curProd.images[0];
+      }
+      document.getElementById('orderModal').style.display = 'flex';
+      selectPay('wechat');
+    }
+
+    function showContact() { document.getElementById("contact").scrollIntoView({behavior:"smooth"}); }
+    function closeOrder() {
+      document.getElementById('orderModal').style.display = 'none';
+      document.getElementById('orderSuccess').style.display = 'none';
+      document.getElementById('orderForm').style.display = 'block';
+    }
+
+    function submitOrder() {
+      var name = document.getElementById('oName2').value.trim();
+      var phone = document.getElementById('oPhone').value.trim();
+      var note = document.getElementById('oNote').value.trim();
+      if (!name || !phone) {
+        alert('请填写姓名和电话');
+        return;
+      }
+      fetch(API + '/orders', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          product: curProd ? curProd.name : '',
+          price: curProd ? curProd.price : 0,
+          name: name,
+          phone: phone,
+          address: note,
+          payMethod: curPay
+        })
+      }).then(function(r) { return r.json(); }).then(function(d) {
+        if (d.ok) {
+          document.getElementById('orderForm').style.display = 'none';
+          document.getElementById('orderSuccess').style.display = 'block';
+        } else {
+          alert('下单失败，请重试');
+        }
+      }).catch(function() {
+        alert('网络错误');
+      });
+    }
+
+    
+    
+        function toggleMenu() {
+      document.getElementById('menu').classList.toggle('show');
+    }
+
+    function toggleLang(e) {
+      if(e) e.stopPropagation();
+      var ld = document.getElementById('langDropdown');
+      if(ld) ld.classList.toggle('open');
+    }
+function toggleSettings(e) {
+      if(e) e.stopPropagation();
+      var dd = document.getElementById('settingsDropdown');
+      if(dd) dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+    }
+    // Close settings when clicking outside
+    document.addEventListener('click', function(ev) {
+      var dd = document.getElementById('settingsDropdown');
+      if(dd && !ev.target.closest('.settings-dropdown') && !ev.target.closest('[onclick*="toggleSettings"]')) {
+        dd.style.display = 'none';
+      }
+    });
+    function checkAppUpdate() {
+      toggleSettings();
+      fetch(API + '/app-version').then(function(r){return r.json()}).then(function(d){
+        var curVer = (window.Android && window.Android.getVersionCode) ? window.Android.getVersionCode() : 0;
+        if (d.versionCode > curVer) {
+          if (confirm('发现新版本 v' + d.versionName + '\n' + d.updateMessage + '\n\n是否立即更新？')) {
+            if (window.Android && window.Android.downloadUpdate) {
+              window.Android.downloadUpdate(d.downloadUrl);
+            } else {
+              window.open(d.downloadUrl);
+            }
+          }
+        } else {
+          alert('当前已是最新版本 v' + d.versionName);
+        }
+      }).catch(function(){ alert('检查更新失败，请稍后再试'); });
+    }
+    function clearCache() {
+      toggleSettings();
+      if ('caches' in window) {
+        caches.keys().then(function(names){ for(var i=0;i<names.length;i++) caches.delete(names[i]); });
+      }
+      location.reload(true);
+    }
+    // Close settings dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      var dd = document.getElementById('settingsDropdown');
+      if (dd && !e.target.closest('.settings-dropdown')) {
+        dd.style.display = 'none';
+      }
+    });
+
+    
+    function hideMinePanel() {
+      var panel = document.getElementById('minePanel');
+      var overlay = document.getElementById('minePanelOverlay');
+      if (panel && overlay) {
+        panel.classList.remove('show');
+        setTimeout(function() { panel.style.display = 'none'; overlay.style.display = 'none'; }, 350);
+      }
+    }
+
+    
+    function showLoginPanel() {
+      hideMinePanel();
+      showContact();
+      alert(i18n[currentLang].mine_login || '请登录');
+    }
+
+    function showSettingsPanel() {
+      hideMinePanel();
+      alert(i18n[currentLang].mine_settings || '系统设置');
+    }
+
+    function bindWechat() {
+      hideMinePanel();
+      handleWechatClick();
+    }
+
+    function bindPhone() {
+      hideMinePanel();
+      showContact();
+    }
+
+// ===== 启动 =====
+    loadCases();
+    setLang(currentLang);
+    loadData();
+  

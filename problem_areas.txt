@@ -1,0 +1,105 @@
+=== showContact search ===
+  'showContact': 2 occurrences
+  'contact': 144 occurrences
+  'scrollTo.*contact': 0 occurrences
+  'openContact': 0 occurrences
+
+=== Mine Panel HTML ===
+
+    loadCases();
+    setLang(currentLang);
+    loadData();
+  </script>
+
+    <!-- 我的面板 -->
+    <div id="minePanel" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:#fff;border-radius:20px 20px 0 0;box-shadow:0 -8px 40px rgba(0,0,0,0.15);padding:0;max-height:70vh;overflow:hidden;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1)">
+      <div style="padding:20px 24px 0;text-align:center">
+        <div style="width:40px;height:4px;background:#ddd;border-radius:2px;margin:0 auto 16px"></div>
+        <div style="width:64px;height:64px;bo
+
+=== Z-index elements ===
+  z-index values: ['2', '3', '5', '90', '100', '199', '200', '999', '9999', '10000', '99999']
+
+=== Nav CSS ===
+.nav { position:fixed; top:0; left:0; right:0; z-index:100; height:var(--nav-h); background:rgba(250,248,245,0.85); backdrop-filter:blur(20px) saturate(1.5); border-bottom:1px solid rgba(0,0,0,0.04); 
+
+=== HTML structure ===
+  <div> count: 121
+  </div> count: 121
+  <script> count: 1
+  </script> count: 1
+  <style> count: 1
+  </style> count: 1
+
+=== Mine Panel functions ===
+
+showMinePanel:
+function showMinePanel() {
+      var panel = document.getElementById('minePanel');
+      var overlay = document.getElementById('minePanelOverlay');
+      if (panel && overlay) {
+        overlay.style.
+
+hideMinePanel:
+function hideMinePanel() {
+      var panel = document.getElementById('minePanel');
+      var overlay = document.getElementById('minePanelOverlay');
+      if (panel && overlay) {
+        panel.classLis
+
+showLoginPanel:
+function showLoginPanel() {
+      hideMinePanel();
+      showContact();
+      alert(i18n[currentLang].mine_login || '请登录');
+    }
+
+    function showSettingsPanel() {
+      hideMinePanel();
+      alert
+
+showSettingsPanel:
+function showSettingsPanel() {
+      hideMinePanel();
+      alert(i18n[currentLang].mine_settings || '系统设置');
+    }
+
+    function bindWechat() {
+      hideMinePanel();
+      handleWechatClick();
+    }
+
+bindWechat:
+function bindWechat() {
+      hideMinePanel();
+      handleWechatClick();
+    }
+
+    function bindPhone() {
+      hideMinePanel();
+      showContact();
+    }
+
+// ===== 启动 =====
+    loadCases();
+    se
+
+bindPhone:
+function bindPhone() {
+      hideMinePanel();
+      showContact();
+    }
+
+// ===== 启动 =====
+    loadCases();
+    setLang(currentLang);
+    loadData();
+  
+
+clearCache:
+function clearCache() {
+      toggleSettings();
+      if ('caches' in window) {
+        caches.keys().then(function(names){ for(var i=0;i<names.length;i++) caches.delete(names[i]); });
+      }
+      l

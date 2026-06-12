@@ -1,0 +1,31 @@
+dot' + (i === 0 ? ' active' : '');
+
+        dot.onclick = () => goHero(i);
+
+        dots.appendChild(dot);
+
+      });
+
+      heroTimer = setInterval(() => goHero((heroIdx + 1) % showImgs.length), 5000);
+
+    }
+
+    function goHero(i) {
+
+      document.querySelectorAll('.hero-slide').forEach((s, j) => s.classList.toggle('active', j === i));
+
+      document.querySelectorAll('.dot').forEach((d, j) => d.classList.toggle('active', j === i));
+
+      heroIdx = i;
+
+    }
+
+
+
+    // ===== 加载数据 =====
+
+    async function loadCases() {
+
+  try {
+
+    const r

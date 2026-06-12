@@ -1,0 +1,35 @@
+Remote size: 85622 /var/www/frontend/index.html
+JS: JS:OK
+
+NAV:
+  <nav class="nav" id="nav">
+
+    <div class="container">
+
+      <a href="#home" class="logo">卓翌<em>定制</em></a>
+
+      <ul class="menu" id="menu">
+
+        <li><a href="#home" class="active" data-i18n="nav_home">首页</a></li>
+
+        <li><a href="#about" data-i18n="nav_about">关于</a></li>
+
+        <li><a href="#services" data-i18n="nav_services">服务</a></li>
+
+        <li><a href="#products" data-i18n="nav_products">产品</a></li>
+
+        <li><a href="#portfolio" data-i18n="nav_portfolio">案例</a></li>
+
+        <li><a href="#contact" data-i18n="nav_contact">联系</a></li>
+
+      </ul>
+
+      
+    </div>
+
+    <div class="lang-switch">
+
+        <button class="lang-toggle" onclick="toggleLangMenu(event)">
+
+          <span id="currentLangLabel">中文</span>
+

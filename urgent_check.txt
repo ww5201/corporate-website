@@ -1,0 +1,87 @@
+File: 85637 bytes
+
+JS: 44366 chars, braces: 184:184
+
+=== Function Check ===
+  [OK] toggleMenu
+  [OK] toggleLang
+  [OK] toggleSettings
+  [OK] setLang
+  [OK] showMinePanel
+  [OK] hideMinePanel
+  [OK] loadData
+  [OK] loadCases
+  [OK] renderProducts
+  [OK] renderPortfolio
+  [OK] selectPay
+  [OK] submitOrder
+  [OK] openOrder
+  [OK] closeOrder
+  [OK] handleWechatClick
+  [MISSING] showContact
+  [OK] openLb
+  [OK] closeLb
+  [OK] navLb
+  [OK] openProductLb
+  [OK] checkAppUpdate
+
+=== onclick handlers in HTML ===
+  [OK] setLang (onclick)
+  [OK] openLightbox (onclick)
+  [OK] imgNav (onclick)
+  [OK] selectPay (onclick)
+  [OK] handleWechatClick (onclick)
+  [OK] showSettingsPanel (onclick)
+  [OK] hideMinePanel (onclick)
+  [OK] toggleSettings (onclick)
+  [OK] selectPay (onclick)
+  [OK] goToSlide (onclick)
+  [OK] navLb (onclick)
+  [OK] showMinePanel (onclick)
+  [OK] openPortfolioLightbox (onclick)
+  [OK] clearCache (onclick)
+  [OK] toggleLang (onclick)
+  [MISSING] this.closest (onclick)
+  [OK] showLoginPanel (onclick)
+  [MISSING] window.scrollTo (onclick)
+  [OK] bindPhone (onclick)
+  [OK] setLang (onclick)
+  [OK] bindWechat (onclick)
+  [OK] setLang (onclick)
+  [OK] setLang (onclick)
+  [OK] toggleSettings (onclick)
+  [OK] imgNav (onclick)
+  [OK] checkAppUpdate (onclick)
+  [MISSING] lbData.idx=${i};renderLb (onclick)
+  [MISSING] if (onclick)
+  [OK] toggleMenu (onclick)
+  [OK] setLang (onclick)
+  [OK] setLang (onclick)
+  [OK] closeOrder (onclick)
+  [OK] closeLb (onclick)
+  [OK] submitOrder (onclick)
+  [OK] filterProd (onclick)
+  [OK] openProductLb (onclick)
+  [OK] setLang (onclick)
+  [OK] navLb (onclick)
+  [OK] filterProd (onclick)
+  [OK] openOrder (onclick)
+
+=== Common Issues ===
+
+=== Duplicate functions ===
+
+=== CSS Check ===
+  .menu.show: True
+  #minePanel: True
+  #langDropdown: True
+
+=== Duplicate mine keys ===
+  mobile_mine occurrences: 8
+
+=== Startup ===
+// ===== 启动 =====
+    loadCases();
+    setLang(currentLang);
+    loadData();
+  

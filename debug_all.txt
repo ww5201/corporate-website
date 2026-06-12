@@ -1,0 +1,217 @@
+
+=== openOrder at 69167 ===
+price.toLocaleString()} <small>起</small></span>
+
+              <button class="product-btn" onclick="openOrder('${p._id}')">立即咨询</button>
+
+            </div>
+
+          </div>
+
+        `;
+
+        grid.appendChild(card);
+
+        observer.observe(card);
+
+
+
+        if (imgs.length > 1) {
+
+          productTimers[p._id] = setInterval(() => imgNavAuto(p._id, 1), 3000);
+
+        }
+
+      });
+
+
+
+      g
+
+=== openOrder at 74815 ===
+';
+        document.getElementById('qrHint').textContent = '暂未配置支付二维码';
+      }
+    }
+
+    function openOrder(pid) {
+      curProd = products.find(p => p._id === pid);
+      if (!curProd) { alert('Product not found'); return; }
+      document.getElementById('orderTitle').textContent = curProd.name;
+      document.getElementById('orderPrice').textContent = '¥' + curProd.price;
+      document.getEle
+
+
+=== ORDER MODAL HTML ===
+id="orderModal" onclick="if(event.target===this)closeOrder()">
+
+    <div class="modal">
+
+      <div class="modal-header"><h3>确认下单</h3><button class="modal-close" onclick="closeOrder()">×</button></div>
+
+      <div class="modal-body" id="orderForm">
+
+        <div class="modal-product">
+
+          <img id="oImg" src="" alt="">
+
+          <div><h4 id="oName"></h4><span class="price" id="oPrice"></span></div>
+
+        </div>
+
+        <div class="form-group"><label>姓名 *</label><input type="text" id="oName2" placeholder="请输入姓名"></div>
+
+        <div class="form-group"><label>电话 *</label><input type="tel" id="oPhone" placeholder="请输入手机号"></div>
+
+        <div class="form-group"><label>备注</label><textarea id="oNote" rows="2" placeholder="尺寸要求等"></textarea></div>
+
+        <div style="margin-bottom:16px">
+
+          <label style="display:block;margin-bottom:8px;font-size:0.82rem;color:#777">支付方式</label>
+
+          <div class="pay-methods">
+
+            <div class="pay-btn active" onclick="selectPay('wechat')">💚 微信</div>
+
+            <div class="pay-btn" onclick="selectPay('alipay')">💙 支付宝</div>
+
+          </div>
+
+        </div>
+
+        <div class="qr-box">
+
+          <img id="qrImg" src="">
+
+          <p id="qrHint">请选择支付方式</p>
+
+        </div>
+
+        <button class="order-btn" onclick="submitOrder()">确认下单</button>
+
+      </div>
+
+      <div class="order-success" id="orderSuccess" style="display:none">
+
+        <div class="icon">✅</div>
+
+        <h3>下单成功！</h3>
+
+        <p style="color:#777;margin-top:8px">我们已收到您的订单，会尽快联系您</p>
+
+        <button class="order-btn" style="margin-top:24px;background:#999" onclick="closeOrder()">关闭</button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- 浮动按钮 -->
+
+  <div class="float-contact">
+
+    <div class="wechat-popup" id="wechatPopup">
+
+      <img id="wechatQrImg" src="">
+
+      <p>长按识别二维码<br>添加微信咨询</p>
+
+    </div>
+
+    <button class="float-btn float-wechat" onclick="handleWechatClick()" title="微信咨询" id="wechatBtn">💬</button>
+
+    <button class="f
+
+=== SELECTPAY ===
+function selectPay(method) {
+      curPay = method;
+      document.querySelectorAll('.pay-btn').forEach(b => b.classList.remove('active'));
+      if (method === 'wechat') {
+        document.querySelector('.pay-btn:first-child').classList.add('active');
+      } else {
+        document.querySelector('.pay-btn:last-child').classList.add('active');
+      }
+      if (payConfig[method + 'Qr']) {
+        document.getElementById('qrImg').src = payConfig[method + 'Qr'];
+        document.getElementById('q
+
+=== SUBMITORDER ===
+function submitOrder() {
+      var name = document.getElementById('orderName').value.trim();
+      var phone = document.getElementById('orderPhone').value.trim();
+      var addr = document.getElementById('orderAddr').value.trim();
+      if (!name || !phone || !addr) {
+        alert('请填写完整信息');
+        return;
+      }
+      fetch(API + '/orders', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          product: curProd ? curProd.name : '',
+          price: curProd ? curProd.price : 0,
+          name: name,
+          phone: phone,
+          address: addr,
+          payMethod: curPay
+        })
+      }).then(function(r) { return r.json(); }).then(function(d) {
+        if (d.ok) {
+          document.getElementById('orderForm').st
+
+=== CLOSEORDER ===
+function closeOrder() {
+      document.getElementById('orderModal').style.display = 'none';
+      document.getElementById('orderSuccess').style.display = 'none';
+      document.getElementById('orderForm').style.display = 'block';
+    }
+
+    function submitOrder() {
+      var name = document.getElementById('orderName').value.trim();
+      var phone = document.getElementById('orderPhone').value.trim();
+      var addr = document.getElementById('orderAddr').value.trim();
+      if (!name || !phone ||
+
+=== NAV MENU ===
+
+
+=== HAMBURGER ===
+menu-toggle { display:none; background:none; border:none; font-size:1.5rem; cursor:pointer; padding:8px; }
+
+    .lang-switch { position:relative; margin-left:16px; padding-left:16px; border-left:1px solid rgba(0,0,0,0.08); }
+
+    .lang-toggle { background:none; border:none; cursor:pointer; font-size:0.88rem; padding:6px 12px; border-radius:8px; transition:all 0.3s; color:var(--text2); display:flex; align-items:center; gap:6px; }
+
+    .lang-toggle:hover { background:rgba(0,0,0,0.04); }
+
+    .lang
+
+=== MOBILE NAV ===
+mobileNav = document.querySelector('.mobile-nav');
+
+      if (mobileNav) {
+
+        mobileNav.innerHTML = `<div class="mobile-nav-inner">
+
+          <a href="#home" class="active"><span class="icon">🏠</span>${i18n[lang].mobile_home}</a>
+
+          <a href="#products"><span class="icon">📦</span>${i18n[lang].mobile_products}</a>
+
+          <a href="#contact"><span class="icon">💬</span>${i18n[lang].mobile_consult}</a>
+
+          
+
+        </div>`;
+
+      }
+
+    }
+
+
+
+    // ===== 数字滚动 =====
+
+    fun

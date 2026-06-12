@@ -1,0 +1,27 @@
+=== Memory ===
+              total        used        free      shared  buff/cache   available
+Mem:          1.8Gi       986Mi       317Mi       1.0Mi       718Mi       884Mi
+Swap:         2.0Gi       0.0Ki       2.0Gi
+
+
+=== Top Processes ===
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+mysql        883  0.3 21.4 1780912 410208 ?      Ssl  11:45   0:01 /usr/libexec/mysqld --basedir=/usr
+root        1112  2.2 13.4 11951032 258320 ?     Ssl  11:45   0:11 /usr/local/share/aliyun-assist/plugin/ACS-ECS-OpenClaw/current/node-runtime/bin/node /usr/local/share/aliyun-assist/plugin/ACS-ECS-OpenClaw/current/node-runtime/lib/node_modules/openclaw/dist/index.js gateway --port 18789
+root        1941  0.0  2.8 1033140 54664 ?       Ssl  11:49   0:00 /usr/bin/node server-v4.js
+root        1510  0.0  2.6 1031356 51224 ?       Ssl  11:47   0:00 PM2 v7.0.1: God Daemon (/root/.pm2)
+root         886  0.5  1.8 1506384 35376 ?       Sl   11:45   0:02 /usr/local/cloudmonitor/bin/argusagent
+root         575  0.1  1.8 745720 34996 ?        Ssl  11:45   0:00 /opt/alibabacloud/hbrclient/client/hbrclient run
+root        1301  0.8  1.6 146000 30984 ?        Ssl  11:45   0:04 /usr/local/aegis/aegis_client/aegis_12_81/AliYunDunMonitor
+root         701  0.1  1.3 475028 26616 ?        Ssl  11:45   0:00 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+root         484  0.0  1.2  53028 23276 ?        Ss   11:45   0:00 /usr/lib/systemd/systemd-journald
+root         692  0.0  1.0 472440 19420 ?        Ssl  11:45   0:00 /usr/sbin/NetworkManager --no-daemon
+root        1268  0.2  1.0  71628 19312 ?        Sl   11:45   0:01 /usr/local/aegis/alihips/AliHips
+
+
+=== MySQL ===
+400.594 MB - /usr/libexec/mysqld
+
+=== Swap ===
+NAME      TYPE SIZE USED PRIO
+/swapfile file   2G 524K   -2

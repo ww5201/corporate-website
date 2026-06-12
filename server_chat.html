@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>在线咨询 | 卓翌定制</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1677ff;
+      --primary-light: #4096ff;
+      --primary-dark: #0958d9;
+      --green: #07c160;
+      --dark: #1a1a2e;
+      --dark2: #16213e;
+      --gold: #c9a96e;
+      --text: #333;
+      --text-2: #666;
+      --text-3: #999;
+      --bg: #f0f2f5;
+      --card: #fff;
+      --border: #e8e8e8;
+      --bubble-mine: linear-gradient(135deg, #1677ff 0%, #4096ff 100%);
+      --bubble-other: #fff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg); color: var(--text);
+      height: 100vh; height: 100dvh;
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .chat-header {
+      background: linear-gradient(135deg, var(--dark) 0%, var(--dark2) 100%);
+      color: #fff; padding: 12px 16px;
+      display: flex; align-items: center; gap: 12px;
+      flex-shrink: 0; z-index: 10;
+      padding-top: max(12px, env(safe-area-inset-top, 12px));
+    }
+    .chat-header .back-btn {
+      width: 34px; height: 34px; border: none;
+      background: rgba(255,255,255,0.1); border-radius: 50%;
+      font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; flex-shrink: 0; transition: background 0.2s;
+    }
+    .chat-header .back-btn:active { background: rgba(255,255,255,0.25); }
+    .header-avatar {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--gold) 0%, #e8d5b0 100%);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(201,169,110,0.4);
+    }
+    .header-info { flex: 1; }
+    .header-info h3 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+    .status-line { font-size: 12px; opacity: 0.8; display: flex; align-items: center; gap: 5px; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+    .status-dot.online { background: var(--green); box-shadow: 0 0 4px var(--green); }
+    .status-dot.offline { background: #aaa; }
+    .conn-bar { display: none; background: #fff3cd; color: #856404; text-align: center; padding: 6px; font-size: 12px; flex-shrink: 0; }
+    .conn-bar.show { display: block; }
+    .chat-body {
+      flex: 1; overflow-y: auto; overflow-x: hidden;
+      padding: 12px 16px 8px; -webkit-overflow-scrolling: touch;
+      background: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 85%, rgba(201,169,110,0.04) 0%, transparent 50%),
+        radial-gradient(circle at 85% 15%, rgba(22,119,255,0.04) 0%, transparent 50%);
+    }
+    .chat-body::-webkit-scrollbar { width: 3px; }
+    .chat-body::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 3px; }
+    .welcome-block { text-align: center; padding: 28px 16px 20px; animation: fadeUp 0.5s ease; }
+    .welcome-icon {
+      width: 68px; height: 68px;
+      background: linear-gradient(135deg, var(--gold) 0%, #e8d5b0 100%);
+      border-radius: 22px; display: flex; align-items: center; justify-content: center;
+      font-size: 34px; margin: 0 auto 16px;
+      box-shadow: 0 6px 20px rgba(201,169,110,0.3);
+    }
+    .welcome-block h3 { font-size: 17px; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+    .welcome-block p { font-size: 13px; color: var(--text-3); line-height: 1.7; }
+    .time-divider { text-align: center; margin: 14px 0 10px; font-size: 11px; color: var(--text-3); }
+    .time-divider span { background: rgba(0,0,0,0.04); padding: 2px 10px; border-radius: 10px; }
+    .msg-row { display: flex; margin-bottom: 10px; animation: fadeUp 0.2s ease; }
+    .msg-row.mine { flex-direction: row-reverse; }
+    .msg-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px;
+    }
+    .msg-row:not(.mine) .msg-avatar {
+      background: linear-gradient(135deg, var(--gold) 0%, #e8d5b0 100%); margin-right: 8px;
+    }
+    .msg-row.mine .msg-avatar {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: #fff; margin-left: 8px;
+    }
+    .msg-content { max-width: 72%; }
+    .msg-bubble {
+      padding: 10px 14px; border-radius: 16px;
+      font-size: 14px; line-height: 1.6; word-break: break-word;
+    }
+    .msg-row:not(.mine) .msg-bubble {
+      background: var(--bubble-other); color: var(--text);
+      border-top-left-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .msg-row.mine .msg-bubble {
+      background: var(--bubble-mine); color: #fff;
+      border-top-right-radius: 4px; box-shadow: 0 2px 8px rgba(22,119,255,0.18);
+    }
+    .msg-time-small { font-size: 10px; color: var(--text-3); margin-top: 3px; }
+    .msg-row.mine .msg-time-small { text-align: right; }
+    .quick-replies { display: flex; flex-wrap: wrap; gap: 8px; padding: 6px 16px 4px; animation: fadeUp 0.3s ease; }
+    .quick-btn {
+      padding: 7px 15px; background: #fff; color: var(--primary);
+      border: 1px solid #d6e4ff; border-radius: 20px;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: all 0.2s; font-family: inherit;
+    }
+    .quick-btn:active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .typing-bar { display: none; padding: 4px 16px 2px; font-size: 12px; color: var(--text-3); }
+    .typing-bar.show { display: flex; align-items: center; gap: 4px; }
+    .typing-dots { display: inline-flex; gap: 3px; }
+    .typing-dots span {
+      width: 4px; height: 4px; background: var(--text-3);
+      border-radius: 50%; animation: bounce 1.2s infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    .chat-footer {
+      background: #fff; border-top: 1px solid var(--border);
+      padding: 8px 12px; display: flex; align-items: flex-end; gap: 8px; flex-shrink: 0;
+      padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
+    }
+    .input-wrap {
+      flex: 1; background: var(--bg); border-radius: 22px;
+      padding: 8px 16px; display: flex; align-items: flex-end;
+      min-height: 40px; border: 1.5px solid transparent; transition: border-color 0.2s, background 0.2s;
+    }
+    .input-wrap:focus-within { border-color: var(--primary); background: #fff; }
+    .input-wrap textarea {
+      flex: 1; border: none; outline: none; background: transparent;
+      font-size: 15px; font-family: inherit; resize: none;
+      max-height: 100px; line-height: 1.4; color: var(--text);
+    }
+    .input-wrap textarea::placeholder { color: var(--text-3); }
+    .send-btn {
+      width: 42px; height: 42px; border-radius: 50%; border: none;
+      flex-shrink: 0; cursor: pointer;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; opacity: 0.4;
+    }
+    .send-btn.active { opacity: 1; }
+    .send-btn:active { transform: scale(0.9); }
+    .toast {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.78); color: #fff;
+      padding: 10px 24px; border-radius: 8px; font-size: 14px;
+      z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes bounce { 0%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-4px); } }
+    @media (min-width: 768px) { body { max-width: 480px; margin: 0 auto; box-shadow: 0 0 40px rgba(0,0,0,0.08); } }
+  </style>
+</head>
+<body>
+  <div class="chat-header">
+    <button class="back-btn" onclick="goBack()">&#8249;</button>
+    <div class="header-avatar">&#127968;</div>
+    <div class="header-info">
+      <h3>卓翌定制 &middot; 在线咨询</h3>
+      <div class="status-line">
+        <span class="status-dot online" id="sDot"></span>
+        <span id="sText">连接中...</span>
+      </div>
+    </div>
+  </div>
+  <div class="conn-bar" id="connBar"><span id="connText"></span></div>
+  <div class="chat-body" id="chatBody">
+    <div class="welcome-block" id="welcomeBlock">
+      <div class="welcome-icon">&#128172;</div>
+      <h3>欢迎来到卓翌定制</h3>
+      <p>您好！有什么可以帮您的？<br>我们的顾问将尽快为您解答</p>
+    </div>
+  </div>
+  <div class="quick-replies" id="quickReplies">
+    <button class="quick-btn" onclick="sendQuick('我想了解定制衣柜')">定制衣柜</button>
+    <button class="quick-btn" onclick="sendQuick('请问价格是多少？')">价格咨询</button>
+    <button class="quick-btn" onclick="sendQuick('我想预约上门量房')">预约量房</button>
+    <button class="quick-btn" onclick="sendQuick('请问有设计效果图吗？')">看效果图</button>
+  </div>
+  <div class="typing-bar" id="typingBar">
+    客服正在输入<span class="typing-dots"><span></span><span></span><span></span></span>
+  </div>
+  <div class="chat-footer">
+    <div class="input-wrap">
+      <textarea id="msgInput" rows="1" placeholder="输入消息..." oninput="autoGrow(this);toggleSend()" onkeydown="onKey(event)"></textarea>
+    </div>
+    <button class="send-btn" id="sendBtn" onclick="sendMsg()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+  <div class="toast" id="toast"></div>
+
+<script>
+var API='';
+var convId=null, ws=null, wsRetry=0, MAX_RETRY=5;
+var lastTimeLabel='', pollTmr=null, sending=false;
+
+async function init(){
+  var saved=localStorage.getItem('zy_convId');
+  if(saved){ convId=saved; await loadHistory(); }
+  else { await createConv(); }
+  connectWS();
+  document.getElementById('msgInput').focus();
+}
+
+async function createConv(){
+  try{
+    var vid=localStorage.getItem('zy_visitorId');
+    if(!vid){ vid='v_'+Date.now()+'_'+Math.random().toString(36).slice(2,8); localStorage.setItem('zy_visitorId',vid); }
+    var r=await fetch(API+'/api/conversations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({visitorId:vid,name:'访客',phone:''})});
+    var d=await r.json();
+    convId=d._id;
+    localStorage.setItem('zy_convId',convId);
+    addSysMsg('欢迎来到卓翌定制！我们的顾问将尽快为您服务，请稍候...');
+  }catch(e){ showToast('创建会话失败，请刷新重试'); }
+}
+
+async function loadHistory(){
+  try{
+    var r=await fetch(API+'/api/conversations/'+convId+'/messages');
+    if(r.status===404){ localStorage.removeItem('zy_convId'); await createConv(); return; }
+    var msgs=await r.json();
+    if(msgs.length>0){
+      document.getElementById('welcomeBlock').style.display='none';
+      msgs.forEach(function(m){ renderMsg(m,false); });
+      scrollDown();
+    }
+  }catch(e){}
+}
+
+function connectWS(){
+  if(!convId) return;
+  var proto=location.protocol==='https:'?'wss:':'ws:';
+  try{
+    ws=new WebSocket(proto+'//'+location.host+'/ws/chat?convId='+convId);
+    ws.onopen=function(){ wsRetry=0; setStatus('online','在线'); hideConn(); startPoll(); };
+    ws.onmessage=function(e){
+      try{
+        var d=JSON.parse(e.data);
+        if(d.type==='new_message'&&d.message.sender!=='visitor'){
+          document.getElementById('welcomeBlock').style.display='none';
+          renderMsg(d.message,true);
+        }
+      }catch(err){}
+    };
+    ws.onclose=function(){
+      setStatus('offline','已断开');
+      if(wsRetry<MAX_RETRY){ wsRetry++; showConn('重连中...('+wsRetry+'/'+MAX_RETRY+')'); setTimeout(connectWS,2000*wsRetry); }
+      else { showConn('已切换为轮询模式'); startPoll(); }
+    };
+    ws.onerror=function(){ setStatus('offline','连接异常'); };
+  }catch(e){ startPoll(); }
+}
+
+function startPoll(){ if(pollTmr) return; pollTmr=setInterval(doPoll,5000); }
+async function doPoll(){
+  if(!convId) return;
+  try{
+    var r=await fetch(API+'/api/conversations/'+convId+'/poll?since='+encodeURIComponent(lastTimeLabel));
+    var d=await r.json();
+    if(d.messages&&d.messages.length>0){
+      document.getElementById('welcomeBlock').style.display='none';
+      d.messages.forEach(function(m){ if(m.sender!=='visitor') renderMsg(m,true); });
+    }
+  }catch(e){}
+}
+
+async function sendMsg(){
+  var inp=document.getElementById('msgInput');
+  var txt=inp.value.trim();
+  if(!txt||sending) return;
+  sending=true; inp.value=''; autoGrow(inp); toggleSend();
+  renderMsg({sender:'visitor',content:txt,createdAt:new Date().toISOString()},true);
+  try{
+    var r=await fetch(API+'/api/conversations/'+convId+'/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({sender:'visitor',content:txt,type:'text'})
+    });
+    var d=await r.json();
+    if(d.error) showToast('发送失败: '+d.error);
+  }catch(e){ showToast('网络错误，消息可能未送达'); }
+  sending=false;
+  document.getElementById('quickReplies').style.display='none';
+}
+
+function sendQuick(txt){ document.getElementById('msgInput').value=txt; sendMsg(); }
+
+function renderMsg(msg,anim){
+  var body=document.getElementById('chatBody');
+  var mine=msg.sender==='visitor';
+  var t=msg.createdAt||new Date().toISOString();
+  var tl=timeLabel(t);
+  if(tl!==lastTimeLabel){
+    var dv=document.createElement('div'); dv.className='time-divider';
+    dv.innerHTML='<span>'+tl+'</span>'; body.appendChild(dv); lastTimeLabel=tl;
+  }
+  var row=document.createElement('div');
+  row.className='msg-row'+(mine?' mine':'');
+  if(!anim) row.style.animation='none';
+  var av=mine?'&#128100;':'&#127968;';
+  row.innerHTML='<div class="msg-avatar">'+av+'</div>'
+    +'<div class="msg-content"><div class="msg-bubble">'+esc(msg.content)+'</div>'
+    +'<div class="msg-time-small">'+hm(t)+'</div></div>';
+  body.appendChild(row); scrollDown();
+}
+
+function addSysMsg(txt){
+  var body=document.getElementById('chatBody');
+  var d=document.createElement('div'); d.className='time-divider';
+  d.innerHTML='<span>'+txt+'</span>'; body.appendChild(d); scrollDown();
+}
+
+function scrollDown(){ requestAnimationFrame(function(){ var b=document.getElementById('chatBody'); b.scrollTop=b.scrollHeight; }); }
+function timeLabel(iso){
+  var d=new Date(iso), h=pad(d.getHours()), m=pad(d.getMinutes()), now=new Date();
+  if(d.toDateString()===now.toDateString()) return h+':'+m;
+  return (d.getMonth()+1)+'/'+d.getDate()+' '+h+':'+m;
+}
+function hm(iso){ var d=new Date(iso); return pad(d.getHours())+':'+pad(d.getMinutes()); }
+function pad(n){ return n<10?'0'+n:''+n; }
+function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML.replace(/\n/g,'<br>'); }
+function autoGrow(el){ el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,100)+'px'; }
+function toggleSend(){
+  document.getElementById('sendBtn').classList.toggle('active',document.getElementById('msgInput').value.trim().length>0);
+}
+function onKey(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMsg(); } }
+function setStatus(t,txt){ document.getElementById('sDot').className='status-dot '+t; document.getElementById('sText').textContent=txt; }
+function showConn(txt){ document.getElementById('connText').textContent=txt; document.getElementById('connBar').classList.add('show'); }
+function hideConn(){ document.getElementById('connBar').classList.remove('show'); }
+function goBack(){ if(document.referrer&&document.referrer!==location.href) history.back(); else location.href='/'; }
+function showToast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },2000); }
+
+init();
+</script>
+</body>
+</html>

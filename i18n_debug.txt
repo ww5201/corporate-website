@@ -1,0 +1,53 @@
+Found 'mobile_mine' at pos 3095:
+'退出登录'
+        mine_bindwx_hint: '登录后绑定微信和手机号'
+        mine_bindphone: '绑定手机号'
+        mine_bindwx: '绑定微信'
+        mine_login: '登录/注册'
+        mine_settings: '系统设置'
+        mine_title: '个人中心'
+        mobile_mine: '我的'
+
+      },
+
+      en: {
+
+        nav_home: 'Home', nav_about: 'About', nav_services: 'Services', nav_products: 'Products', nav_portfolio: 'Portfolio', nav_contact: 'Contact',
+
+       
+
+All 'mobile_' in JS:
+  pos 2773: mobile_home: '首页', mobile_prod
+  pos 2792: mobile_products: '产品', mobile_
+  pos 2815: mobile_consult: '咨询',,,,,,,,,
+  pos 3095: mobile_mine: '我的'
+
+      },
+  pos 5983: mobile_home: 'Home', mobile_pr
+  pos 6004: mobile_products: 'Products', m
+  pos 6033: mobile_consult: 'Consult'
+  pos 8195: mobile_home: 'ホーム', mobile_pro
+  pos 8215: mobile_products: '製品', mobile_
+  pos 8238: mobile_consult: '相談'
+
+      },
+  pos 10388: mobile_home: '홈', mobile_produ
+  pos 10406: mobile_products: '제품', mobile_
+  pos 10429: mobile_consult: '상담'
+
+      },
+  pos 13199: mobile_home: 'หน้าแรก', mobile
+  pos 13223: mobile_products: 'สินค้า', mob
+  pos 13250: mobile_consult: 'ปรึกษา'
+  pos 16223: mobile_home: 'Trang chủ', mobi
+  pos 16249: mobile_products: 'Sản phẩm', m
+  pos 16278: mobile_consult: 'Tư vấn'
+  pos 19246: mobile_home: 'Utama', mobile_p
+  pos 19268: mobile_products: 'Produk', mob
+  pos 19295: mobile_consult: 'Rundingan'
+  pos 20698: mobile_home}</a>
+
+          <a
+  pos 20786: mobile_products}</a>
+  pos 20877: mobile_consult}</a>
+  pos 21002: mobile_mine}</a>

@@ -1,0 +1,6 @@
+Backend health: {"status":"ok","time":"2026-06-03T03:08:31.571Z"}
+App version: {"versionCode":3,"versionName":"1.2.0","updateMessage":"微信自动复制号码+咨询按钮修复+云更新","downloadUrl":"http://8.138.218.146/apk/zhuoyi-latest.apk","forceUpdate":false}
+oName refs: 4
+orderTitle refs (should be 0): 0
+checkAppUpdate refs: 2
+settings-menu refs: 2

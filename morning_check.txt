@@ -1,0 +1,14 @@
+File size: 76598
+Has selectPay: True
+Has handleWechatClick: True
+Has Android bridge: True
+Health: {"status":"ok","time":"2026-06-03T02:30:59.655Z"}
+JS: JS OK, len=39125, funcs=36
+
+Recent log:
+113.215.189.66 - - [03/Jun/2026:03:15:01 +0800] "GET / HTTP/1.1" 200 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.5938.62 Safari/537.36" "-"
+59.82.135.160 - - [03/Jun/2026:03:29:04 +0800] "GET / HTTP/1.1" 200 0 "-" "Mozilla/5.0 (Linux; Android 9; ASUS_X00TD; Flow) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/359.0.0.288 Mobile Safari/537.36" "-"
+113.215.188.190 - - [03/Jun/2026:03:34:27 +0800] "GET / HTTP/1.1" 200 0 "-" "Mozilla/5.0 (Linux; Android 9; ASUS_X00TD; Flow) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/359.0.0.288 Mobile Safari/537.36" "-"
+27.148.196.62 - - [03/Jun/2026:09:37:42 +0800] "GET / HTTP/1.1" 200 84050 "-" "Mozilla/5.0 (Android 14; Mobile; rv:128.0) Gecko/128.0 Firefox/128.0" "-"
+43.139.151.30 - - [03/Jun/2026:09:49:05 +0800] "CONNECT www.baidu.com:443 HTTP/1.1" 400 157 "-" "-" "-"
+

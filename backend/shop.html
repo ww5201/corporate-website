@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>精选商品 | 卓翌定制</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1677ff;
+      --primary-light: #4096ff;
+      --primary-bg: #e6f4ff;
+      --orange: #ff6600;
+      --orange-bg: #fff7e6;
+      --gold: #c9a96e;
+      --dark: #1a1a1a;
+      --text: #333;
+      --text-2: #666;
+      --text-3: #999;
+      --bg: #f5f5f5;
+      --card: #fff;
+      --border: #f0f0f0;
+      --radius: 12px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { font-size: 16px; }
+    body {
+      font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 70px;
+      overflow-x: hidden;
+    }
+
+    /* ===== 顶部搜索栏 ===== */
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: linear-gradient(135deg, var(--primary) 0%, #4096ff 100%);
+      padding: 10px 12px 12px;
+    }
+    .header-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-btn {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.2);
+      border: none; border-radius: 50%;
+      color: #fff; font-size: 18px;
+      cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .search-bar {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-radius: 20px;
+      padding: 7px 14px;
+      gap: 6px;
+    }
+    .search-bar .icon { color: var(--text-3); font-size: 16px; }
+    .search-bar input {
+      flex: 1; border: none; outline: none;
+      font-size: 14px; background: transparent;
+      color: var(--text);
+    }
+    .search-bar input::placeholder { color: #bbb; }
+    .search-btn {
+      background: var(--primary);
+      color: #fff; border: none; border-radius: 16px;
+      padding: 5px 16px; font-size: 13px; font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ===== 分类标签栏 ===== */
+    .cat-scroll {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .cat-scroll::-webkit-scrollbar { display: none; }
+    .cat-list {
+      display: flex;
+      padding: 0 8px;
+      white-space: nowrap;
+      min-width: max-content;
+    }
+    .cat-item {
+      position: relative;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: color 0.2s;
+      flex-shrink: 0;
+    }
+    .cat-item.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .cat-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 20px; height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    /* ===== 轮播横幅 ===== */
+    .banner-area {
+      padding: 10px 10px 0;
+    }
+    .banner-card {
+      background: linear-gradient(135deg, var(--primary) 0%, #69b1ff 100%);
+      border-radius: var(--radius);
+      padding: 20px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+    }
+    .banner-text h3 { font-size: 18px; font-weight: 700; }
+    .banner-text p { font-size: 12px; opacity: 0.85; margin-top: 4px; }
+    .banner-tag {
+      background: rgba(255,255,255,0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    /* ===== 快捷入口 ===== */
+    .quick-entry {
+      background: #fff;
+      margin: 10px 10px 0;
+      border-radius: var(--radius);
+      padding: 16px 8px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .quick-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .quick-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .quick-icon.cabinet { background: #fff1f0; }
+    .quick-icon.wardrobe { background: #e6f7ff; }
+    .quick-icon.kitchen { background: #fff7e6; }
+    .quick-icon.custom { background: #f6ffed; }
+    .quick-item span {
+      font-size: 12px;
+      color: var(--text-2);
+    }
+
+    /* ===== 限时特惠 ===== */
+    .flash-section {
+      margin: 10px 10px 0;
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+    .flash-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .flash-header .left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .flash-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .flash-timer {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      color: var(--text-3);
+    }
+    .flash-timer b {
+      display: inline-block;
+      background: var(--text);
+      color: #fff;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .flash-more {
+      font-size: 12px;
+      color: var(--text-3);
+      text-decoration: none;
+    }
+    .flash-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .flash-scroll::-webkit-scrollbar { display: none; }
+    .flash-card {
+      flex-shrink: 0;
+      width: 100px;
+      text-align: center;
+    }
+    .flash-card img {
+      width: 100px; height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #f5f5f5;
+    }
+    .flash-card .no-img {
+      width: 100px; height: 100px;
+      border-radius: 8px;
+      background: #f5f5f5;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; color: #ddd;
+    }
+    .flash-card .price {
+      color: var(--primary);
+      font-size: 15px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+    .flash-card .price small { font-size: 10px; }
+    .flash-card .orig {
+      color: var(--text-3);
+      font-size: 11px;
+      text-decoration: line-through;
+    }
+
+    /* ===== 商品列表区域 ===== */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 18px 0 10px;
+    }
+    .section-header::before,
+    .section-header::after {
+      content: '';
+      width: 20px; height: 1px;
+      background: #ddd;
+    }
+    .section-header span {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* 商品瀑布流 */
+    .product-waterfall {
+      padding: 0 8px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .waterfall-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .p-card {
+      background: #fff;
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .p-card:active { transform: scale(0.98); }
+    .p-card-img {
+      width: 100%;
+      aspect-ratio: 1;
+      background: #f5f5f5;
+      position: relative;
+      overflow: hidden;
+    }
+    .p-card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .p-card-img .badge {
+      position: absolute;
+      top: 6px; left: 6px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+    .p-card-body {
+      padding: 10px;
+    }
+    .p-card-title {
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--text);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .p-card-title .tag {
+      display: inline-block;
+      background: var(--primary-bg);
+      color: var(--primary);
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      margin-right: 3px;
+      font-weight: 600;
+      vertical-align: middle;
+    }
+    .p-card-price {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+    .p-card-price .cur {
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .p-card-price .num {
+      color: var(--primary);
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .p-card-price .orig {
+      color: var(--text-3);
+      font-size: 11px;
+      text-decoration: line-through;
+      margin-left: 4px;
+    }
+    .p-card-sales {
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 4px;
+    }
+    .p-card-action {
+      margin-top: 8px;
+    }
+    .p-card-action button {
+      width: 100%;
+      padding: 7px 0;
+      background: linear-gradient(135deg, var(--primary) 0%, #69b1ff 100%);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .p-card-action button:active { opacity: 0.85; }
+
+    /* 加载状态 */
+    .loading-box {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--text-3);
+      font-size: 14px;
+    }
+    .spinner {
+      display: inline-block;
+      width: 20px; height: 20px;
+      border: 3px solid #eee;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .empty-box {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-3);
+    }
+    .empty-box .icon { font-size: 48px; margin-bottom: 12px; }
+
+    /* ===== 底部导航 ===== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #fff;
+      border-top: 1px solid var(--border);
+      display: flex;
+      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6px 0 8px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .nav-item .nav-icon { font-size: 22px; margin-bottom: 2px; }
+    .nav-item .nav-label { font-size: 10px; color: var(--text-3); }
+    .nav-item.active .nav-label { color: var(--primary); font-weight: 600; }
+    .nav-item.active .nav-icon { transform: scale(1.1); }
+
+    /* ===== 商品详情弹窗 ===== */
+    .detail-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      animation: fadeIn 0.2s;
+    }
+    .detail-overlay.show { display: block; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .detail-sheet {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #fff;
+      border-radius: 16px 16px 0 0;
+      max-height: 85vh;
+      overflow-y: auto;
+      z-index: 201;
+      animation: slideUp 0.3s ease;
+    }
+    .detail-overlay.show .detail-sheet { display: block; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+    .detail-close {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0,0,0,0.06);
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .detail-imgs {
+      width: 100%;
+      aspect-ratio: 1;
+      background: #f5f5f5;
+      position: relative;
+    }
+    .detail-imgs img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+    }
+    .detail-img-nav {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .detail-img-nav.prev { left: 8px; }
+    .detail-img-nav.next { right: 8px; }
+    .detail-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%; transform: translateX(-50%);
+      display: flex; gap: 5px;
+    }
+    .detail-dots span {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+    }
+    .detail-dots span.active { background: #fff; }
+    .detail-info {
+      padding: 16px;
+    }
+    .detail-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+    .detail-price-row .cur {
+      color: var(--primary); font-size: 14px; font-weight: 700;
+    }
+    .detail-price-row .num {
+      color: var(--primary); font-size: 28px; font-weight: 900; line-height: 1;
+    }
+    .detail-price-row .orig {
+      color: var(--text-3); font-size: 13px;
+      text-decoration: line-through; margin-left: 8px;
+    }
+    .detail-tag {
+      display: inline-block;
+      background: var(--primary-bg);
+      color: var(--primary);
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .detail-name {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+    .detail-desc {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .detail-bottom {
+      display: flex;
+      gap: 10px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .detail-bottom .btn-cart {
+      flex: 1;
+      padding: 12px;
+      border-radius: 24px;
+      border: 2px solid var(--primary);
+      background: #fff;
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .detail-bottom .btn-buy {
+      flex: 1;
+      padding: 12px;
+      border-radius: 24px;
+      border: none;
+      background: linear-gradient(135deg, var(--primary) 0%, #69b1ff 100%);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+
+    /* ===== Chat Widget ===== */
+    .chat-fab{position:fixed;bottom:80px;right:16px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#4096ff);color:#fff;border:none;box-shadow:0 4px 16px rgba(22,119,255,0.4);font-size:24px;cursor:pointer;z-index:200;display:flex;align-items:center;justify-content:center}
+    .chat-fab:active{transform:scale(0.92)}
+    .chat-fab .badge-dot{position:absolute;top:4px;right:4px;width:10px;height:10px;background:#ff4d4f;border-radius:50%;border:2px solid #fff}
+    .chat-panel{position:fixed;bottom:0;left:0;right:0;height:75vh;max-height:550px;background:#fff;border-radius:16px 16px 0 0;box-shadow:0 -4px 24px rgba(0,0,0,0.15);z-index:300;display:none;flex-direction:column;overflow:hidden}
+    .chat-panel.open{display:flex;animation:chatSlideUp 0.25s ease-out}
+    @keyframes chatSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .chat-panel-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:linear-gradient(135deg,var(--primary),#4096ff);color:#fff}
+    .chat-panel-header h3{font-size:15px;font-weight:600}
+    .chat-panel-close{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.2);border:none;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .chat-panel-body{flex:1;overflow-y:auto;padding:12px;background:#f5f5f5}
+    .chat-bubble{margin-bottom:12px;display:flex;gap:8px}
+    .chat-bubble.visitor{flex-direction:row}
+    .chat-bubble.admin{flex-direction:row-reverse}
+    .chat-bubble-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;flex-shrink:0}
+    .chat-bubble.visitor .chat-bubble-avatar{background:linear-gradient(135deg,#8b7355,#b8a080)}
+    .chat-bubble.admin .chat-bubble-avatar{background:linear-gradient(135deg,var(--primary),#4096ff)}
+    .chat-bubble-content{max-width:70%}
+    .chat-bubble-text{padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.5;word-break:break-word}
+    .chat-bubble.visitor .chat-bubble-text{background:#fff;color:var(--text);border-top-left-radius:4px}
+    .chat-bubble.admin .chat-bubble-text{background:var(--primary);color:#fff;border-top-right-radius:4px}
+    .chat-bubble-time{font-size:10px;color:var(--text-3);margin-top:3px}
+    .chat-bubble.admin .chat-bubble-time{text-align:right}
+    .chat-panel-footer{padding:10px 12px;border-top:1px solid var(--border);background:#fff;display:flex;gap:8px;align-items:flex-end}
+    .chat-panel-footer textarea{flex:1;border:1px solid var(--border);border-radius:20px;padding:8px 14px;font-size:14px;resize:none;height:38px;max-height:80px;font-family:inherit;background:#f5f5f5}
+    .chat-panel-footer textarea:focus{border-color:var(--primary);outline:none;background:#fff}
+    .chat-panel-send{width:38px;height:38px;border-radius:50%;background:var(--primary);color:#fff;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .chat-panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:250;display:none}
+    .chat-panel-overlay.open{display:block}
+    .chat-welcome{text-align:center;padding:40px 20px;color:var(--text-3)}
+    .chat-welcome .icon{font-size:48px;margin-bottom:12px}
+    .chat-welcome p{font-size:13px;line-height:1.6}
+    .lang-switch{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:14px;padding:3px 8px;font-size:11px;cursor:pointer;flex-shrink:0}
+    .lang-switch option{color:#333;background:#fff}
+  </style>
+</head>
+<body>
+
+  <!-- 顶部搜索栏 -->
+  <div class="top-header">
+    <div class="header-row">
+      <button class="back-btn" onclick="location.href='/'">&lsaquo;</button>
+      <div class="search-bar">
+        <span class="icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="搜索商品" onkeydown="if(event.key==='Enter')doSearch()">
+      </div>
+      <button class="search-btn" onclick="doSearch()" data-i18n="search">搜索</button>
+      <select class="lang-switch" id="shopLangSelect" onchange="switchShopLang(this.value)">
+        <option value="zh">中文</option>
+        <option value="en">EN</option>
+        <option value="ja">日本</option>
+        <option value="ko">한국</option>
+        <option value="th">ไทย</option>
+        <option value="vi">Việt</option>
+        <option value="ms">MS</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 分类标签 -->
+  <div class="cat-scroll">
+    <div class="cat-list" id="catList">
+      <div class="cat-item active" data-cat="all">推荐</div>
+    </div>
+  </div>
+
+  <!-- 轮播横幅 -->
+  <div class="banner-area" id="bannerArea">
+    <div class="banner-card">
+      <div class="banner-text">
+        <h3>卓翌定制 · 匠心品质</h3>
+        <p>高端家居定制，为你量身打造理想空间</p>
+      </div>
+      <div class="banner-tag">品牌直营</div>
+    </div>
+  </div>
+
+  <!-- 快捷入口 -->
+  <div class="quick-entry" id="quickEntry"></div>
+
+  <!-- 限时特惠 -->
+  <div class="flash-section" id="flashSection" style="display:none">
+    <div class="flash-header">
+      <div class="left">
+        <span class="flash-title">⚡ 限时特惠</span>
+        <div class="flash-timer">
+          <b id="fh">00</b>:<b id="fm">00</b>:<b id="fs">00</b>
+        </div>
+      </div>
+      <a class="flash-more" href="javascript:void(0)" onclick="scrollToProducts()">更多 ›</a>
+    </div>
+    <div class="flash-scroll" id="flashList"></div>
+  </div>
+
+  <!-- 为你推荐 -->
+  <div class="section-header" id="recommendHeader">
+    <span>为你推荐</span>
+  </div>
+  <div class="product-waterfall" id="waterfall">
+    <div class="waterfall-col" id="colL"></div>
+    <div class="waterfall-col" id="colR"></div>
+  </div>
+  <div class="loading-box" id="loadingBox" style="display:none">
+    <span class="spinner"></span>加载中...
+  </div>
+
+  <!-- 底部导航 -->
+  <div class="bottom-nav">
+    <a class="nav-item" href="/">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">首页</span>
+    </a>
+    <a class="nav-item active" href="/shop.html">
+      <span class="nav-icon">🛍️</span>
+      <span class="nav-label">商品</span>
+    </a>
+    <a class="nav-item" href="/payment.html">
+      <span class="nav-icon">💳</span>
+      <span class="nav-label">支付</span>
+    </a>
+    <a class="nav-item" href="/login.html">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">我的</span>
+    </a>
+  </div>
+
+  <!-- 商品详情弹窗 -->
+  <div class="detail-overlay" id="detailOverlay" onclick="if(event.target===this)closeDetail()">
+    <div class="detail-sheet" id="detailSheet">
+      <button class="detail-close" onclick="closeDetail()">&times;</button>
+      <div class="detail-imgs" id="detailImgs"></div>
+      <div class="detail-info" id="detailInfo"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+<script>
+const API = '';
+let allProducts = [];
+let filteredProducts = [];
+let currentCat = 'all';
+let currentImgIdx = 0;
+let currentImages = [];
+
+// ===== 加载商品 =====
+async function loadProducts() {
+  try {
+    const res = await fetch(API + '/api/products');
+    const data = await res.json();
+    allProducts = Array.isArray(data) ? data : (data.data || []);
+    buildCategories();
+    buildQuickEntry();
+    buildFlash();
+    filterAndRender('all');
+  } catch(e) {
+    document.getElementById('waterfall').innerHTML =
+      '<div class="empty-box" style="width:100%"><div class="icon">😵</div><p>加载失败，请下拉刷新</p></div>';
+  }
+}
+
+// ===== 分类 =====
+function buildCategories() {
+  const cats = new Set();
+  allProducts.forEach(p => { if(p.category) cats.add(p.category); });
+  const list = document.getElementById('catList');
+  list.innerHTML = '<div class="cat-item active" data-cat="all">推荐</div>';
+  cats.forEach(c => {
+    list.innerHTML += `<div class="cat-item" data-cat="${c}">${c}</div>`;
+  });
+  list.querySelectorAll('.cat-item').forEach(el => {
+    el.addEventListener('click', () => {
+      list.querySelectorAll('.cat-item').forEach(e => e.classList.remove('active'));
+      el.classList.add('active');
+      filterAndRender(el.dataset.cat);
+    });
+  });
+}
+
+// ===== 快捷入口 =====
+function buildQuickEntry() {
+  const catMap = {};
+  allProducts.forEach(p => {
+    if (p.category) {
+      if (!catMap[p.category]) catMap[p.category] = 0;
+      catMap[p.category]++;
+    }
+  });
+  const icons = { '整体衣柜': '🪟', '衣柜': '👔', '橱柜': '🍳', '定制': '✨', '酒柜': '🍷', '衣帽间': '👒' };
+  const bgs = ['cabinet', 'wardrobe', 'kitchen', 'custom'];
+  const el = document.getElementById('quickEntry');
+  el.innerHTML = '';
+  let idx = 0;
+  for (const cat in catMap) {
+    const bg = bgs[idx % bgs.length];
+    el.innerHTML += `
+      <div class="quick-item" onclick="selectCat('${cat}')">
+        <div class="quick-icon ${bg}">${icons[cat] || '📦'}</div>
+        <span>${cat}</span>
+      </div>`;
+    idx++;
+  }
+  // Fill to 4 or 8
+  while (idx % 4 !== 0 && idx < 8) {
+    el.innerHTML += `<div class="quick-item"><div class="quick-icon" style="background:#f5f5f5;color:#ddd">📦</div><span>更多</span></div>`;
+    idx++;
+  }
+}
+
+function selectCat(cat) {
+  const items = document.querySelectorAll('.cat-item');
+  items.forEach(el => {
+    el.classList.toggle('active', el.dataset.cat === cat);
+  });
+  filterAndRender(cat);
+  scrollToProducts();
+}
+
+// ===== 限时特惠 =====
+function buildFlash() {
+  // Pick products with images as "flash deals"
+  const withImg = allProducts.filter(p => p.image || (p.images && p.images.length));
+  if (!withImg.length) return;
+  document.getElementById('flashSection').style.display = '';
+  const el = document.getElementById('flashList');
+  el.innerHTML = withImg.slice(0, 8).map(p => `
+    <div class="flash-card" onclick="openDetail(${allProducts.indexOf(p)})">
+      ${p.image ? `<img src="${p.image}" alt="${p.name}" loading="lazy">` : `<div class="no-img">📦</div>`}
+      <div class="price"><small>¥</small>${(p.price||0).toLocaleString()}</div>
+      <div class="orig">¥${Math.round((p.price||0)*1.6).toLocaleString()}</div>
+    </div>
+  `).join('');
+  startTimer();
+}
+
+function startTimer() {
+  // Countdown to midnight
+  function tick() {
+    const now = new Date();
+    const end = new Date(now);
+    end.setHours(23,59,59,999);
+    const diff = end - now;
+    const h = Math.floor(diff/3600000);
+    const m = Math.floor((diff%3600000)/60000);
+    const s = Math.floor((diff%60000)/1000);
+    document.getElementById('fh').textContent = String(h).padStart(2,'0');
+    document.getElementById('fm').textContent = String(m).padStart(2,'0');
+    document.getElementById('fs').textContent = String(s).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+// ===== 搜索 =====
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!q) {
+    filterAndRender(currentCat);
+    return;
+  }
+  filteredProducts = allProducts.filter(p =>
+    (p.name || '').toLowerCase().includes(q) ||
+    (p.description || '').toLowerCase().includes(q) ||
+    (p.category || '').toLowerCase().includes(q)
+  );
+  renderWaterfall(filteredProducts);
+  // Reset cat
+  document.querySelectorAll('.cat-item').forEach(e => e.classList.remove('active'));
+}
+
+// ===== 过滤 & 渲染 =====
+function filterAndRender(cat) {
+  currentCat = cat;
+  filteredProducts = cat === 'all' ? [...allProducts] : allProducts.filter(p => p.category === cat);
+  renderWaterfall(filteredProducts);
+}
+
+function renderWaterfall(products) {
+  const colL = document.getElementById('colL');
+  const colR = document.getElementById('colR');
+  colL.innerHTML = '';
+  colR.innerHTML = '';
+
+  if (!products.length) {
+    colL.innerHTML = '<div class="empty-box" style="width:100%"><div class="icon">📭</div><p>暂无商品</p></div>';
+    return;
+  }
+
+  // Waterfall layout
+  products.forEach((p, i) => {
+    const idx = allProducts.indexOf(p);
+    const origPrice = Math.round((p.price||0) * (1.3 + Math.random()*0.5));
+    const card = document.createElement('div');
+    card.className = 'p-card';
+    card.onclick = () => openDetail(idx);
+    card.innerHTML = `
+      <div class="p-card-img">
+        ${p.image || (p.images && p.images.length)
+          ? `<img src="${p.image || p.images[0]}" alt="${p.name}" loading="lazy">`
+          : ''}
+        ${p.category ? `<span class="badge">${p.category}</span>` : ''}
+      </div>
+      <div class="p-card-body">
+        <div class="p-card-title">
+          ${p.category ? `<span class="tag">${p.category}</span>` : ''}
+          ${p.name}
+        </div>
+        <div class="p-card-price">
+          <span class="cur">¥</span>
+          <span class="num">${(p.price||0).toLocaleString()}</span>
+          <span class="orig">¥${origPrice.toLocaleString()}</span>
+        </div>
+        <div class="p-card-sales">已售 ${Math.floor(Math.random()*200+10)}件</div>
+        <div class="p-card-action">
+          <button onclick="event.stopPropagation();goPay(${idx})">立即下单</button>
+        </div>
+      </div>`;
+    // Alternate columns
+    if (i % 2 === 0) colL.appendChild(card);
+    else colR.appendChild(card);
+  });
+}
+
+function scrollToProducts() {
+  document.getElementById('recommendHeader').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===== 商品详情 =====
+function openDetail(idx) {
+  const p = allProducts[idx];
+  if (!p) return;
+  currentImages = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
+  currentImgIdx = 0;
+  const origPrice = Math.round((p.price||0) * (1.3 + Math.random()*0.5));
+
+  // Images
+  const imgsEl = document.getElementById('detailImgs');
+  if (currentImages.length) {
+    imgsEl.innerHTML = `
+      <img id="dImg" src="${currentImages[0]}" alt="${p.name}">
+      ${currentImages.length > 1 ? `
+        <button class="detail-img-nav prev" onclick="navDImg(-1)">&lsaquo;</button>
+        <button class="detail-img-nav next" onclick="navDImg(1)">&rsaquo;</button>
+        <div class="detail-dots">${currentImages.map((_,i) => `<span class="${i===0?'active':''}" onclick="goDImg(${i})"></span>`).join('')}</div>
+      ` : ''}`;
+  } else {
+    imgsEl.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:60px;color:#ddd">📦</div>';
+  }
+
+  // Info
+  document.getElementById('detailInfo').innerHTML = `
+    ${p.category ? `<span class="detail-tag">${p.category}</span>` : ''}
+    <div class="detail-name">${p.name}</div>
+    <div class="detail-price-row">
+      <span class="cur">¥</span>
+      <span class="num">${(p.price||0).toLocaleString()}</span>
+      <span class="orig">¥${origPrice.toLocaleString()}</span>
+    </div>
+    <div class="detail-desc">${p.description || '暂无详细描述'}</div>
+    <div class="detail-bottom">
+      <button class="btn-cart" onclick="showToast('已加入收藏')">❤ 收藏</button>
+      <button class="btn-buy" onclick="goPay(${idx})">立即下单</button>
+    </div>
+  `;
+
+  document.getElementById('detailOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetail() {
+  document.getElementById('detailOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function navDImg(dir) {
+  if (!currentImages.length) return;
+  currentImgIdx = (currentImgIdx + dir + currentImages.length) % currentImages.length;
+  updateDImg();
+}
+function goDImg(i) {
+  currentImgIdx = i;
+  updateDImg();
+}
+function updateDImg() {
+  document.getElementById('dImg').src = currentImages[currentImgIdx];
+  document.querySelectorAll('.detail-dots span').forEach((d,i) => d.classList.toggle('active', i===currentImgIdx));
+}
+
+// ===== 跳转支付 =====
+function goPay(idx) {
+  const p = allProducts[idx];
+  if (!p) return;
+  window.open(`/payment.html?product=${encodeURIComponent(p.name)}&amount=${p.price||0}`, '_blank');
+}
+
+// ===== Toast =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+// ===== 键盘 =====
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeDetail();
+  if (e.key === 'ArrowLeft') navDImg(-1);
+  if (e.key === 'ArrowRight') navDImg(1);
+});
+
+// Init
+loadProducts();
+</script>
+<!-- Chat FAB Button -->
+  <button class="chat-fab" id="chatFab" onclick="toggleChat()">
+    💬
+    <span class="badge-dot" id="chatBadge" style="display:none"></span>
+  </button>
+
+  <!-- Chat Panel Overlay -->
+  <div class="chat-panel-overlay" id="chatOverlay" onclick="toggleChat()"></div>
+
+  <!-- Chat Panel -->
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-panel-header">
+      <h3 data-i18n="customerService">💬 在线客服</h3>
+      <button class="chat-panel-close" onclick="toggleChat()">&times;</button>
+    </div>
+    <div class="chat-panel-body" id="chatBody">
+      <div class="chat-welcome" id="chatWelcome">
+        <div class="icon">💬</div>
+        <p data-i18n="chatWelcomeMsg">您好！欢迎咨询卓翌定制<br>请留下您的消息，客服会尽快回复</p>
+      </div>
+    </div>
+    <div class="chat-panel-footer">
+      <textarea id="chatInput" placeholder="输入消息..." data-i18n-placeholder="typeMsg" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
+      <button class="chat-panel-send" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+
+  <!-- i18n + Chat Script -->
+  <script>
+  // ===== Shop i18n =====
+  const SHOP_I18N = {
+    zh: { search:"搜索", customerService:"💬 在线客服", chatWelcomeMsg:"您好！欢迎咨询卓翌定制<br>请留下您的消息，客服会尽快回复", typeMsg:"输入消息...", chatFab:"💬", sendBtn:"发送", home:"首页", shop:"商品", pay:"支付", mine:"我的", recommend:"推荐", loading:"加载中...", noProducts:"暂无商品", flashDeals:"⚡ 限时特惠", moreDeals:"更多 ›", forYou:"为你推荐", addToCart:"❤ 收藏", buyNow:"立即下单", brandDirect:"品牌直营", slogan:"高端家居定制，为你量身打造理想空间" },
+    en: { search:"Search", customerService:"💬 Live Chat", chatWelcomeMsg:"Hello! Welcome to ZhuoYi Custom<br>Leave a message and we'll reply soon", typeMsg:"Type a message...", chatFab:"💬", sendBtn:"Send", home:"Home", shop:"Shop", pay:"Pay", mine:"Me", recommend:"Featured", loading:"Loading...", noProducts:"No products", flashDeals:"⚡ Flash Deals", moreDeals:"More ›", forYou:"For You", addToCart:"❤ Save", buyNow:"Order Now", brandDirect:"Direct", slogan:"Premium custom furniture, tailored for you" },
+    ja: { search:"検索", customerService:"💬 チャット", chatWelcomeMsg:"こんにちは！卓翌カスタムへようこそ<br>メッセージをお残しください", typeMsg:"メッセージを入力...", chatFab:"💬", sendBtn:"送信", home:"ホーム", shop:"ショップ", pay:"支払い", mine:"マイ", recommend:"おすすめ", loading:"読み込み中...", noProducts:"商品なし", flashDeals:"⚡ タイムセール", moreDeals:"もっと ›", forYou:"あなたへ", addToCart:"❤ お気に入り", buyNow:"注文する", brandDirect:"直営", slogan:"高級オーダー家具、あなたのために" },
+    ko: { search:"검색", customerService:"💬 실시간 채팅", chatWelcomeMsg:"안녕하세요! 줘이 맞춤에 오신 것을 환영합니다<br>메시지를 남겨주시면 곧 답변드립니다", typeMsg:"메시지 입력...", chatFab:"💬", sendBtn:"전송", home:"홈", shop:"쇼핑", pay:"결제", mine:"나의", recommend:"추천", loading:"로딩중...", noProducts:"상품 없음", flashDeals:"⚡ 한정특가", moreDeals:"더보기 ›", forYou:"추천상품", addToCart:"❤ 찜하기", buyNow:"주문하기", brandDirect:"직영", slogan:"프리미엄 맞춤 가구, 당신을 위해" },
+    th: { search:"ค้นหา", customerService:"💬 แชทสด", chatWelcomeMsg:"สวัสดี! ยินดีต้อนรับสู่ ZhuoYi Custom<br>ฝากข้อความไว้ เราจะตอบกลับเร็วๆ นี้", typeMsg:"พิมพ์ข้อความ...", chatFab:"💬", sendBtn:"ส่ง", home:"หน้าแรก", shop:"ร้านค้า", pay:"ชำระเงิน", mine:"ของฉัน", recommend:"แนะนำ", loading:"กำลังโหลด...", noProducts:"ไม่มีสินค้า", flashDeals:"⚡ ดีลจำกัดเวลา", moreDeals:"เพิ่มเติม ›", forYou:"แนะนำสำหรับคุณ", addToCart:"❤ บันทึก", buyNow:"สั่งซื้อ", brandDirect:"แบรนด์ตรง", slogan:"เฟอร์นิเจอร์สั่งทำระดับพรีเมียม" },
+    vi: { search:"Tìm kiếm", customerService:"💬 Chat trực tuyến", chatWelcomeMsg:"Xin chào! Chào mừng đến ZhuoYi Custom<br>Hãy để lại tin nhắn, chúng tôi sẽ trả lời sớm", typeMsg:"Nhập tin nhắn...", chatFab:"💬", sendBtn:"Gửi", home:"Trang chủ", shop:"Cửa hàng", pay:"Thanh toán", mine:"Tôi", recommend:"Gợi ý", loading:"Đang tải...", noProducts:"Không có SP", flashDeals:"⚡ Ưu đãi giới hạn", moreDeals:"Thêm ›", forYou:"Dành cho bạn", addToCart:"❤ Yêu thích", buyNow:"Mua ngay", brandDirect:"Chính hãng", slogan:"Nội thất cao cấp, thiết kế riêng cho bạn" },
+    ms: { search:"Carian", customerService:"💬 Sembang Langsung", chatWelcomeMsg:"Hai! Selamat datang ke ZhuoYi Custom<br>Tinggalkan mesej, kami akan balas segera", typeMsg:"Taip mesej...", chatFab:"💬", sendBtn:"Hantar", home:"Utama", shop:"Kedai", pay:"Bayar", mine:"Saya", recommend:"Pilihan", loading:"Memuatkan...", noProducts:"Tiada produk", flashDeals:"⚡ Tawaran Terhad", moreDeals:"Lagi ›", forYou:"Untuk Anda", addToCart:"❤ Simpan", buyNow:"Beli Sekarang", brandDirect:"Jenama Langsung", slogan:"Perabot tersuai premium, direka khas untuk anda" }
+  };
+
+  let shopLang = localStorage.getItem("shop_lang") || "zh";
+
+  function switchShopLang(lang) {
+    shopLang = lang;
+    localStorage.setItem("shop_lang", lang);
+    applyShopI18n();
+  }
+
+  function applyShopI18n() {
+    const t = SHOP_I18N[shopLang] || SHOP_I18N.zh;
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      if (t[key]) {
+        if (t[key].includes("<br>")) el.innerHTML = t[key];
+        else el.textContent = t[key];
+      }
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+      const key = el.getAttribute("data-i18n-placeholder");
+      if (t[key]) el.placeholder = t[key];
+    });
+    document.getElementById("shopLangSelect").value = shopLang;
+  }
+
+  function st(key) {
+    return (SHOP_I18N[shopLang] || SHOP_I18N.zh)[key] || key;
+  }
+
+  // ===== Chat Widget =====
+  let chatConvId = localStorage.getItem("chat_conv_id") || null;
+  let chatOpen = false;
+  let chatPollTimer = null;
+
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    document.getElementById("chatPanel").classList.toggle("open", chatOpen);
+    document.getElementById("chatOverlay").classList.toggle("open", chatOpen);
+    if (chatOpen) {
+      if (!chatConvId) createConversation();
+      else loadChatMessages();
+      startChatPoll();
+    } else {
+      if (chatPollTimer) { clearInterval(chatPollTimer); chatPollTimer = null; }
+    }
+  }
+
+  async function createConversation() {
+    const visitorId = localStorage.getItem("visitor_id") || "v_" + Date.now();
+    localStorage.setItem("visitor_id", visitorId);
+    try {
+      const res = await fetch("/api/conversations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ visitorId, name: st("visitor") || "访客", phone: "" })
+      });
+      const conv = await res.json();
+      chatConvId = conv._id;
+      localStorage.setItem("chat_conv_id", chatConvId);
+    } catch(e) {
+      console.error("Failed to create conversation:", e);
+    }
+  }
+
+  async function loadChatMessages() {
+    if (!chatConvId) return;
+    try {
+      const res = await fetch("/api/conversations/" + chatConvId + "/messages");
+      const msgs = await res.json();
+      renderChatMessages(msgs);
+    } catch(e) {}
+  }
+
+  function renderChatMessages(msgs) {
+    const body = document.getElementById("chatBody");
+    const welcome = document.getElementById("chatWelcome");
+    if (welcome) welcome.style.display = msgs.length ? "none" : "block";
+
+    // Only render if we have messages
+    const existingCount = body.querySelectorAll(".chat-bubble").length;
+    if (msgs.length === existingCount) return;
+
+    // Rebuild all messages
+    const welcomeHtml = welcome ? welcome.outerHTML : '';
+    body.innerHTML = msgs.length ? '' : welcomeHtml;
+
+    msgs.forEach(m => {
+      const div = document.createElement("div");
+      div.className = "chat-bubble " + m.sender;
+      const initial = m.sender === "visitor" ? "👤" : "🛡️";
+      const time = new Date(m.createdAt).toLocaleTimeString(shopLang === "zh" ? "zh-CN" : shopLang, { hour: "2-digit", minute: "2-digit" });
+      div.innerHTML = '<div class="chat-bubble-avatar">' + initial + '</div>' +
+        '<div class="chat-bubble-content">' +
+        '<div class="chat-bubble-text">' + escapeHtml(m.content) + '</div>' +
+        '<div class="chat-bubble-time">' + time + '</div></div>';
+      body.appendChild(div);
+    });
+
+    body.scrollTop = body.scrollHeight;
+  }
+
+  async function sendChat() {
+    const input = document.getElementById("chatInput");
+    const content = input.value.trim();
+    if (!content || !chatConvId) return;
+    input.value = "";
+
+    try {
+      await fetch("/api/conversations/" + chatConvId + "/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sender: "visitor", content })
+      });
+      await loadChatMessages();
+    } catch(e) {
+      console.error("Send failed:", e);
+    }
+  }
+
+  function startChatPoll() {
+    if (chatPollTimer) clearInterval(chatPollTimer);
+    chatPollTimer = setInterval(async () => {
+      if (!chatOpen || !chatConvId) return;
+      try {
+        const res = await fetch("/api/conversations/" + chatConvId + "/messages");
+        const msgs = await res.json();
+        const lastAdmin = msgs.filter(m => m.sender === "admin");
+        renderChatMessages(msgs);
+      } catch(e) {}
+    }, 5000);
+  }
+
+  function escapeHtml(s) {
+    const d = document.createElement("div");
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  // Apply i18n on load
+  document.addEventListener("DOMContentLoaded", applyShopI18n);
+  applyShopI18n();
+  </script>
+
+</body>
+</html>

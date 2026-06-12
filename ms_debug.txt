@@ -1,0 +1,29 @@
+mobile_consult at 59104:
+mobile_consult: 'Rundingan'
+
+      },
+
+         };
+
+
+
+    // Old langDropdown removed - language selection now in settings dropdown
+
+
+
+    const langLabels = { zh:'中文', en:'English', ja:'日本語', ko:'한국어', th:'ไทย', vi:'Tiếng Việt', ms:'Melayu' };
+
+    function setLang(lang) {
+
+      currentLang = lang
+
+Next content at 59139: },
+
+         };
+
+
+
+    // Old langDropdown removed
+
+
+Added to ms! File: 85637 bytes

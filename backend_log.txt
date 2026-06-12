@@ -1,0 +1,21 @@
+-- Logs begin at Sun 2026-05-24 18:25:42 CST, end at Wed 2026-06-03 12:10:55 CST. --
+May 31 11:49:16 iZ7xv9l4awz756t6zatq6rZ node[1867]: Admin: http://localhost:3000/admin.html
+May 31 11:49:16 iZ7xv9l4awz756t6zatq6rZ systemd[1]: zhuoyi-backend.service: Succeeded.
+May 31 11:49:22 iZ7xv9l4awz756t6zatq6rZ systemd[1]: zhuoyi-backend.service: Service RestartSec=5s expired, scheduling restart.
+May 31 11:49:22 iZ7xv9l4awz756t6zatq6rZ systemd[1]: zhuoyi-backend.service: Scheduled restart job, restart counter is at 4.
+May 31 11:49:22 iZ7xv9l4awz756t6zatq6rZ systemd[1]: Stopped ZhuoYi Backend Server.
+May 31 11:49:22 iZ7xv9l4awz756t6zatq6rZ systemd[1]: Started ZhuoYi Backend Server.
+May 31 11:49:22 iZ7xv9l4awz756t6zatq6rZ node[1941]: Server running on port 3000
+May 31 11:49:22 iZ7xv9l4awz756t6zatq6rZ node[1941]: Admin: http://localhost:3000/admin.html
+Jun 03 10:43:52 iZ7xv9l4awz756t6zatq6rZ systemd[1]: Stopping ZhuoYi Backend Server...
+Jun 03 10:43:52 iZ7xv9l4awz756t6zatq6rZ systemd[1]: zhuoyi-backend.service: Succeeded.
+Jun 03 10:43:52 iZ7xv9l4awz756t6zatq6rZ systemd[1]: Stopped ZhuoYi Backend Server.
+Jun 03 10:43:52 iZ7xv9l4awz756t6zatq6rZ systemd[1]: Started ZhuoYi Backend Server.
+Jun 03 10:43:53 iZ7xv9l4awz756t6zatq6rZ node[15771]: Server running on port 3000
+Jun 03 10:43:53 iZ7xv9l4awz756t6zatq6rZ node[15771]: Admin: http://localhost:3000/admin.html
+Jun 03 10:53:56 iZ7xv9l4awz756t6zatq6rZ systemd[1]: Stopping ZhuoYi Backend Server...
+Jun 03 10:53:56 iZ7xv9l4awz756t6zatq6rZ systemd[1]: zhuoyi-backend.service: Succeeded.
+Jun 03 10:53:56 iZ7xv9l4awz756t6zatq6rZ systemd[1]: Stopped ZhuoYi Backend Server.
+Jun 03 10:53:56 iZ7xv9l4awz756t6zatq6rZ systemd[1]: Started ZhuoYi Backend Server.
+Jun 03 10:53:56 iZ7xv9l4awz756t6zatq6rZ node[16170]: Server running on port 3000
+Jun 03 10:53:56 iZ7xv9l4awz756t6zatq6rZ node[16170]: Admin: http://localhost:3000/admin.html

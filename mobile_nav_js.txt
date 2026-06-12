@@ -1,0 +1,54 @@
+Found at JS pos 20201:
+ssList.remove('open');
+
+      document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+
+        const key = el.dataset.i18n;
+
+        if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+
+      });
+
+      // 更新移动端导航
+
+      const mobileNav = document.querySelector('.mobile-nav');
+
+      if (mobileNav) {
+
+        mobileNav.innerHTML = `<div class="mobile-nav-inner">
+
+          <a href="#home" class="active"><span class="icon">🏠</span>${i18n[lang].mobile_home}</a>
+
+          <a href="#products"><span class="icon">📦</span>${i18n[lang].mobile_products}</a>
+
+          <a href="#contact"><span class="icon">💬</span>${i18n[lang].mobile_consult}</a>
+
+          
+
+        </div>`;
+
+      }
+
+    }
+
+
+
+    // ===== 数字滚动 =====
+
+    function animateCounters() {
+
+      document.querySelectorAll('.stat-num[data-count]').forEach(el => {
+
+        const target = parseInt(el.dataset.count);
+
+        let current = 0;
+
+        const step = Math.ceil(target / 40);
+
+        const timer = setInterval(() => {
+
+          current += step;
+
+    

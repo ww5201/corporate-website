@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>卓翌定制 - 网站恢复指南</title>
+<style>
+body { font-family: -apple-system, "Microsoft YaHei", sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #f5f5f5; }
+h1 { color: #e74c3c; }
+.step { background: white; border-radius: 12px; padding: 20px; margin: 15px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.step h2 { color: #2c3e50; margin-top: 0; font-size: 18px; }
+.num { display: inline-block; width: 28px; height: 28px; background: #3498db; color: white; border-radius: 50%; text-align: center; line-height: 28px; margin-right: 10px; font-weight: bold; }
+.cmd-box { background: #1e1e1e; color: #4ec9b0; padding: 15px; border-radius: 8px; font-family: "Consolas", monospace; font-size: 13px; overflow-x: auto; position: relative; word-break: break-all; }
+.copy-btn { position: absolute; top: 8px; right: 8px; background: #3498db; color: white; border: none; padding: 6px 14px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+.copy-btn:hover { background: #2980b9; }
+a.button { display: inline-block; background: #27ae60; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: bold; margin: 10px 0; }
+a.button:hover { background: #219a52; }
+.warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px 16px; border-radius: 4px; margin: 15px 0; }
+.success { background: #d4edda; border-left: 4px solid #28a745; padding: 12px 16px; border-radius: 4px; margin: 15px 0; }
+</style>
+</head>
+<body>
+
+<h1>🔧 卓翌定制网站恢复工具</h1>
+
+<div class="warning">
+  ⚠️ <strong>当前状态：</strong>服务器 SSH 端口被封锁，无法自动上传修复文件。<br>
+  请按照以下步骤手动恢复（约 2 分钟）。
+</div>
+
+<div class="step">
+  <h2><span class="num">1</span>打开阿里云控制台</h2>
+  <p>点击下面的按钮打开服务器远程连接页面：</p>
+  <a class="button" href="https://ecs.console.aliyun.com/#/server/detail/region/cn-chengdu/instanceId/iZ7xv9l4awz756t6zatq6rZ/tab/vnc" target="_blank">🚀 打开阿里云 Workbench 远程连接 →</a>
+  <p style="color:#666;font-size:13px;margin-top:8px;">
+    如果上面链接不工作，请手动：<br>
+    ① 打开 <a href="https://ecs.console.aliyun.com/" target="_blank">ecs.console.aliyun.com</a><br>
+    ② 找到服务器 <strong>8.138.218.146</strong><br>
+    ③ 点右侧 <strong>远程连接</strong> → 选 <strong>Workbench远程连接</strong><br>
+    ④ 用户名输入 <code>root</code>，密码输入 <code>ww0987654.</code>
+  </p>
+</div>
+
+<div class="step">
+  <h2><span class="num">2</span>复制恢复命令</h2>
+  <p>点击下方「复制」按钮，然后粘贴到 Workbench 终端中：</p>
+  <div class="cmd-box" id="cmdBox">
+    <button class="copy-btn" onclick="copyCmd()">📋 复制命令</button>
+    <pre id="cmdText" style="margin:0"></pre>
+  </div>
+  <p style="color:#888;font-size:12px;">提示：如果粘贴后命令太长显示不全，直接按回车执行即可。</p>
+</div>
+
+<div class="step">
+  <h2><span class="num">3</span>验证结果</h2>
+  <p>命令执行成功后会显示 <strong>DONE</strong> 和文件大小（约 80390 bytes）。</p>
+  <p>然后刷新浏览器访问网站：<a href="http://8.138.218.146/" target="_blank">http://8.138.218.146/</a></p>
+</div>
+
+<div class="success" id="successMsg" style="display:none">
+  ✅ 命令已复制！现在去 Workbench 粘贴并回车执行。
+</div>
+
+<script>
+// Read the recover script
+fetch('recover.sh').then(r=>r.text()).then(text=>{
+  document.getElementById('cmdText').textContent = text;
+}).catch(e => {
+  document.getElementById('cmdText').textContent = 'Error loading command. Please run: python D:\\tokai\\gen_sh.py first';
+});
+
+function copyCmd() {
+  const cmd = document.getElementById('cmdText').textContent;
+  navigator.clipboard.writeText(cmd).then(() => {
+    document.getElementById('successMsg').style.display = 'block';
+    document.querySelector('.copy-btn').textContent = '✅ 已复制!';
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = cmd;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    document.getElementById('successMsg').style.display = 'block';
+  });
+}
+</script>
+
+</body>
+</html>

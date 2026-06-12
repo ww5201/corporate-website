@@ -1,0 +1,56 @@
+=== NAV ===
+<nav class="nav" id="nav">
+    <div class="container">
+      <a href="#home" class="logo">卓翌<em>定制</em></a>
+      <ul class="menu" id="menu">
+        <li><a href="#home" class="active" data-i18n="nav_home">首页</a></li>
+        <li><a href="#about" data-i18n="nav_about">关于</a></li>
+        <li><a href="#services" data-i18n="nav_services">服务</a></li>
+        <li><a href="#products" data-i18n="nav_products">产品</a></li>
+        <li><a href="#portfolio" data-i18n="nav_portfolio">案例</a></li>
+        <li><a href="#contact" data-i18n="nav_contact">联系</a></li>
+      </ul>
+      <div class="lang-switch">
+        <button class="lang-toggle" onclick="toggleLang(event)"><span id="currentLangLabel">中文</span> <span class="arrow">▼</span></button>
+        <div class="lang-dropdown" id="langDropdown">
+          <button onclick="setLang('zh')">🇨🇳 中文</button>
+          <button onclick="setLang('en')">🇺🇸 English</button>
+          <button onclick="setLang('ja')">🇯🇵 日本語</button>
+          <button onclick="setLang('ko')">🇰🇷 한국어</button>
+          <button onclick="setLang('th')">🇹🇭 ไทย</button>
+          <button onclick="setLang('vi')">🇻🇳 Tiếng Việt</button>
+          <button onclick="setLang('ms')">🇲🇾 Melayu</button>
+        </div>
+      </div>
+      <div style="position:relative">
+        <button onclick="toggleSettings(event)" style="background:none;border:none;cursor:pointer;font-size:1.1rem;padding:6px 8px;border-radius:8px;color:#555" title="设置">⚙</button>
+        <div class="settings-dropdown" id="settingsDropdown" style="display:none;position:absolute;right:0;top:100%;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.12);min-width:160px;z-index:9999;overflow:hidden">
+          <a onclick="checkAppUpdate()" style="display:block;padding:12px 16px;cursor:pointer;font-size:0.88rem;color:#333;text-decoration:none">🔄 版本更新</a>
+          <a onclick="clearCache()" style="display:block;padding:12px 16px;cursor:pointer;font-size:0.88rem;color:#333;text-decoration:none">🗑️ 
+
+=== CHECKS ===
+  [OK] lang-switch class in HTML
+  [OK] langDropdown in HTML
+  [MISSING!] setLang buttons in HTML
+  [OK] toggleLang function
+  [OK] toggleSettings function
+  [OK] setLang function
+  [OK] langLabels variable
+  [OK] currentLangLabel in JS
+  [OK] loadData function
+  [OK] loadCases function
+  [OK] renderProducts function
+  [OK] startup loadCases
+  [OK] startup setLang
+  [OK] startup loadData
+
+JS: 41195 chars, braces: 172:172
+SOME FAILED
+
+=== Element References ===
+  MISSING element 'portfolioCarousel': const container = document.getElementById('portfolioCarousel');
+  MISSING element 'carouselSlides': const slides = document.getElementById('carouselSlides');
+  MISSING element 'carouselNav': const nav = document.getElementById('carouselNav');
+  MISSING element 'lightboxImg': const img = document.getElementById('lightboxImg');
+  MISSING element 'lightboxCounter': const counter = document.getElementById('lightboxCounter');
+  MISSING element 'wechatGuide': var existing = document.getElementById('wechatGuide');

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>我的 | 卓翌定制</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+
+<div class="mine-page" id="minePage">
+  <!-- 已登录状态 -->
+  <div id="loggedInView" style="display:none">
+    <!-- 用户信息头部 -->
+    <div class="mine-header-bg">
+      <div class="mine-avatar" id="mineAvatar">👤</div>
+      <div class="mine-nickname" id="mineNickname">用户</div>
+      <div class="mine-phone" id="minePhone"></div>
+    </div>
+
+    <!-- 订单区域 -->
+    <div class="mine-orders-section">
+      <div class="mine-orders-tabs" id="orderTabs">
+        <div class="mine-order-tab active" data-status="all">
+          <span class="tab-icon">📋</span>
+          <span data-i18n="mine.all_orders">全部订单</span>
+        </div>
+        <div class="mine-order-tab" data-status="pending_payment">
+          <span class="tab-icon">💰</span>
+          <span data-i18n="mine.pending">待付款</span>
+        </div>
+        <div class="mine-order-tab" data-status="paid">
+          <span class="tab-icon">✅</span>
+          <span data-i18n="mine.paid">已付款</span>
+        </div>
+        <div class="mine-order-tab" data-status="shipped">
+          <span class="tab-icon">🚚</span>
+          <span data-i18n="mine.shipped">已发货</span>
+        </div>
+        <div class="mine-order-tab" data-status="completed">
+          <span class="tab-icon">🎉</span>
+          <span data-i18n="mine.done">已完成</span>
+        </div>
+      </div>
+      <div class="mine-order-list" id="orderList">
+        <div style="text-align:center;padding:20px;color:#bbb" data-i18n="mine.no_orders">暂无订单</div>
+      </div>
+    </div>
+
+    <!-- 菜单列表 -->
+    <div class="mine-menu-section">
+      <a href="/chat.html" class="mine-menu-item">
+        <span class="mine-menu-icon">💬</span>
+        <span class="mine-menu-label" data-i18n="mine.chat">我的消息</span>
+        <span class="mine-menu-arrow">›</span>
+      </a>
+      <div class="mine-menu-item" id="menuSettings">
+        <span class="mine-menu-icon">⚙️</span>
+        <span class="mine-menu-label" data-i18n="mine.settings">设置</span>
+        <span class="mine-menu-arrow">›</span>
+      </div>
+      <div class="mine-menu-item" id="menuAbout">
+        <span class="mine-menu-icon">ℹ️</span>
+        <span class="mine-menu-label" data-i18n="mine.about">关于我们</span>
+        <span class="mine-menu-arrow">›</span>
+      </div>
+    </div>
+
+    <button class="mine-logout-btn" id="logoutBtn" data-i18n="mine.logout">退出登录</button>
+  </div>
+
+  <!-- 未登录状态 -->
+  <div id="loggedOutView">
+    <div class="mine-header-bg">
+      <div class="mine-avatar">👤</div>
+    </div>
+    <div class="mine-login-prompt">
+      <div class="login-icon">🔐</div>
+      <p data-i18n="mine.login_hint">登录后享受更多服务</p>
+      <button class="mine-login-btn" id="goLoginBtn" data-i18n="mine.login">登录/注册</button>
+    </div>
+
+    <div class="mine-menu-section">
+      <a href="/chat.html" class="mine-menu-item">
+        <span class="mine-menu-icon">💬</span>
+        <span class="mine-menu-label" data-i18n="mine.chat">我的消息</span>
+        <span class="mine-menu-arrow">›</span>
+      </a>
+      <div class="mine-menu-item" id="menuAbout2">
+        <span class="mine-menu-icon">ℹ️</span>
+        <span class="mine-menu-label" data-i18n="mine.about">关于我们</span>
+        <span class="mine-menu-arrow">›</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 登录弹窗 -->
+<div class="modal-overlay" id="loginModal" style="display:none">
+  <div class="login-card" style="max-width:400px;width:100%">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 style="margin:0" data-i18n="login.title">登录</h2>
+      <button id="closeLoginModal" style="background:none;border:none;font-size:24px;cursor:pointer;color:#999">&times;</button>
+    </div>
+
+    <div class="login-field">
+      <label data-i18n="login.phone">手机号</label>
+      <input type="tel" id="loginPhone" placeholder="请输入手机号" maxlength="11">
+    </div>
+    <div class="login-field">
+      <label data-i18n="login.code">验证码</label>
+      <div class="login-code-row">
+        <input type="text" id="loginCode" placeholder="6位验证码" maxlength="6">
+        <button class="login-code-btn" id="sendCodeBtn" data-i18n="login.send_code">获取验证码</button>
+      </div>
+    </div>
+    <div id="loginError" class="login-error"></div>
+    <button class="login-submit-btn" id="loginSubmitBtn" data-i18n="login.submit">登录</button>
+
+    <div class="login-divider">or</div>
+
+    <button class="login-wechat-btn" id="wechatLoginBtn">
+      <span style="font-size:20px">💚</span>
+      <span data-i18n="login.wechat">微信登录</span>
+    </button>
+
+    <div class="login-terms">
+      <span data-i18n="login.agree">登录即表示同意</span>
+      <a href="#" data-i18n="login.terms">用户协议</a>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="./src/mine.js"></script>
+</body>
+</html>

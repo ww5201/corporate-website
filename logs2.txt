@@ -1,0 +1,15 @@
+[TAILING] Tailing last 5 lines for [tokai-backend] process (change the value with --lines option)
+/root/.pm2/logs/tokai-backend-error.log last 5 lines:
+0|tokai-ba |     at Function.route (/root/backend/node_modules/router/index.js:428:17)
+0|tokai-ba |     at Function.route (/root/backend/node_modules/express/lib/application.js:257:22)
+0|tokai-ba |     at app.<computed> [as get] (/root/backend/node_modules/express/lib/application.js:478:22) {
+0|tokai-ba |   originalPath: '*'
+0|tokai-ba | }
+
+/root/.pm2/logs/tokai-backend-out.log last 5 lines:
+0|tokai-ba | Admin: http://localhost:3000/admin.html
+0|tokai-ba | Server running on port 3000
+0|tokai-ba | Admin: http://localhost:3000/admin
+0|tokai-ba | SPA: http://localhost:3000/
+0|tokai-ba | WebSocket: ws://localhost:3000/ws/chat
+

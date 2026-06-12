@@ -1,0 +1,20 @@
+mobile_mine in zh: False
+mobile_mine in en: False
+mobile_mine in ja: False
+mine_title in zh: False
+mine_settings in zh: False
+mine_login in zh: False
+mine_bindwx in zh: False
+mine_bindphone in zh: False
+
+showMinePanel in HTML: True
+minePanel in HTML: True
+mobile_mine in nav template: True
+
+JS: 42549 chars, braces: 184:184
+Startup:
+// ===== 启动 =====
+    loadCases();
+    setLang(currentLang);
+    loadData();
+  

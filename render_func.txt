@@ -1,0 +1,101 @@
+function renderProducts(cat) {
+
+      const grid = document.getElementById('productsGrid');
+
+      grid.innerHTML = '';
+
+      Object.values(productTimers).forEach(t => clearInterval(t));
+
+      productTimers = {};
+
+      let list = products;
+
+      if (cat && cat !== 'all') list = list.filter(p => p.category === cat);
+
+      if (!list.length) { grid.innerHTML = '<p style="text-align:center;color:#999;padding:40px;grid-column:1/-1">暂无产品</p>'; return; }
+
+
+
+      list.forEach(p => {
+
+        const imgs = p.images && p.images.length ? p.images : (p.image ? [p.image] : []);
+
+        const card = document.createElement('div');
+
+        card.className = 'product-card reveal';
+
+        card.dataset.pid = p._id;
+
+        let track = imgs.map(img => `<img src="${IMG}${img}" loading="lazy">`).join('');
+
+        if (!track) track = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ddd;font-size:3rem">📦</div>';
+
+
+
+        card.innerHTML = `
+
+          <div class="product-img" data-idx="0" data-total="${imgs.length}" data-pid="${p._id}" onclick="openProductLb('${p._id}')" style="cursor:pointer">
+
+            <div class="product-img-track">${track}</div>
+
+            ${imgs.length > 1 ? `
+
+              <span class="product-count">1/${imgs.length}</span>
+
+              <button class="product-nav prev" onclick="imgNav(this,-1)">‹</button>
+
+              <button class="product-nav next" onclick="imgNav(this,1)">›</button>
+
+            ` : ''}
+
+          </div>
+
+          <div class="product-info">
+
+            <h4>${p.name}</h4>
+
+            <div class="desc">${p.description || ''}</div>
+
+            <div class="product-bottom">
+
+              <span class="product-price">¥${p.price.toLocaleString()} <small>起</small></span>
+
+              <button class="product-btn" onclick="openOrder('${p._id}')">立即咨询</button>
+
+            </div>
+
+          </div>
+
+        `;
+
+        grid.appendChild(card);
+
+        observer.observe(card);
+
+
+
+        if (imgs.length > 1) {
+
+          productTimers[p._id] = setInterval(() => imgNavAuto(p._id, 1), 3000);
+
+        }
+
+      });
+
+
+
+      grid.querySelectorAll('.product-card').forEach(card => {
+
+        const pid = card.dataset.pid;
+
+        if (!productTimers[pid]) return;
+
+        card.addEventListener('mouseenter', () => { clearInterval(productTimers[pid]); productTimers[pid] = null; });
+
+        card.addEventListener('mouseleave', () => { productTimers[pid] = setInterval(() => imgNavAuto(pid, 1), 3000); });
+
+      });
+
+    }
+
+

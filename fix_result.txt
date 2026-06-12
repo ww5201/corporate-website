@@ -1,0 +1,9 @@
+Changes: 3
+  Removed mine panel from wrong position
+  Inserted mine panel before </script>
+  Added showContact function
+
+File: 85794 bytes
+JS: 47208 chars, braces: 186:186
+showContact: True
+minePanel before script: True
