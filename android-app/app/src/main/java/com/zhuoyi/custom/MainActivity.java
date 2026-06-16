@@ -27,13 +27,10 @@ import android.widget.Toast;
 
 import android.app.AlertDialog;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
 
 public class MainActivity extends Activity {
 
     private static final String TAG = "ZhuoyiApp";
-    private BroadcastReceiver wxLoginReceiver;
     private WebView webView;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -69,16 +66,6 @@ public class MainActivity extends Activity {
             Log.w(TAG, "WeChat init skipped", t);
         }
 
-        wxLoginReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                int errCode = intent.getIntExtra("errCode", -1);
-                String code = intent.getStringExtra("code");
-                handleWeChatResult(errCode, code);
-            }
-        };
-        registerReceiver(wxLoginReceiver, new IntentFilter("com.zhuoyi.custom.WX_LOGIN_RESULT"), Context.RECEIVER_NOT_EXPORTED);
-
         webView.addJavascriptInterface(new Object() {
             @android.webkit.JavascriptInterface
             public boolean isInstalled() {
@@ -96,7 +83,16 @@ public class MainActivity extends Activity {
         }, "AndroidWeChat");
 
         showProgress();
-        webView.loadUrl(HOME_URL);
+
+        // 关键修复：在加载首页之前，先检查是否有微信回调的 code
+        String wxCode = getIntent().getStringExtra("wx_code");
+        if (wxCode != null && !wxCode.isEmpty()) {
+            Log.i(TAG, "onCreate: got wx_code from intent=" + wxCode);
+            webView.loadUrl("file:///android_asset/login.html?wxcode=" + wxCode);
+        } else {
+            webView.loadUrl(HOME_URL);
+        }
+
         handleDeepLink(getIntent()); // Handle deep link on cold start
     }
 
@@ -331,6 +327,22 @@ public class MainActivity extends Activity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+        // 优先处理微信回调 code
+        String wxCode = intent.getStringExtra("wx_code");
+        if (wxCode != null && !wxCode.isEmpty()) {
+            Log.i(TAG, "onNewIntent: got wx_code=" + wxCode);
+            String url = "file:///android_asset/login.html?wxcode=" + wxCode;
+            if (webView != null) webView.loadUrl(url);
+            return;
+        }
+        // 处理微信错误
+        int wxErrCode = intent.getIntExtra("wx_errcode", Integer.MIN_VALUE);
+        if (wxErrCode != Integer.MIN_VALUE) {
+            Log.w(TAG, "onNewIntent: wx_errcode=" + wxErrCode);
+            handleWeChatResult(wxErrCode, null);
+            return;
+        }
+        // 处理深链接
         handleDeepLink(intent);
     }
 
@@ -355,22 +367,40 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         if (webView != null) webView.onResume();
-        // Check for WeChat code from WXEntryActivity
+
+        // 检查 Intent Extra 中的微信 code (主方案)
+        String intentCode = getIntent().getStringExtra("wx_code");
+        if (intentCode != null && !intentCode.isEmpty()) {
+            Log.i(TAG, "onResume: got wx_code from intent=" + intentCode);
+            String url = "file:///android_asset/login.html?wxcode=" + intentCode;
+            runOnUiThread(() -> { if (webView != null) webView.loadUrl(url); });
+            getIntent().removeExtra("wx_code");
+            return;
+        }
+
+        // 检查 Intent Extra 中的错误码
+        int intentErrCode = getIntent().getIntExtra("wx_errcode", Integer.MIN_VALUE);
+        if (intentErrCode != Integer.MIN_VALUE) {
+            Log.w(TAG, "onResume: wx_errcode from intent=" + intentErrCode);
+            handleWeChatResult(intentErrCode, null);
+            getIntent().removeExtra("wx_errcode");
+            return;
+        }
+
+        // SharedPreferences 备用检查 (兼容旧流程)
         try {
             SharedPreferences sp = getSharedPreferences("wx_login", MODE_PRIVATE);
             String code = sp.getString("wx_code", null);
             long ts = sp.getLong("wx_time", 0);
             if (code != null && !code.isEmpty() && (System.currentTimeMillis() - ts) < 120000) {
-                Log.i(TAG, "Got WeChat code=" + code);
-                // Navigate to login.html with code as URL param
+                Log.i(TAG, "onResume: got wx_code from SP=" + code);
                 String url = "file:///android_asset/login.html?wxcode=" + code.replace("'", "");
                 runOnUiThread(() -> { if (webView != null) webView.loadUrl(url); });
-                // Clear code from SP so we don't process again
                 sp.edit().remove("wx_code").remove("wx_time").apply();
             } else if (sp.getInt("wx_errcode", -1) != -1) {
                 int errCode = sp.getInt("wx_errcode", -1);
                 sp.edit().remove("wx_errcode").apply();
-                Log.w(TAG, "WeChat errCode=" + errCode);
+                Log.w(TAG, "onResume: wx_errcode from SP=" + errCode);
             }
         } catch (Exception e) {
             Log.w(TAG, "wx code read error", e);
@@ -385,9 +415,6 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        if (wxLoginReceiver != null) {
-            try { unregisterReceiver(wxLoginReceiver); } catch (Exception e) {}
-        }
         if (mainHandler != null) {
             mainHandler.removeCallbacksAndMessages(null);
         }
