@@ -1,78 +1,125 @@
 package com.zhuoyi.custom;
 
 import android.app.Activity;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.DownloadListener;
+import android.webkit.ConsoleMessage;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import android.app.AlertDialog;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
-import android.content.Context;
-import androidx.appcompat.app.AlertDialog;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends Activity {
 
+    private static final String TAG = "ZhuoyiApp";
+    private BroadcastReceiver wxLoginReceiver;
     private WebView webView;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private static final String WEBSITE_URL = "http://8.138.218.146";
+    private static final String HOME_URL = "file:///android_asset/index.html";
     private ValueCallback<Uri[]> uploadMessage;
     private final static int FILE_CHOOSER_RESULT_CODE = 1;
-    private BroadcastReceiver wxLoginReceiver;
+    private Handler mainHandler;
+    private Runnable hideProgressRunnable;
+    private boolean pageLoaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
-
         setContentView(R.layout.activity_main);
 
-        // Initialize WeChat SDK (safe init)
-        try {
-            WeChatAuthHelper.init(this);
-        } catch (Exception e) {
-            // WeChat SDK init failed - non-fatal, login won't work
-        }
+        mainHandler = new Handler(Looper.getMainLooper());
 
         progressBar = findViewById(R.id.progressBar);
         swipeRefreshLayout = findViewById(R.id.swipeRefresh);
         webView = findViewById(R.id.webView);
 
+        // Set white background to prevent flash
+        webView.setBackgroundColor(Color.WHITE);
+
         setupSwipeRefresh();
         setupWebView();
 
-        // Register broadcast receiver for WeChat login result
+        try {
+            WeChatAuthHelper.init(this);
+        } catch (Throwable t) {
+            Log.w(TAG, "WeChat init skipped", t);
+        }
+
         wxLoginReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                handleWeChatLoginResult(intent);
+                int errCode = intent.getIntExtra("errCode", -1);
+                String code = intent.getStringExtra("code");
+                handleWeChatResult(errCode, code);
             }
         };
-        registerReceiver(wxLoginReceiver, new IntentFilter("com.zhuoyi.custom.WX_LOGIN_RESULT"));
+        registerReceiver(wxLoginReceiver, new IntentFilter("com.zhuoyi.custom.WX_LOGIN_RESULT"), Context.RECEIVER_NOT_EXPORTED);
 
-        webView.loadUrl(WEBSITE_URL);
+        webView.addJavascriptInterface(new Object() {
+            @android.webkit.JavascriptInterface
+            public boolean isInstalled() {
+                WeChatAuthHelper.init(MainActivity.this);
+                return WeChatAuthHelper.isWeChatInstalled();
+            }
+            @android.webkit.JavascriptInterface
+            public boolean login() {
+                Log.i(TAG, "login() called");
+                WeChatAuthHelper.init(MainActivity.this);
+                boolean ok = WeChatAuthHelper.login("snsapi_userinfo", "zhuoyi_" + System.currentTimeMillis());
+                Log.i(TAG, "login() result=" + ok);
+                return ok;
+            }
+        }, "AndroidWeChat");
+
+        showProgress();
+        webView.loadUrl(HOME_URL);
+        handleDeepLink(getIntent()); // Handle deep link on cold start
+    }
+
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setProgress(0);
+        pageLoaded = false;
+
+        // Auto-hide progress after 10 seconds max
+        if (hideProgressRunnable != null) mainHandler.removeCallbacks(hideProgressRunnable);
+        hideProgressRunnable = () -> {
+            if (!pageLoaded) {
+                Log.w(TAG, "Loading timeout, hiding progress");
+                hideProgress();
+            }
+        };
+        mainHandler.postDelayed(hideProgressRunnable, 10000);
+    }
+
+    private void hideProgress() {
+        pageLoaded = true;
+        progressBar.setVisibility(View.GONE);
+        if (hideProgressRunnable != null) mainHandler.removeCallbacks(hideProgressRunnable);
     }
 
     private void setupSwipeRefresh() {
@@ -83,16 +130,14 @@ public class MainActivity extends Activity {
             android.R.color.holo_red_light
         );
         swipeRefreshLayout.setOnRefreshListener(() -> {
+            showProgress();
             webView.reload();
-            new android.os.Handler(Looper.getMainLooper()).postDelayed(() -> {
-                swipeRefreshLayout.setRefreshing(false);
-            }, 1500);
+            mainHandler.postDelayed(() -> swipeRefreshLayout.setRefreshing(false), 2000);
         });
     }
 
     private void setupWebView() {
         WebSettings settings = webView.getSettings();
-
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setAllowFileAccess(true);
@@ -106,45 +151,90 @@ public class MainActivity extends Activity {
         settings.setBuiltInZoomControls(true);
         settings.setDisplayZoomControls(false);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        settings.setAllowUniversalAccessFromFileURLs(true);
+        settings.setAllowFileAccessFromFileURLs(true);
+        settings.setBlockNetworkImage(false);
+        settings.setLoadsImagesAutomatically(true);
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setUserAgentString(settings.getUserAgentString() + " ZhuoyiCustom/1.0");
 
-        // Add JavaScript interface for WeChat login
-        webView.addJavascriptInterface(new WeChatJsInterface(), "AndroidWeChat");
+        webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null); // fix GPU crash
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 String url = request.getUrl().toString();
+                Log.d(TAG, "shouldOverrideUrlLoading: " + url);
 
+                // Allow same-origin and file:// navigation
+                if (url.startsWith("file:///android_asset/")) {
+                    return false;
+                }
+
+                // External schemes - open in system browser
                 if (url.startsWith("tel:") || url.startsWith("mailto:")) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(intent);
+                    try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url))); } catch (Exception e) {}
                     return true;
                 }
-                if (url.startsWith("https://weixin") || url.startsWith("alipays://") ||
-                    url.startsWith("weixin://")) {
-                    try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        startActivity(intent);
-                    } catch (Exception e) {
+
+                if (url.startsWith("weixin://") || url.startsWith("alipays://")) {
+                    try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url))); } catch (Exception e) {
                         Toast.makeText(MainActivity.this, "未安装对应应用", Toast.LENGTH_SHORT).show();
                     }
                     return true;
                 }
 
-                view.loadUrl(url);
-                return true;
+                // Allow WeChat OAuth URLs in WebView
+                if (url.contains("open.weixin.qq.com") || url.contains("api.weixin.qq.com")) {
+                    return false;
+                }
+
+                // Allow server API URLs in WebView (for wechat-callback etc)
+                if (url.contains("8.138.218.146") || url.contains("wgh2026.top")) {
+                    return false;
+                }
+
+                // Other HTTP/HTTPS links - open in system browser
+                if (url.startsWith("http://") || url.startsWith("https://")) {
+                    try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url))); } catch (Exception e) {}
+                    return true;
+                }
+
+                return false;
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                Log.d(TAG, "onPageStarted: " + url);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                Log.d(TAG, "onPageFinished: " + url);
+                hideProgress();
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                String url = request.getUrl().toString();
+                Log.w(TAG, "onReceivedError: " + url);
+
+                // Only show error for main page load failure
+                if (request.isForMainFrame()) {
+                    hideProgress();
+                    runOnUiThread(() -> {
+                        Toast.makeText(MainActivity.this, "页面加载失败，请下拉刷新重试", Toast.LENGTH_LONG).show();
+                    });
+                }
             }
 
             @Override
             public void onReceivedSslError(WebView view, android.webkit.SslErrorHandler handler,
                                            android.net.http.SslError error) {
                 handler.proceed();
-            }
-
-            @Override
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                showErrorDialog();
             }
         });
 
@@ -155,8 +245,14 @@ public class MainActivity extends Activity {
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setProgress(newProgress);
                 } else {
-                    progressBar.setVisibility(View.GONE);
+                    hideProgress();
                 }
+            }
+
+            @Override
+            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                Log.d(TAG, "JS: " + consoleMessage.message() + " [" + consoleMessage.lineNumber() + "]");
+                return true;
             }
 
             @Override
@@ -175,32 +271,35 @@ public class MainActivity extends Activity {
         });
 
         webView.setDownloadListener((url, userAgent, contentDisposition, mimeType, contentLength) -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(intent);
+            try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url))); } catch (Exception e) {}
         });
-    }
-
-    private void showErrorDialog() {
-        new AlertDialog.Builder(this)
-            .setTitle("网络异常")
-            .setMessage("页面加载失败，请检查网络连接")
-            .setPositiveButton("重试", (dialog, which) -> webView.reload())
-            .setNegativeButton("退出", (dialog, which) -> finish())
-            .setCancelable(false)
-            .show();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (webView.canGoBack()) {
-                webView.goBack();
-                return true;
-            }
-            showExitDialog();
-            return true;
+            return handleBack();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        handleBack();
+    }
+
+    private boolean handleBack() {
+        // If we can go back in WebView history, do it
+        if (webView != null && webView.canGoBack()) {
+            // Check if going back would hit a non-asset URL
+            webView.goBack();
+            showProgress();
+            return true;
+        }
+
+        // No more history - show exit dialog
+        showExitDialog();
+        return true;
     }
 
     private void showExitDialog() {
@@ -229,81 +328,90 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleDeepLink(intent);
+    }
+
+    private void handleDeepLink(Intent intent) {
+        if (intent == null || intent.getData() == null) return;
+        Uri uri = intent.getData();
+        if ("zhuoyi".equals(uri.getScheme()) && "login".equals(uri.getHost())) {
+            String token = uri.getQueryParameter("token");
+            String userJson = uri.getQueryParameter("user");
+            if (token != null && !token.isEmpty()) {
+                Log.i(TAG, "Deep link: got login token");
+                String js = "localStorage.setItem('token','" + token.replace("'", "\'") + "');"
+                    + (userJson != null ? "localStorage.setItem('user',decodeURIComponent('" + 
+                    java.net.URLEncoder.encode(userJson, java.nio.charset.StandardCharsets.UTF_8).replace("'", "\'") + "'));" : "")
+                    + "window.location.href='login.html';";
+                runOnUiThread(() -> webView.evaluateJavascript(js, null));
+            }
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        webView.onResume();
+        if (webView != null) webView.onResume();
+        // Check for WeChat code from WXEntryActivity
+        try {
+            SharedPreferences sp = getSharedPreferences("wx_login", MODE_PRIVATE);
+            String code = sp.getString("wx_code", null);
+            long ts = sp.getLong("wx_time", 0);
+            if (code != null && !code.isEmpty() && (System.currentTimeMillis() - ts) < 120000) {
+                Log.i(TAG, "Got WeChat code=" + code);
+                // Navigate to login.html with code as URL param
+                String url = "file:///android_asset/login.html?wxcode=" + code.replace("'", "");
+                runOnUiThread(() -> { if (webView != null) webView.loadUrl(url); });
+                // Clear code from SP so we don't process again
+                sp.edit().remove("wx_code").remove("wx_time").apply();
+            } else if (sp.getInt("wx_errcode", -1) != -1) {
+                int errCode = sp.getInt("wx_errcode", -1);
+                sp.edit().remove("wx_errcode").apply();
+                Log.w(TAG, "WeChat errCode=" + errCode);
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "wx code read error", e);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        webView.onPause();
+        if (webView != null) webView.onPause();
     }
 
     @Override
     protected void onDestroy() {
         if (wxLoginReceiver != null) {
-            try {
-                unregisterReceiver(wxLoginReceiver);
-            } catch (Exception e) {
-                // already unregistered
-            }
+            try { unregisterReceiver(wxLoginReceiver); } catch (Exception e) {}
+        }
+        if (mainHandler != null) {
+            mainHandler.removeCallbacksAndMessages(null);
         }
         if (webView != null) {
+            webView.stopLoading();
+            webView.setWebViewClient(null);
+            webView.setWebChromeClient(null);
+            webView.removeAllViews();
             webView.destroy();
         }
         super.onDestroy();
     }
 
-    // ========== WeChat Login ==========
-
-    /**
-     * JavaScript 接口：网页调用 AndroidWeChat.login() 触发原生微信登录
-     */
-    private class WeChatJsInterface {
-        @android.webkit.JavascriptInterface
-        public void login() {
-            runOnUiThread(() -> {
-                if (!WeChatAuthHelper.isWeChatInstalled()) {
-                    Toast.makeText(MainActivity.this, "请先安装微信", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                boolean success = WeChatAuthHelper.login("snsapi_userinfo", "zhuoyi_" + System.currentTimeMillis());
-                if (!success) {
-                    Toast.makeText(MainActivity.this, "微信登录失败", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-        @android.webkit.JavascriptInterface
-        public boolean isWeChatInstalled() {
-            return WeChatAuthHelper.isWeChatInstalled();
-        }
-    }
-
-    /**
-     * 处理微信登录回调结果
-     */
-    private void handleWeChatLoginResult(Intent intent) {
-        String code = intent.getStringExtra("code");
-        String error = intent.getStringExtra("error");
-
-        if (error != null) {
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
-            runOnUiThread(() -> {
-                webView.evaluateJavascript("window.onWeChatLoginError && window.onWeChatLoginError('" + error + "')", null);
-            });
-            return;
-        }
-
-        if (code != null && !code.isEmpty()) {
-            // Send code to backend via JavaScript, let the web frontend handle the API call
-            runOnUiThread(() -> {
-                webView.evaluateJavascript(
-                    "window.onWeChatLoginCode && window.onWeChatLoginCode('" + code + "')",
-                    null
-                );
-            });
-        }
+    private void handleWeChatResult(int errCode, String code) {
+        runOnUiThread(() -> {
+            String js;
+            if (errCode == 0 && code != null && !code.isEmpty()) {
+                js = "window._onWechatCode && window._onWechatCode('" + code + "')";
+            } else if (errCode == -2) {
+                js = "window._onWechatCancel && window._onWechatCancel()";
+            } else {
+                js = "window._onWechatError && window._onWechatError(" + errCode + ")";
+            }
+            webView.evaluateJavascript(js, null);
+        });
     }
 }

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卓翌定制 - 在线支付</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #f5f0eb 0%, #e8e0d8 100%); min-height: 100vh; }
+  
+  /* 顶部导航 */
+  .navbar { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,0.08); z-index: 100; }
+  .nav-inner { max-width: 800px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+  .nav-inner a { text-decoration: none; color: #8b7355; font-weight: 600; font-size: 1.1rem; }
+  .nav-inner a:hover { color: #6b5a45; }
+  
+  /* 主容器 */
+  .container { max-width: 800px; margin: 80px auto 2rem; padding: 0 1rem; }
+  
+  /* 步骤条 */
+  .steps { display: flex; justify-content: center; margin-bottom: 2rem; }
+  .step { display: flex; align-items: center; gap: 0.5rem; }
+  .step-num { width: 32px; height: 32px; border-radius: 50%; background: #e8e0d8; color: #999; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; }
+  .step.active .step-num { background: #8b7355; color: #fff; }
+  .step.done .step-num { background: #52c41a; color: #fff; }
+  .step-label { font-size: 0.85rem; color: #999; }
+  .step.active .step-label { color: #8b7355; font-weight: 600; }
+  .step.done .step-label { color: #52c41a; }
+  .step-line { width: 40px; height: 2px; background: #e8e0d8; margin: 0 0.5rem; }
+  .step.done + .step-line, .step-line.done { background: #52c41a; }
+  
+  /* 卡片 */
+  .card { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.06); margin-bottom: 1rem; }
+  .card h3 { color: #333; margin-bottom: 1rem; font-size: 1rem; }
+  
+  /* 表单 */
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; margin-bottom: 0.3rem; font-size: 0.85rem; color: #666; font-weight: 500; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 0.7rem; border: 1px solid #e0d8d0; border-radius: 8px; font-size: 0.95rem;
+    transition: border-color 0.2s; background: #faf8f6;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: #8b7355; outline: none; background: #fff;
+  }
+  .form-group textarea { resize: vertical; min-height: 60px; }
+  .form-row { display: flex; gap: 1rem; }
+  .form-row .form-group { flex: 1; }
+  
+  /* 支付方式选择 */
+  .pay-methods { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 1rem; }
+  .pay-method { 
+    border: 2px solid #e8e0d8; border-radius: 12px; padding: 1rem; cursor: pointer; text-align: center;
+    transition: all 0.2s; position: relative;
+  }
+  .pay-method:hover { border-color: #8b7355; background: #faf8f6; }
+  .pay-method.selected { border-color: #8b7355; background: #f9f5f0; }
+  .pay-method.selected::after { content: '✓'; position: absolute; top: 8px; right: 10px; color: #8b7355; font-weight: bold; }
+  .pay-method .icon { font-size: 1.8rem; margin-bottom: 0.3rem; }
+  .pay-method .name { font-size: 0.9rem; color: #333; font-weight: 500; }
+  .pay-method .desc { font-size: 0.75rem; color: #999; margin-top: 0.2rem; }
+  
+  /* 支付类型 */
+  .pay-types { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1rem; }
+  .pay-type { 
+    border: 2px solid #e8e0d8; border-radius: 12px; padding: 0.8rem; cursor: pointer; text-align: center;
+    transition: all 0.2s;
+  }
+  .pay-type:hover { border-color: #8b7355; }
+  .pay-type.selected { border-color: #8b7355; background: #f9f5f0; }
+  .pay-type .type-icon { font-size: 1.5rem; }
+  .pay-type .type-name { font-size: 0.85rem; color: #333; font-weight: 500; margin-top: 0.3rem; }
+  .pay-type .type-desc { font-size: 0.7rem; color: #999; }
+  
+  /* 金额展示 */
+  .amount-display { text-align: center; padding: 1.5rem; background: linear-gradient(135deg, #f9f5f0, #efe8df); border-radius: 12px; margin: 1rem 0; }
+  .amount-display .label { font-size: 0.85rem; color: #999; }
+  .amount-display .amount { font-size: 2.5rem; color: #8b7355; font-weight: bold; margin: 0.3rem 0; }
+  .amount-display .amount small { font-size: 1rem; color: #999; font-weight: normal; }
+  .amount-display .hint { font-size: 0.8rem; color: #8b7355; }
+  
+  /* 按钮 */
+  .btn-primary { 
+    display: block; width: 100%; padding: 1rem; background: linear-gradient(135deg, #8b7355, #6b5a45);
+    color: #fff; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(139,115,85,0.3); }
+  .btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+  
+  .btn-back { 
+    display: inline-block; padding: 0.6rem 1.5rem; background: #fff; color: #8b7355;
+    border: 1px solid #8b7355; border-radius: 8px; font-size: 0.9rem; cursor: pointer;
+    text-decoration: none; margin-right: 1rem;
+  }
+  
+  /* 询价模式 */
+  .inquiry-info { 
+    background: #fffbe6; border: 1px solid #ffe58f; border-radius: 8px; padding: 1rem; 
+    margin: 1rem 0; font-size: 0.85rem; color: #ad6800; line-height: 1.6;
+  }
+  
+  /* Mock 提示 */
+  .mock-badge { 
+    display: inline-block; background: #ff4d4f; color: #fff; padding: 2px 8px; 
+    border-radius: 4px; font-size: 0.7rem; margin-left: 0.5rem; vertical-align: middle;
+  }
+  
+  /* 隐藏区域 */
+  .hidden { display: none !important; }
+  
+  /* 响应式 */
+  @media (max-width: 600px) {
+    .pay-methods { grid-template-columns: 1fr 1fr; }
+    .pay-types { grid-template-columns: 1fr; }
+    .form-row { flex-direction: column; gap: 0; }
+    .amount-display .amount { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+  <!-- 导航 -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="/">← 返回首页</a>
+      <a href="payment.html">卓翌定制 · 在线支付</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- 步骤条 -->
+    <div class="steps">
+      <div class="step active" id="step1"><div class="step-num">1</div><div class="step-label">填写信息</div></div>
+      <div class="step-line" id="line1"></div>
+      <div class="step" id="step2"><div class="step-num">2</div><div class="step-label">确认支付</div></div>
+      <div class="step-line" id="line2"></div>
+      <div class="step" id="step3"><div class="step-num">3</div><div class="step-label">支付完成</div></div>
+    </div>
+
+    <!-- 步骤 1：填写订单信息 -->
+    <div id="page1">
+      <!-- 支付类型 -->
+      <div class="card">
+        <h3>选择支付类型</h3>
+        <div class="pay-types">
+          <div class="pay-type selected" onclick="selectPayType('full', this)">
+            <div class="type-icon">💰</div>
+            <div class="type-name">全款支付</div>
+            <div class="type-desc">一次性付清</div>
+          </div>
+          <div class="pay-type" onclick="selectPayType('deposit', this)">
+            <div class="type-icon">📝</div>
+            <div class="type-name">定金预付</div>
+            <div class="type-desc">先付 30% 定金</div>
+          </div>
+          <div class="pay-type" onclick="selectPayType('inquiry', this)">
+            <div class="type-icon">💬</div>
+            <div class="type-name">询价后支付</div>
+            <div class="type-desc">先询价再付款</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 产品信息 -->
+      <div class="card" id="productCard">
+        <h3>订单信息</h3>
+        <div class="form-group">
+          <label>产品名称 *</label>
+          <input type="text" id="productName" placeholder="如：整体衣柜定制" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>总金额 (元) *</label>
+            <input type="number" id="totalAmount" placeholder="请输入金额" min="1" step="0.01" required oninput="updateAmount()">
+          </div>
+          <div class="form-group" id="depositRateGroup" class="hidden">
+            <label>定金比例</label>
+            <select id="depositRate" onchange="updateAmount()">
+              <option value="0.3">30%</option>
+              <option value="0.5">50%</option>
+              <option value="0.2">20%</option>
+            </select>
+          </div>
+        </div>
+        <div class="amount-display" id="amountDisplay" style="display:none">
+          <div class="label">应付金额</div>
+          <div class="amount" id="payAmountDisplay">¥0 <small>元</small></div>
+          <div class="hint" id="amountHint"></div>
+        </div>
+      </div>
+
+      <!-- 询价信息 -->
+      <div class="card hidden" id="inquiryCard">
+        <h3>询价信息</h3>
+        <div class="inquiry-info">
+          💡 选择询价后支付，您提交需求后我们将尽快报价，确认价格后再进行支付。
+        </div>
+        <div class="form-group">
+          <label>您的需求描述 *</label>
+          <textarea id="inquiryDesc" placeholder="请描述您的定制需求，如材质、尺寸、风格等"></textarea>
+        </div>
+        <div class="form-group">
+          <label>预算范围</label>
+          <input type="text" id="budget" placeholder="如：5000-10000 元">
+        </div>
+      </div>
+
+      <!-- 客户信息 -->
+      <div class="card">
+        <h3>联系信息</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>姓名 *</label>
+            <input type="text" id="customerName" placeholder="您的姓名" required>
+          </div>
+          <div class="form-group">
+            <label>手机号 *</label>
+            <input type="tel" id="customerPhone" placeholder="联系电话" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>邮箱（选填）</label>
+          <input type="email" id="customerEmail" placeholder="用于接收订单通知">
+        </div>
+        <div class="form-group">
+          <label>备注</label>
+          <textarea id="remark" placeholder="其他补充信息"></textarea>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="goToStep2()">下一步：选择支付方式</button>
+    </div>
+
+    <!-- 步骤 2：选择支付方式 -->
+    <div id="page2" class="hidden">
+      <div class="card">
+        <h3>选择支付方式 <span class="mock-badge" id="mockBadge">模拟模式</span></h3>
+        <div class="pay-methods">
+          <div class="pay-method selected" onclick="selectMethod('alipay', this)">
+            <div class="icon">💙</div>
+            <div class="name">支付宝</div>
+            <div class="desc">推荐国内用户</div>
+          </div>
+          <div class="pay-method" onclick="selectMethod('wechat', this)">
+            <div class="icon">💚</div>
+            <div class="name">微信支付</div>
+            <div class="desc">扫码支付</div>
+          </div>
+          <div class="pay-method" onclick="selectMethod('paypal', this)">
+            <div class="icon">💳</div>
+            <div class="name">PayPal</div>
+            <div class="desc">海外客户推荐</div>
+          </div>
+          <div class="pay-method" onclick="selectMethod('bank', this)">
+            <div class="icon">🏦</div>
+            <div class="name">银行转账</div>
+            <div class="desc">对公转账</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 订单确认 -->
+      <div class="card">
+        <h3>订单确认</h3>
+        <div id="orderSummary"></div>
+      </div>
+
+      <div style="display:flex;gap:1rem;margin-top:1rem">
+        <button class="btn-back" onclick="goToStep1()">返回修改</button>
+        <button class="btn-primary" style="flex:1" onclick="submitPayment()" id="payBtn">确认支付</button>
+      </div>
+    </div>
+
+    <!-- 步骤 3：支付处理中 -->
+    <div id="page3" class="hidden">
+      <div class="card" style="text-align:center;padding:3rem">
+        <div style="font-size:3rem;margin-bottom:1rem" id="resultIcon">⏳</div>
+        <h2 id="resultTitle" style="color:#333;margin-bottom:0.5rem">支付处理中</h2>
+        <p id="resultDesc" style="color:#999;margin-bottom:1.5rem">请稍候...</p>
+        <div id="resultActions"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 状态
+    let currentStep = 1;
+    let selectedPayType = 'full';
+    let selectedMethod = 'alipay';
+    let isMockMode = true;
+
+    // 初始化
+    async function init() {
+      try {
+        const r = await fetch('http://8.138.218.146/api/payment/config');
+        const d = await r.json();
+        isMockMode = d.mockMode;
+        document.getElementById('mockBadge').style.display = isMockMode ? 'inline-block' : 'none';
+      } catch (e) {
+        console.log('Payment config check failed, assuming mock mode');
+      }
+    }
+
+    // 支付类型选择
+    function selectPayType(type, el) {
+      selectedPayType = type;
+      document.querySelectorAll('.pay-type').forEach(e => e.classList.remove('selected'));
+      el.classList.add('selected');
+      
+      const depositGroup = document.getElementById('depositRateGroup');
+      const inquiryCard = document.getElementById('inquiryCard');
+      const productCard = document.getElementById('productCard');
+      
+      if (type === 'deposit') {
+        depositGroup.classList.remove('hidden');
+        inquiryCard.classList.add('hidden');
+        productCard.classList.remove('hidden');
+      } else if (type === 'inquiry') {
+        depositGroup.classList.add('hidden');
+        inquiryCard.classList.remove('hidden');
+        productCard.classList.add('hidden');
+      } else {
+        depositGroup.classList.add('hidden');
+        inquiryCard.classList.add('hidden');
+        productCard.classList.remove('hidden');
+      }
+      
+      updateAmount();
+    }
+
+    // 更新金额
+    function updateAmount() {
+      const total = Number(document.getElementById('totalAmount').value) || 0;
+      const display = document.getElementById('amountDisplay');
+      
+      if (total > 0 && selectedPayType !== 'inquiry') {
+        display.style.display = 'block';
+        let payAmount = total;
+        let hint = '';
+        
+        if (selectedPayType === 'deposit') {
+          const rate = Number(document.getElementById('depositRate').value);
+          payAmount = Math.round(total * rate * 100) / 100;
+          hint = `定金 ${rate * 100}%，尾款 ¥${(total - payAmount).toFixed(2)} 线下结算`;
+        }
+        
+        document.getElementById('payAmountDisplay').innerHTML = `¥${payAmount.toFixed(2)} <small>元</small>`;
+        document.getElementById('amountHint').textContent = hint;
+      } else {
+        display.style.display = selectedPayType === 'inquiry' ? 'none' : 'none';
+      }
+    }
+
+    // 支付方式选择
+    function selectMethod(method, el) {
+      selectedMethod = method;
+      document.querySelectorAll('.pay-method').forEach(e => e.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    // 步骤切换
+    function goToStep2() {
+      // 验证
+      if (selectedPayType !== 'inquiry') {
+        const name = document.getElementById('productName').value.trim();
+        const amount = Number(document.getElementById('totalAmount').value);
+        if (!name) return alert('请输入产品名称');
+        if (!amount || amount <= 0) return alert('请输入有效金额');
+      } else {
+        const desc = document.getElementById('inquiryDesc').value.trim();
+        if (!desc) return alert('请描述您的需求');
+      }
+      
+      const cName = document.getElementById('customerName').value.trim();
+      const cPhone = document.getElementById('customerPhone').value.trim();
+      if (!cName) return alert('请输入姓名');
+      if (!cPhone) return alert('请输入手机号');
+      
+      // 生成订单摘要
+      const total = Number(document.getElementById('totalAmount').value) || 0;
+      let payAmount = total;
+      if (selectedPayType === 'deposit') {
+        const rate = Number(document.getElementById('depositRate').value);
+        payAmount = Math.round(total * rate * 100) / 100;
+      }
+      
+      const methodNames = { alipay: '支付宝', wechat: '微信支付', paypal: 'PayPal', bank: '银行转账' };
+      const typeNames = { full: '全款支付', deposit: '定金预付', inquiry: '询价后支付' };
+      
+      let summary = `
+        <div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #f0f0f0;font-size:0.9rem">
+          <span style="color:#999">产品</span><span>${document.getElementById('productName').value || '待询价'}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #f0f0f0;font-size:0.9rem">
+          <span style="color:#999">支付类型</span><span>${typeNames[selectedPayType]}</span>
+        </div>`;
+      
+      if (selectedPayType !== 'inquiry') {
+        summary += `
+        <div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #f0f0f0;font-size:0.9rem">
+          <span style="color:#999">总金额</span><span>¥${total.toFixed(2)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:0.5rem 0;font-size:0.9rem">
+          <span style="color:#8b7355;font-weight:600">应付金额</span><span style="color:#8b7355;font-weight:600;font-size:1.2rem">¥${payAmount.toFixed(2)}</span>
+        </div>`;
+      }
+      
+      document.getElementById('orderSummary').innerHTML = summary;
+      
+      // 切换步骤
+      setStep(2);
+    }
+
+    function goToStep1() { setStep(1); }
+
+    function setStep(n) {
+      currentStep = n;
+      for (let i = 1; i <= 3; i++) {
+        const step = document.getElementById('step' + i);
+        step.className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
+      }
+      document.getElementById('line1').className = 'step-line' + (n > 1 ? ' done' : '');
+      document.getElementById('line2').className = 'step-line' + (n > 2 ? ' done' : '');
+      
+      document.getElementById('page1').classList.toggle('hidden', n !== 1);
+      document.getElementById('page2').classList.toggle('hidden', n !== 2);
+      document.getElementById('page3').classList.toggle('hidden', n !== 3);
+    }
+
+    // 提交支付
+    async function submitPayment() {
+      const btn = document.getElementById('payBtn');
+      btn.disabled = true;
+      btn.textContent = '支付处理中...';
+      
+      try {
+        const total = Number(document.getElementById('totalAmount').value) || 0;
+        const body = {
+          productName: document.getElementById('productName').value || '询价订单',
+          amount: total,
+          paymentMethod: selectedMethod,
+          paymentType: selectedPayType,
+          depositRate: selectedPayType === 'deposit' ? Number(document.getElementById('depositRate').value) : 1,
+          customerName: document.getElementById('customerName').value,
+          customerPhone: document.getElementById('customerPhone').value,
+          customerEmail: document.getElementById('customerEmail').value,
+          remark: selectedPayType === 'inquiry' 
+            ? document.getElementById('inquiryDesc').value 
+            : document.getElementById('remark').value,
+        };
+        
+        const r = await fetch('http://8.138.218.146/api/payment/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        
+        const d = await r.json();
+        
+        if (d.ok) {
+          // 跳转到支付页面
+          if (d.payUrl) {
+            window.location.href = d.payUrl;
+          } else {
+            setStep(3);
+            showResult('success', d.orderId);
+          }
+        } else {
+          alert('支付创建失败：' + d.error);
+          btn.disabled = false;
+          btn.textContent = '确认支付';
+        }
+      } catch (e) {
+        alert('网络错误，请重试');
+        btn.disabled = false;
+        btn.textContent = '确认支付';
+      }
+    }
+
+    // 显示结果
+    function showResult(status, orderId) {
+      const icon = document.getElementById('resultIcon');
+      const title = document.getElementById('resultTitle');
+      const desc = document.getElementById('resultDesc');
+      const actions = document.getElementById('resultActions');
+      
+      if (status === 'success') {
+        icon.textContent = '✅';
+        title.textContent = '支付成功';
+        desc.textContent = '您的付款已确认，我们将尽快安排生产！';
+      } else if (status === 'pending') {
+        icon.textContent = '⏳';
+        title.textContent = '等待确认';
+        desc.textContent = '我们将在确认收款后通知您，请保留转账凭证。';
+      } else {
+        icon.textContent = '❌';
+        title.textContent = '支付失败';
+        desc.textContent = '支付未完成，请重新尝试。';
+      }
+      
+      actions.innerHTML = `
+        <a href="/" style="display:inline-block;padding:0.6rem 1.5rem;background:#8b7355;color:#fff;border-radius:8px;text-decoration:none;margin:0.5rem">返回首页</a>
+        <a href="/payment/order/${orderId}" style="display:inline-block;padding:0.6rem 1.5rem;background:#fff;color:#8b7355;border:1px solid #8b7355;border-radius:8px;text-decoration:none;margin:0.5rem">查看订单</a>
+      `;
+    }
+
+    init();
+  </script>
+</body>
+</html>

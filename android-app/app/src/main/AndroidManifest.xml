@@ -30,10 +30,18 @@
         <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
-            android:exported="false"
+            android:exported="true"
+            android:launchMode="singleTask"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:hardwareAccelerated="true" />
+            android:hardwareAccelerated="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="zhuoyi"/>
+            </intent-filter>
+        </activity>
 
         <!-- Privacy Policy Activity -->
         <activity
@@ -43,17 +51,15 @@
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true" />
 
-        <!-- WeChat Open Platform Callback Activity -->
-        <activity
-            android:name=".wxapi.WXEntryActivity"
-            android:exported="true"
-            android:launchMode="singleTask"
+
+    
+        <!-- WeChat Callback Activity -->
+        <activity android:name=".wxapi.WXEntryActivity" android:exported="true"
+            android:launchMode="singleTop" android:taskAffinity="com.zhuoyi.custom"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
-                <data android:scheme="wx187d6ca3a6da9ca3" />
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="com.tencent.mm.openapi.WXEntryActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 

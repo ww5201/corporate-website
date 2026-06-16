@@ -103,17 +103,74 @@ export function mountLogin() {
     }
   };
 
-  window._wechatLogin = async () => {
-    try {
-      const res = await auth.loginByWechat('mock_code_' + Date.now());
-      if (res.success) {
-        showToast('登录成功！', 'success');
-        setTimeout(() => {
-          window.location.hash = '#/profile';
-        }, 500);
+  window._wechatLogin = () => {
+    // Priority: Use native Android WeChat SDK (via JS Bridge)
+    if (typeof window.AndroidWeChat !== 'undefined' && window.AndroidWechat !== null) {
+      if (window.AndroidWeChat.isInstalled()) {
+        // Set up callbacks before calling login
+        window._onWechatCode = function(code) {
+          console.log('WeChat code received:', code);
+          (async () => {
+            try {
+              showToast('正在登录...', 'info');
+              const res = await auth.loginByWechat(code);
+              if (res.success) {
+                showToast('微信登录成功！', 'success');
+                setTimeout(() => { window.location.hash = '#/profile'; }, 500);
+              } else {
+                showToast(res.error || '登录失败', 'error');
+              }
+            } catch (e) {
+              showToast(e.message || '微信登录失败', 'error');
+            }
+          })();
+        };
+        window._onWechatCancel = function() { showToast('已取消微信登录', 'info'); };
+        window._onWechatError = function(errCode) { showToast('微信登录错误: ' + errCode, 'error'); };
+
+        // Call native SDK login
+        var ok = window.AndroidWeChat.login();
+        if (!ok) { showToast('无法启动微信，请确认已安装微信', 'error'); }
+        return;
+      } else {
+        showToast('未检测到微信客户端，请先安装微信', 'error');
+        return;
       }
-    } catch (e) {
-      showToast(e.message || '微信登录失败', 'error');
     }
+
+    // Fallback: Browser QR Code Scan (for non-APP environments)
+    const appId = 'wx187d6ca3a6da9ca3';
+    const redirectUri = encodeURIComponent('http://8.138.218.146/wechat-callback.html');
+    const state = 'zhuoyi_' + Date.now();
+    const authUrl = 'https://open.weixin.qq.com/connect/qrconnect?appid=' + appId
+      + '&redirect_uri=' + redirectUri
+      + '&response_type=code&scope=snsapi_login&state=' + state
+      + '#wechat_redirect';
+    window.location.href = authUrl;
   };
+
+  // Check if we came back from WeChat OAuth2 redirect
+  const urlParams = new URLSearchParams(window.location.search);
+  const wxCode = urlParams.get('code');
+  if (wxCode) {
+    // Clean URL
+    window.history.replaceState({}, '', window.location.pathname + window.location.hash);
+    // Auto-login with real code
+    (async () => {
+      try {
+        showToast('正在登录...', 'info');
+        const res = await auth.loginByWechat(wxCode);
+        if (res.success) {
+          showToast('微信登录成功！', 'success');
+          setTimeout(() => {
+            window.location.hash = '#/profile';
+          }, 500);
+        } else {
+          showToast(res.error || '登录失败', 'error');
+        }
+      } catch (e) {
+        showToast(e.message || '微信登录失败', 'error');
+      }
+    })();
+  }
 }
