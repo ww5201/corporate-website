@@ -205,7 +205,7 @@
   <div class="toast" id="toast"></div>
 
 <script>
-var API='';
+var API='http://8.138.218.146';
 var convId=null, ws=null, wsRetry=0, MAX_RETRY=5;
 var lastTimeLabel='', pollTmr=null, sending=false;
 
@@ -244,9 +244,9 @@ async function loadHistory(){
 
 function connectWS(){
   if(!convId) return;
-  var proto=location.protocol==='https:'?'wss:':'ws:';
+  var wsBase = API.replace(/^http/, 'ws');
   try{
-    ws=new WebSocket(proto+'//'+location.host+'/ws/chat?convId='+convId);
+    ws=new WebSocket(wsBase+'/ws/chat?convId='+convId);
     ws.onopen=function(){ wsRetry=0; setStatus('online','在线'); hideConn(); startPoll(); };
     ws.onmessage=function(e){
       try{
@@ -341,7 +341,7 @@ function onKey(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMsg
 function setStatus(t,txt){ document.getElementById('sDot').className='status-dot '+t; document.getElementById('sText').textContent=txt; }
 function showConn(txt){ document.getElementById('connText').textContent=txt; document.getElementById('connBar').classList.add('show'); }
 function hideConn(){ document.getElementById('connBar').classList.remove('show'); }
-function goBack(){ if(document.referrer&&document.referrer!==location.href) history.back(); else location.href='/'; }
+function goBack(){ if(document.referrer&&document.referrer!==location.href) history.back(); else location.href='index.html'; }
 function showToast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },2000); }
 
 init();

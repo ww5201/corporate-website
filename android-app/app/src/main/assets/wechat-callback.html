@@ -22,11 +22,11 @@ body { font-family: -apple-system, sans-serif; text-align: center; padding-top: 
 
   if (code) {
     // Redirect back to the main app with the code
-    window.location.href = '/?wx_code=' + encodeURIComponent(code) + '&wx_state=' + encodeURIComponent(state || '');
+    window.location.href = 'index.html?wx_code=' + encodeURIComponent(code) + '&wx_state=' + encodeURIComponent(state || '');
   } else {
     var error = params.get('error') || '授权失败';
     document.querySelector('.loading').textContent = error;
-    setTimeout(function() { window.location.href = '/'; }, 2000);
+    setTimeout(function() { window.location.href = 'index.html'; }, 2000);
   }
 })();
 </script>

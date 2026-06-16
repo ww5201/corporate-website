@@ -693,7 +693,7 @@
 
   <!-- Bottom Nav -->
   <div class="bottom-nav">
-    <a class="nav-item active" href="/">
+    <a class="nav-item active" href="index.html">
       <span class="nav-icon">🏠</span>
       <span class="nav-label">首页</span>
     </a>
@@ -839,7 +839,7 @@ function openDetail(idx) {
     <div class="detail-price"><small>¥</small>${(p.price||0).toLocaleString()} <span style="font-size:14px;color:var(--text-3);text-decoration:line-through;font-weight:400">¥${origPrice.toLocaleString()}</span></div>
     <div class="detail-desc">${p.description || '暂无详细描述'}</div>
     <div class="detail-actions">
-      <button class="btn-chat" onclick="window.open('/payment.html?product=' + encodeURIComponent('${p.name||''}'),'_blank')">💬 咨询客服</button>
+      <button class="btn-chat" onclick="window.open('payment.html?product=' + encodeURIComponent('${p.name||''}'),'_blank')">💬 咨询客服</button>
       <button class="btn-buy" onclick="goPay(${idx})">🛒 立即下单</button>
     </div>`;
 
@@ -866,7 +866,7 @@ function updateDots() {
 function goPay(idx) {
   const p = allProducts[idx];
   if (!p) return;
-  window.open('/payment.html?product=' + encodeURIComponent(p.name) + '&price=' + (p.price||0), '_blank');
+  window.open('payment.html?product=' + encodeURIComponent(p.name) + '&price=' + (p.price||0), '_blank');
 }
 
 // ===== Contact Form =====
@@ -979,7 +979,7 @@ loadProducts();
     <div>
       <h3 style="font-size:16px;margin-bottom:16px;color:#c9a96e;">快速链接</h3>
       <ul style="list-style:none;font-size:13px;line-height:2.2;opacity:0.8;padding:0;">
-        <li><a href="/" style="color:#fff;text-decoration:none;">首页</a></li>
+        <li><a href="index.html" style="color:#fff;text-decoration:none;">首页</a></li>
         <li><a href="shop.html" style="color:#fff;text-decoration:none;">产品展示</a></li>
         <li><a href="privacy.html" style="color:#fff;text-decoration:none;">隐私政策</a></li>
         <li><a href="user-agreement.html" style="color:#fff;text-decoration:none;">用户协议</a></li>

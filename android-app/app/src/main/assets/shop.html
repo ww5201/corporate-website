@@ -635,7 +635,7 @@
   <!-- 顶部搜索栏 -->
   <div class="top-header">
     <div class="header-row">
-      <button class="back-btn" onclick="location.href='/'">&lsaquo;</button>
+      <button class="back-btn" onclick="location.href='index.html'">&lsaquo;</button>
       <div class="search-bar">
         <span class="icon">🔍</span>
         <input type="text" id="searchInput" placeholder="搜索商品" onkeydown="if(event.key==='Enter')doSearch()">
@@ -702,7 +702,7 @@
 
   <!-- 底部导航 -->
   <div class="bottom-nav">
-    <a class="nav-item" href="/">
+    <a class="nav-item" href="index.html">
       <span class="nav-icon">🏠</span>
       <span class="nav-label">首页</span>
     </a>
@@ -987,7 +987,7 @@ function updateDImg() {
 function goPay(idx) {
   const p = allProducts[idx];
   if (!p) return;
-  window.open(`/payment.html?product=${encodeURIComponent(p.name)}&amount=${p.price||0}`, '_blank');
+  window.open(`payment.html?product=${encodeURIComponent(p.name)}&amount=${p.price||0}`, '_blank');
 }
 
 // ===== Toast =====
