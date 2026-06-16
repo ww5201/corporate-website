@@ -54,8 +54,8 @@ public class MainActivity extends Activity {
         swipeRefreshLayout = findViewById(R.id.swipeRefresh);
         webView = findViewById(R.id.webView);
 
-        // Set white background to prevent flash
-        webView.setBackgroundColor(Color.WHITE);
+        // Set background matching page color to prevent white flash
+        webView.setBackgroundColor(Color.parseColor("#f5f5f5"));
 
         setupSwipeRefresh();
         setupWebView();
@@ -159,7 +159,8 @@ public class MainActivity extends Activity {
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setUserAgentString(settings.getUserAgentString() + " ZhuoyiCustom/1.0");
 
-        webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null); // fix GPU crash
+        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null); // enable GPU acceleration
+        webView.setOverScrollMode(View.OVER_SCROLL_NEVER); // prevent overscroll artifacts
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -292,9 +293,7 @@ public class MainActivity extends Activity {
     private boolean handleBack() {
         // If we can go back in WebView history, do it
         if (webView != null && webView.canGoBack()) {
-            // Check if going back would hit a non-asset URL
             webView.goBack();
-            showProgress();
             return true;
         }
 
