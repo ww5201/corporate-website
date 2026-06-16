@@ -1383,7 +1383,7 @@ function contactService() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
+      'Authorization': token ? 'Bearer ' + token : ''
     },
     body: JSON.stringify({
       visitorId: visitorId,
@@ -1391,17 +1391,24 @@ function contactService() {
       phone: user.phone || ''
     }),
   })
-  .then(function(r) { return r.json(); })
+  .then(function(r) {
+    if (!r.ok) throw new Error('服务器错误 (' + r.status + ')');
+    return r.json();
+  })
   .then(function(data) {
-    if (data.conversation && data.conversation._id) {
-      location.href = 'chat.html?convId=' + data.conversation._id;
-    } else if (data._id) {
-      location.href = 'chat.html?convId=' + data._id;
+    // Server returns conversation object directly: { _id, visitorId, ... }
+    var convId = (data._id) || (data.conversation && data.conversation._id) || (data.id);
+    if (convId) {
+      location.href = 'chat.html?convId=' + convId;
     } else {
+      console.error('contactService: unexpected response:', JSON.stringify(data));
       showToast('连接客服失败，请稍后重试');
     }
   })
-  .catch(function() { showToast('网络错误'); });
+  .catch(function(err) {
+    console.error('contactService error:', err.message);
+    showToast('网络错误，请检查网络后重试');
+  });
 }
 
 // ===== 关于我们 =====

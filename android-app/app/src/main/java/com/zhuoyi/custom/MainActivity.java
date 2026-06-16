@@ -209,6 +209,10 @@ public class MainActivity extends Activity {
             public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 Log.d(TAG, "onPageStarted: " + url);
+                // Only show progress for initial loads, not back/forward navigation
+                if (!pageLoaded) {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -216,6 +220,10 @@ public class MainActivity extends Activity {
                 super.onPageFinished(view, url);
                 Log.d(TAG, "onPageFinished: " + url);
                 hideProgress();
+                // Safety net: force-hide progress bar after short delay
+                mainHandler.postDelayed(() -> {
+                    if (progressBar != null) progressBar.setVisibility(View.GONE);
+                }, 300);
             }
 
             @Override
@@ -244,9 +252,12 @@ public class MainActivity extends Activity {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 if (newProgress < 100) {
-                    progressBar.setVisibility(View.VISIBLE);
+                    if (progressBar.getVisibility() != View.VISIBLE) {
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
                     progressBar.setProgress(newProgress);
                 } else {
+                    progressBar.setVisibility(View.GONE);
                     hideProgress();
                 }
             }
