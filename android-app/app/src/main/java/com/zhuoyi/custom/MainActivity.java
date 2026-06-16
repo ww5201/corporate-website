@@ -333,6 +333,8 @@ public class MainActivity extends Activity {
             Log.i(TAG, "onNewIntent: got wx_code=" + wxCode);
             String url = "file:///android_asset/login.html?wxcode=" + wxCode;
             if (webView != null) webView.loadUrl(url);
+            // 关键：清除 extra，防止 onResume 重复处理同一个 code（code 只能用一次）
+            intent.removeExtra("wx_code");
             return;
         }
         // 处理微信错误
@@ -340,6 +342,7 @@ public class MainActivity extends Activity {
         if (wxErrCode != Integer.MIN_VALUE) {
             Log.w(TAG, "onNewIntent: wx_errcode=" + wxErrCode);
             handleWeChatResult(wxErrCode, null);
+            intent.removeExtra("wx_errcode");
             return;
         }
         // 处理深链接

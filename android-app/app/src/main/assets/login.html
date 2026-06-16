@@ -707,24 +707,35 @@ function checkLogin() {
 
 function wechatLogin_callback(code) {
   showToast('微信授权成功，正在登录...');
+  console.log('wechatLogin_callback: sending code to backend, code length=' + code.length);
   fetch(API + '/api/auth/wechat/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ code: code }),
   })
-  .then(function(r) { return r.json(); })
+  .then(function(r) {
+    console.log('wechatLogin_callback: response status=' + r.status);
+    return r.json();
+  })
   .then(function(data) {
+    console.log('wechatLogin_callback: response data=' + JSON.stringify(data));
     if (data.success) {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       showToast(data.user && data.user.isNew ? '微信注册成功！' : '微信登录成功！');
       setTimeout(function() { showLoggedIn(data.user); }, 500);
     } else {
-      showToast(data.error || '微信登录失败');
+      var errMsg = data.error || '微信登录失败';
+      console.error('wechatLogin_callback: login failed - ' + errMsg);
+      showToast('登录失败: ' + errMsg);
       checkLogin();
     }
   })
-  .catch(function() { showToast('网络错误'); checkLogin(); });
+  .catch(function(err) {
+    console.error('wechatLogin_callback: network error - ' + err.message);
+    showToast('网络错误，请检查网络连接后重试');
+    checkLogin();
+  });
 }
 </script>
 </body>
