@@ -38,6 +38,9 @@
       display: flex;
       align-items: center;
       border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
     .back-btn {
       width: 32px; height: 32px;
@@ -50,6 +53,18 @@
       flex: 1; text-align: center;
       font-size: 16px; font-weight: 600;
       margin-right: 32px;
+    }
+    .top-right-btn {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-2);
+      padding: 4px;
     }
 
     /* 品牌区 */
@@ -265,47 +280,6 @@
       text-decoration: none;
     }
 
-    /* 其他登录方式 */
-    .other-login {
-      margin-top: 30px;
-      text-align: center;
-    }
-    .divider-line {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 0 20px;
-      margin-bottom: 20px;
-    }
-    .divider-line::before,
-    .divider-line::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-    .divider-line span {
-      font-size: 12px;
-      color: var(--text-3);
-    }
-    .social-btns {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-    }
-    .social-btn {
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      border: none;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .social-btn:active { transform: scale(0.9); }
-    .social-btn.wechat { background: #f0fff4; }
-    .social-btn.phone { background: var(--primary-bg); }
-
     /* Toast */
     .toast {
       position: fixed;
@@ -323,53 +297,376 @@
     }
     .toast.show { opacity: 1; }
 
-    /* ===== 已登录状态 ===== */
-    .logged-in {
-      display: none;
-      text-align: center;
-      padding: 24px 20px;
-    }
-    .logged-in.show { display: block; }
-    .user-avatar {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 36px;
-      margin: 0 auto 12px;
+    /* ===== 个人中心 (已登录) ===== */
+    .profile-page { display: none; flex: 1; }
+    .profile-page.show { display: block; }
+
+    /* 头部用户区 */
+    .profile-header {
+      background: linear-gradient(135deg, var(--primary) 0%, #69b4ff 100%);
+      padding: 28px 20px 32px;
       color: #fff;
+      position: relative;
     }
-    .user-name {
-      font-size: 18px;
+    .profile-header::after {
+      content: '';
+      position: absolute;
+      bottom: -12px; left: 0; right: 0;
+      height: 24px;
+      background: var(--bg);
+      border-radius: 16px 16px 0 0;
+    }
+    .profile-user-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .profile-avatar {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.4);
+      overflow: hidden;
+    }
+    .profile-avatar img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .profile-info { flex: 1; }
+    .profile-name {
+      font-size: 20px;
       font-weight: 700;
       margin-bottom: 4px;
     }
-    .user-phone {
+    .profile-phone {
       font-size: 14px;
-      color: var(--text-3);
-      margin-bottom: 20px;
+      opacity: 0.85;
     }
-    .user-actions {
+
+    /* 订单快捷入口 */
+    .order-shortcuts {
+      background: #fff;
+      margin: 0 16px;
+      margin-top: -4px;
+      border-radius: 12px;
+      padding: 16px 0;
+      display: flex;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      position: relative;
+      z-index: 1;
+    }
+    .order-shortcut {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-    }
-    .user-actions button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 500;
+      align-items: center;
+      gap: 6px;
       cursor: pointer;
       border: none;
+      background: none;
+      padding: 4px 0;
     }
-    .btn-logout {
-      background: var(--bg);
+    .order-shortcut .shortcut-icon {
+      font-size: 24px;
+      position: relative;
+    }
+    .order-shortcut .shortcut-label {
+      font-size: 12px;
       color: var(--text-2);
     }
-    .btn-orders {
+    .shortcut-badge {
+      position: absolute;
+      top: -6px; right: -10px;
+      background: #ff4d4f;
+      color: #fff;
+      font-size: 10px;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+
+    /* 菜单卡片 */
+    .menu-card {
+      background: #fff;
+      margin: 12px 16px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 16px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .menu-item:active {
+      background: #f9f9f9;
+    }
+    .menu-item + .menu-item {
+      border-top: 1px solid var(--border);
+    }
+    .menu-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    .menu-text {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .menu-arrow {
+      color: var(--text-3);
+      font-size: 14px;
+    }
+    .menu-desc {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-right: 8px;
+    }
+
+    /* 退出按钮 */
+    .logout-section {
+      margin: 20px 16px;
+    }
+    .logout-btn {
+      width: 100%;
+      padding: 14px;
+      background: #fff;
+      color: #ff4d4f;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      transition: background 0.15s;
+    }
+    .logout-btn:active { background: #fff5f5; }
+
+    /* ===== 模态框 ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .modal-overlay.show {
+      display: flex;
+    }
+    .modal-sheet {
+      background: #fff;
+      width: 100%;
+      max-height: 85vh;
+      border-radius: 16px 16px 0 0;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 1;
+    }
+    .modal-title {
+      flex: 1;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .modal-close {
+      width: 32px; height: 32px;
+      border: none;
+      background: var(--bg);
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-2);
+    }
+    .modal-body {
+      padding: 20px 16px;
+    }
+
+    /* 表单 */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
+      margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+      background: var(--bg);
+      font-family: inherit;
+    }
+    .form-input:focus {
+      border-color: var(--primary);
+      background: #fff;
+    }
+    .form-btn {
+      width: 100%;
+      padding: 14px;
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       color: #fff;
+      border: none;
+      border-radius: 26px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .form-btn:active { opacity: 0.85; }
+    .form-btn.secondary {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* 地址卡片 */
+    .address-item {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .address-item .addr-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .address-item .addr-phone {
+      font-size: 13px;
+      color: var(--text-2);
+      margin-bottom: 6px;
+    }
+    .address-item .addr-detail {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+    .address-item .addr-default {
+      display: inline-block;
+      background: var(--primary-bg);
+      color: var(--primary);
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+    }
+    .address-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .addr-action-btn {
+      font-size: 13px;
+      color: var(--primary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+    .addr-action-btn.delete {
+      color: #ff4d4f;
+    }
+
+    /* 订单卡片 */
+    .order-item {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .order-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .order-id {
+      font-size: 13px;
+      color: var(--text-3);
+    }
+    .order-status {
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .order-status.pending { background: #fff7e6; color: #fa8c16; }
+    .order-status.paid { background: #f0fff4; color: #07c160; }
+    .order-status.shipped { background: var(--primary-bg); color: var(--primary); }
+    .order-status.completed { background: var(--bg); color: var(--text-3); }
+    .order-product {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .order-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .order-amount {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ff4d4f;
+    }
+    .order-date {
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-3);
+    }
+    .empty-state .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+    .empty-state .empty-text {
+      font-size: 14px;
     }
 
     /* 加载 */
@@ -397,126 +694,315 @@
   <!-- 顶部 -->
   <div class="top-bar">
     <button class="back-btn" onclick="goBack()">&lsaquo;</button>
-    <div class="top-title">登录</div>
+    <div class="top-title" id="topTitle">登录</div>
+    <button class="top-right-btn" id="settingsBtn" style="display:none" onclick="showSettings()">&#9881;</button>
   </div>
 
-  <!-- 品牌区 -->
-  <div class="brand-area" id="brandArea">
-    <div class="brand-logo">🏠</div>
-    <div class="brand-name">卓翌<span>定制</span></div>
-    <div class="brand-desc">高端家居定制 · 品质生活</div>
-  </div>
-
-  <!-- 登录卡片 -->
-  <div class="login-card" id="loginCard">
-    <div class="login-tabs">
-      <button class="login-tab active" onclick="switchTab('phone')">📱 手机登录</button>
-      <button class="login-tab" onclick="switchTab('wechat')">💚 微信登录</button>
+  <!-- ===== 未登录区域 ===== -->
+  <div id="loginArea">
+    <!-- 品牌区 -->
+    <div class="brand-area" id="brandArea">
+      <div class="brand-logo">&#127968;</div>
+      <div class="brand-name">卓翌<span>定制</span></div>
+      <div class="brand-desc">高端家居定制 · 品质生活</div>
     </div>
 
-    <!-- 手机号登录 -->
-    <div class="tab-content active" id="tab-phone">
-      <div class="phone-login">
-        <div class="input-group">
-          <label>手机号码</label>
-          <input type="tel" id="phoneInput" placeholder="请输入手机号" maxlength="11">
-        </div>
-        <div class="input-group">
-          <label>验证码</label>
-          <div class="input-row">
-            <input type="text" id="codeInput" placeholder="6位验证码" maxlength="6">
-            <button class="sms-btn" id="smsBtn" onclick="sendSms()">获取验证码</button>
+    <!-- 登录卡片 -->
+    <div class="login-card" id="loginCard">
+      <div class="login-tabs">
+        <button class="login-tab active" onclick="switchTab('phone')">&#128241; 手机登录</button>
+        <button class="login-tab" onclick="switchTab('wechat')">&#128154; 微信登录</button>
+      </div>
+
+      <!-- 手机号登录 -->
+      <div class="tab-content active" id="tab-phone">
+        <div class="phone-login">
+          <div class="input-group">
+            <label>手机号码</label>
+            <input type="tel" id="phoneInput" placeholder="请输入手机号" maxlength="11">
           </div>
+          <div class="input-group">
+            <label>验证码</label>
+            <div class="input-row">
+              <input type="text" id="codeInput" placeholder="6位验证码" maxlength="6">
+              <button class="sms-btn" id="smsBtn" onclick="sendSms()">获取验证码</button>
+            </div>
+          </div>
+          <button class="submit-btn" id="phoneLoginBtn" onclick="phoneLogin()">登录 / 注册</button>
         </div>
-        <button class="submit-btn" id="phoneLoginBtn" onclick="phoneLogin()">登录 / 注册</button>
       </div>
-    </div>
 
-    <!-- 微信登录 -->
-    <div class="tab-content" id="tab-wechat">
-      <div class="wechat-login">
-        <div class="qr-box" id="qrBox">
-          <div class="qr-placeholder">💬</div>
-          <div class="qr-hint">点击下方按钮登录</div>
+      <!-- 微信登录 -->
+      <div class="tab-content" id="tab-wechat">
+        <div class="wechat-login">
+          <div class="qr-box" id="qrBox">
+            <div class="qr-placeholder">&#128172;</div>
+            <div class="qr-hint">点击下方按钮登录</div>
+          </div>
+          <div class="wechat-tip">请使用微信扫一扫登录</div>
+          <button class="wechat-scan-btn" onclick="wechatLogin()">
+            &#128154; 微信一键登录
+          </button>
         </div>
-        <div class="wechat-tip">请使用微信扫一扫登录</div>
-        <button class="wechat-scan-btn" onclick="wechatLogin()">
-          💚 微信一键登录
-        </button>
       </div>
-    </div>
 
-    <!-- 协议 -->
-    <div class="agreement">
-      登录即代表同意 <a href="privacy.html">《用户协议》</a> 和 <a href="privacy.html">《隐私政策》</a>
+      <!-- 协议 -->
+      <div class="agreement">
+        登录即代表同意 <a href="privacy.html">《用户协议》</a> 和 <a href="privacy.html">《隐私政策》</a>
+      </div>
     </div>
   </div>
 
-  <!-- 已登录状态 -->
-  <div class="login-card" id="loggedInCard" style="margin:0 16px;display:none">
-    <div class="logged-in show">
-      <div class="user-avatar" id="userAvatar">👤</div>
-      <div class="user-name" id="userName">用户</div>
-      <div class="user-phone" id="userPhone"></div>
-      <div class="user-actions">
-        <a href="payment.html" style="text-decoration:none"><button class="btn-orders">💳 我的订单</button></a>
-        <a href="privacy.html" style="text-decoration:none"><button class="btn-logout" style="color:var(--primary)">? Privacy</button></a>
-        <button class="btn-logout" onclick="doLogout()">退出登录</button>
+  <!-- ===== 个人中心 (已登录) ===== -->
+  <div class="profile-page" id="profilePage">
+
+    <!-- 头部 -->
+    <div class="profile-header">
+      <div class="profile-user-row">
+        <div class="profile-avatar" id="profileAvatar">&#128100;</div>
+        <div class="profile-info">
+          <div class="profile-name" id="profileName">用户</div>
+          <div class="profile-phone" id="profilePhone">未绑定手机</div>
+        </div>
       </div>
     </div>
+
+    <!-- 订单快捷入口 -->
+    <div class="order-shortcuts" id="orderShortcuts">
+      <button class="order-shortcut" onclick="showOrders('pending')">
+        <span class="shortcut-icon">&#128179;<span class="shortcut-badge" id="badgePending" style="display:none">0</span></span>
+        <span class="shortcut-label">待付款</span>
+      </button>
+      <button class="order-shortcut" onclick="showOrders('paid')">
+        <span class="shortcut-icon">&#128230;<span class="shortcut-badge" id="badgePaid" style="display:none">0</span></span>
+        <span class="shortcut-label">待发货</span>
+      </button>
+      <button class="order-shortcut" onclick="showOrders('shipped')">
+        <span class="shortcut-icon">&#128666;<span class="shortcut-badge" id="badgeShipped" style="display:none">0</span></span>
+        <span class="shortcut-label">待收货</span>
+      </button>
+      <button class="order-shortcut" onclick="showOrders('all')">
+        <span class="shortcut-icon">&#128203;</span>
+        <span class="shortcut-label">全部订单</span>
+      </button>
+    </div>
+
+    <!-- 功能菜单 -->
+    <div class="menu-card">
+      <button class="menu-item" onclick="showOrders('all')">
+        <span class="menu-icon" style="background:#e6f4ff">&#128230;</span>
+        <span class="menu-text">我的订单</span>
+        <span class="menu-arrow">&#8250;</span>
+      </button>
+      <button class="menu-item" onclick="showAddressManager()">
+        <span class="menu-icon" style="background:#fff7e6">&#128205;</span>
+        <span class="menu-text">收货地址</span>
+        <span class="menu-arrow">&#8250;</span>
+      </button>
+      <button class="menu-item" onclick="showEditProfile()">
+        <span class="menu-icon" style="background:#f0fff4">&#128100;</span>
+        <span class="menu-text">编辑资料</span>
+        <span class="menu-arrow">&#8250;</span>
+      </button>
+      <button class="menu-item" onclick="contactService()">
+        <span class="menu-icon" style="background:#f0f5ff">&#128172;</span>
+        <span class="menu-text">联系客服</span>
+        <span class="menu-desc">在线咨询</span>
+        <span class="menu-arrow">&#8250;</span>
+      </button>
+    </div>
+
+    <!-- 更多菜单 -->
+    <div class="menu-card">
+      <button class="menu-item" onclick="location.href='privacy.html'">
+        <span class="menu-icon" style="background:#f9f0ff">&#128274;</span>
+        <span class="menu-text">隐私政策</span>
+        <span class="menu-arrow">&#8250;</span>
+      </button>
+      <button class="menu-item" onclick="location.href='user-agreement.html'">
+        <span class="menu-icon" style="background:#fff0f6">&#128196;</span>
+        <span class="menu-text">用户协议</span>
+        <span class="menu-arrow">&#8250;</span>
+      </button>
+      <button class="menu-item" onclick="showAbout()">
+        <span class="menu-icon" style="background:var(--bg)">&#8505;&#65039;</span>
+        <span class="menu-text">关于我们</span>
+        <span class="menu-desc">v2.0.0</span>
+        <span class="menu-arrow">&#8250;</span>
+      </button>
+    </div>
+
+    <!-- 退出登录 -->
+    <div class="logout-section">
+      <button class="logout-btn" onclick="doLogout()">退出登录</button>
+    </div>
+
+    <!-- 底部占位 -->
+    <div style="height:80px"></div>
   </div>
 
   <!-- 底部导航 -->
-  <div style="margin-top:auto">
-    <div style="height:70px"></div>
-    <div style="position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #f0f0f0;display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0)">
-      <a style="flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 0 8px;text-decoration:none;cursor:pointer" href="/">
-        <span style="font-size:22px;margin-bottom:2px">🏠</span>
-        <span style="font-size:10px;color:#999">首页</span>
-      </a>
-      <a style="flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 0 8px;text-decoration:none;cursor:pointer" href="shop.html">
-        <span style="font-size:22px;margin-bottom:2px">🛍️</span>
-        <span style="font-size:10px;color:#999">商品</span>
-      </a>
-      <a style="flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 0 8px;text-decoration:none;cursor:pointer" href="payment.html">
-        <span style="font-size:22px;margin-bottom:2px">💳</span>
-        <span style="font-size:10px;color:#999">支付</span>
-      </a>
-      <a style="flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 0 8px;text-decoration:none;cursor:pointer" href="login.html">
-        <span style="font-size:22px;margin-bottom:2px">👤</span>
-        <span style="font-size:10px;color:#1677ff;font-weight:600">我的</span>
-      </a>
-    </div>
+  <div style="position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #f0f0f0;display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0)">
+    <a style="flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 0 8px;text-decoration:none;cursor:pointer" href="/">
+      <span style="font-size:22px;margin-bottom:2px">&#127968;</span>
+      <span style="font-size:10px;color:#999">首页</span>
+    </a>
+    <a style="flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 0 8px;text-decoration:none;cursor:pointer" href="shop.html">
+      <span style="font-size:22px;margin-bottom:2px">&#128717;&#65039;</span>
+      <span style="font-size:10px;color:#999">商品</span>
+    </a>
+    <a style="flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 0 8px;text-decoration:none;cursor:pointer" href="payment.html">
+      <span style="font-size:22px;margin-bottom:2px">&#128179;</span>
+      <span style="font-size:10px;color:#999">支付</span>
+    </a>
+    <a style="flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 0 8px;text-decoration:none;cursor:pointer" href="login.html">
+      <span style="font-size:22px;margin-bottom:2px">&#128100;</span>
+      <span style="font-size:10px;color:#1677ff;font-weight:600">我的</span>
+    </a>
   </div>
 
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
+  <!-- ===== 编辑资料模态 ===== -->
+  <div class="modal-overlay" id="editProfileModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <button class="modal-close" onclick="closeModal('editProfileModal')">&times;</button>
+        <div class="modal-title">编辑资料</div>
+        <div style="width:32px"></div>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">昵称</label>
+          <input class="form-input" id="editNickname" placeholder="请输入昵称" maxlength="20">
+        </div>
+        <div class="form-group">
+          <label class="form-label">手机号</label>
+          <input class="form-input" id="editPhone" placeholder="请输入手机号" maxlength="11" type="tel">
+        </div>
+        <button class="form-btn" onclick="saveProfile()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 地址管理模态 ===== -->
+  <div class="modal-overlay" id="addressModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <button class="modal-close" onclick="closeModal('addressModal')">&times;</button>
+        <div class="modal-title">收货地址</div>
+        <div style="width:32px"></div>
+      </div>
+      <div class="modal-body">
+        <div id="addressList"></div>
+        <button class="form-btn" onclick="showAddressForm()" style="margin-top:12px">+ 新增收货地址</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 地址编辑模态 ===== -->
+  <div class="modal-overlay" id="addressFormModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <button class="modal-close" onclick="closeModal('addressFormModal')">&times;</button>
+        <div class="modal-title" id="addressFormTitle">新增地址</div>
+        <div style="width:32px"></div>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="addrEditId">
+        <div class="form-group">
+          <label class="form-label">收货人</label>
+          <input class="form-input" id="addrName" placeholder="请输入收货人姓名">
+        </div>
+        <div class="form-group">
+          <label class="form-label">手机号</label>
+          <input class="form-input" id="addrPhone" placeholder="请输入手机号" type="tel" maxlength="11">
+        </div>
+        <div class="form-group">
+          <label class="form-label">省份</label>
+          <input class="form-input" id="addrProvince" placeholder="如：广东省">
+        </div>
+        <div class="form-group">
+          <label class="form-label">城市</label>
+          <input class="form-input" id="addrCity" placeholder="如：深圳市">
+        </div>
+        <div class="form-group">
+          <label class="form-label">区/县</label>
+          <input class="form-input" id="addrDistrict" placeholder="如：南山区">
+        </div>
+        <div class="form-group">
+          <label class="form-label">详细地址</label>
+          <input class="form-input" id="addrDetail" placeholder="街道、楼号、门牌号等">
+        </div>
+        <div class="form-group" style="display:flex;align-items:center;gap:8px">
+          <input type="checkbox" id="addrDefault" style="width:18px;height:18px">
+          <label for="addrDefault" style="font-size:14px;color:var(--text)">设为默认地址</label>
+        </div>
+        <button class="form-btn" onclick="saveAddress()">保存地址</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 订单模态 ===== -->
+  <div class="modal-overlay" id="ordersModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <button class="modal-close" onclick="closeModal('ordersModal')">&times;</button>
+        <div class="modal-title" id="ordersTitle">我的订单</div>
+        <div style="width:32px"></div>
+      </div>
+      <div class="modal-body" id="ordersList">
+        <div class="empty-state">
+          <div class="empty-icon">&#128230;</div>
+          <div class="empty-text">加载中...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 关于我们模态 ===== -->
+  <div class="modal-overlay" id="aboutModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <button class="modal-close" onclick="closeModal('aboutModal')">&times;</button>
+        <div class="modal-title">关于我们</div>
+        <div style="width:32px"></div>
+      </div>
+      <div class="modal-body" style="text-align:center;padding:30px 20px">
+        <div style="width:72px;height:72px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:32px;box-shadow:0 6px 20px rgba(22,119,255,0.3)">&#127968;</div>
+        <div style="font-size:20px;font-weight:700;margin-bottom:4px">卓翌定制</div>
+        <div style="font-size:13px;color:var(--text-3);margin-bottom:20px">版本 2.0.0</div>
+        <div style="font-size:14px;color:var(--text-2);line-height:1.8;text-align:left">
+          卓翌定制是一家专注于高端家居定制的品牌，致力于为每一位客户打造独一无二的品质生活空间。
+          <br><br>
+          我们提供从设计、选材到安装的一站式服务，用匠心品质守护您的家居梦想。
+          <br><br>
+          如有任何问题，请通过APP内「联系客服」功能与我们取得联系。
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
-const API = 'http://8.138.218.146';
-let smsCountdown = 0;
-let smsTimer = null;
+var API = 'http://8.138.218.146';
+var smsCountdown = 0;
+var smsTimer = null;
+var currentUser = null;
 
 // ===== Tab 切换 =====
 function switchTab(tab) {
-  document.querySelectorAll('.login-tab').forEach(function(t) {
-    t.classList.remove('active');
-  });
-  document.querySelectorAll('.tab-content').forEach(function(c) {
-    c.classList.remove('active');
-  });
+  document.querySelectorAll('.login-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
   event.target.classList.add('active');
   document.getElementById('tab-' + tab).classList.add('active');
 }
 
 // ===== 手机号登录 =====
-function sendCode() {
+function sendSms() {
   var phone = document.getElementById('phoneInput').value;
-  if (!phone || phone.length !== 11) {
-    showToast('请输入正确的手机号');
-    return;
-  }
-  var btn = document.getElementById('codeBtn');
+  if (!phone || phone.length !== 11) { showToast('请输入正确的手机号'); return; }
+  var btn = document.getElementById('smsBtn');
   btn.disabled = true;
   showToast('验证码发送中...');
   fetch(API + '/api/auth/sms/send', {
@@ -554,7 +1040,7 @@ function phoneLogin() {
   if (!phone || phone.length !== 11) { showToast('请输入手机号'); return; }
   if (!code) { showToast('请输入验证码'); return; }
   showToast('登录中...');
-  fetch(API + '/api/auth/sms/login', {
+  fetch(API + '/api/auth/phone/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ phone: phone, code: code }),
@@ -564,8 +1050,8 @@ function phoneLogin() {
     if (data.success) {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-      showToast(data.isNew ? '注册成功！' : '登录成功！');
-      setTimeout(function() { showLoggedIn(data.user); }, 500);
+      showToast(data.user.isNew ? '注册成功！' : '登录成功！');
+      setTimeout(function() { showProfile(data.user); }, 500);
     } else {
       showToast(data.error || '登录失败');
     }
@@ -583,7 +1069,7 @@ function wechatLogin() {
   }
 }
 
-// 原生SDK回调函数
+// 原生SDK回调
 window._onWechatCode = function(code) {
   showToast('微信授权成功，正在登录...');
   fetch(API + '/api/auth/wechat/login', {
@@ -597,34 +1083,341 @@ window._onWechatCode = function(code) {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       showToast(data.user.isNew ? '微信注册成功！' : '微信登录成功！');
-      setTimeout(function() { showLoggedIn(data.user); }, 500);
+      setTimeout(function() { showProfile(data.user); }, 500);
     } else {
       showToast(data.error || '微信登录失败');
     }
   })
   .catch(function() { showToast('网络错误'); });
 };
-window._onWechatCancel = function() {
-  showToast('已取消微信登录');
-};
-window._onWechatError = function(errCode) {
-  showToast('微信登录失败 (' + errCode + ')');
-};
+window._onWechatCancel = function() { showToast('已取消微信登录'); };
+window._onWechatError = function(errCode) { showToast('微信登录失败 (' + errCode + ')'); };
 
-// ===== 显示已登录 =====
-function showLoggedIn(user) {
-  document.getElementById('brandArea').style.display = 'none';
-  document.getElementById('loginCard').style.display = 'none';
-  document.getElementById('loggedInCard').style.display = 'block';
-  document.getElementById('userName').textContent = user.nickname || '用户';
-  document.getElementById('userPhone').textContent = user.phone ? user.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : '未绑定手机';
-  document.getElementById('userAvatar').textContent = user.nickname ? user.nickname[0] : '\u{1F464}';
-  var titleEl = document.querySelector('.top-title');
-  if (titleEl) titleEl.textContent = '我的';
+// ===== 显示个人中心 =====
+function showProfile(user) {
+  currentUser = user;
+  document.getElementById('loginArea').style.display = 'none';
+  document.getElementById('profilePage').classList.add('show');
+  document.getElementById('settingsBtn').style.display = 'block';
+  document.getElementById('topTitle').textContent = '我的';
+
+  // 更新用户信息
+  document.getElementById('profileName').textContent = user.nickname || '用户';
+  var phoneText = user.phone ? user.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : '未绑定手机';
+  document.getElementById('profilePhone').textContent = phoneText;
+
+  // 头像
+  var avatarEl = document.getElementById('profileAvatar');
+  if (user.avatar && user.avatar.startsWith('http')) {
+    avatarEl.innerHTML = '<img src="' + user.avatar + '" alt="">';
+  } else {
+    avatarEl.textContent = user.nickname ? user.nickname[0] : '\u{1F464}';
+  }
+
+  // 加载订单统计
+  loadOrderStats();
+}
+
+// ===== 加载订单统计 =====
+function loadOrderStats() {
+  var token = localStorage.getItem('token');
+  if (!token) return;
+  fetch(API + '/api/orders', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var orders = data.orders || data || [];
+    if (!Array.isArray(orders)) orders = [];
+    var counts = { pending: 0, paid: 0, shipped: 0 };
+    orders.forEach(function(o) {
+      if (o.status === 'pending') counts.pending++;
+      else if (o.status === 'paid') counts.paid++;
+      else if (o.status === 'shipped') counts.shipped++;
+    });
+    updateBadge('badgePending', counts.pending);
+    updateBadge('badgePaid', counts.paid);
+    updateBadge('badgeShipped', counts.shipped);
+  })
+  .catch(function() {});
+}
+
+function updateBadge(id, count) {
+  var el = document.getElementById(id);
+  if (el) {
+    if (count > 0) {
+      el.style.display = 'flex';
+      el.textContent = count > 99 ? '99+' : count;
+    } else {
+      el.style.display = 'none';
+    }
+  }
+}
+
+// ===== 编辑资料 =====
+function showEditProfile() {
+  var user = currentUser || JSON.parse(localStorage.getItem('user') || '{}');
+  document.getElementById('editNickname').value = user.nickname || '';
+  document.getElementById('editPhone').value = user.phone || '';
+  openModal('editProfileModal');
+}
+
+function saveProfile() {
+  var token = localStorage.getItem('token');
+  var nickname = document.getElementById('editNickname').value.trim();
+  var phone = document.getElementById('editPhone').value.trim();
+
+  if (!nickname) { showToast('昵称不能为空'); return; }
+
+  showToast('保存中...');
+  fetch(API + '/api/auth/me', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify({ nickname: nickname, phone: phone }),
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.success) {
+      currentUser = data.user;
+      localStorage.setItem('user', JSON.stringify(data.user));
+      showProfile(data.user);
+      closeModal('editProfileModal');
+      showToast('资料已更新');
+    } else {
+      showToast(data.error || '保存失败');
+    }
+  })
+  .catch(function() { showToast('网络错误'); });
+}
+
+// ===== 地址管理 =====
+function showAddressManager() {
+  openModal('addressModal');
+  loadAddresses();
+}
+
+function loadAddresses() {
+  var token = localStorage.getItem('token');
+  var listEl = document.getElementById('addressList');
+  listEl.innerHTML = '<div class="empty-state"><div class="empty-text">加载中...</div></div>';
+
+  fetch(API + '/api/addresses', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var addresses = data.addresses || [];
+    if (addresses.length === 0) {
+      listEl.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128205;</div><div class="empty-text">暂无收货地址</div></div>';
+      return;
+    }
+    listEl.innerHTML = addresses.map(function(addr) {
+      var defaultTag = addr.isDefault ? '<span class="addr-default">默认</span>' : '';
+      return '<div class="address-item">' +
+        '<div class="addr-name">' + escHtml(addr.name) + defaultTag + '</div>' +
+        '<div class="addr-phone">' + escHtml(addr.phone) + '</div>' +
+        '<div class="addr-detail">' + escHtml((addr.province || '') + ' ' + (addr.city || '') + ' ' + (addr.district || '') + ' ' + (addr.detail || '')) + '</div>' +
+        '<div class="address-actions">' +
+          '<button class="addr-action-btn" onclick="editAddress(\'' + addr._id + '\')">编辑</button>' +
+          '<button class="addr-action-btn delete" onclick="deleteAddress(\'' + addr._id + '\')">删除</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  })
+  .catch(function() {
+    listEl.innerHTML = '<div class="empty-state"><div class="empty-text">加载失败</div></div>';
+  });
+}
+
+function showAddressForm(addr) {
+  document.getElementById('addrEditId').value = addr ? addr._id : '';
+  document.getElementById('addrName').value = addr ? addr.name : '';
+  document.getElementById('addrPhone').value = addr ? addr.phone : '';
+  document.getElementById('addrProvince').value = addr ? (addr.province || '') : '';
+  document.getElementById('addrCity').value = addr ? (addr.city || '') : '';
+  document.getElementById('addrDistrict').value = addr ? (addr.district || '') : '';
+  document.getElementById('addrDetail').value = addr ? (addr.detail || '') : '';
+  document.getElementById('addrDefault').checked = addr ? addr.isDefault : false;
+  document.getElementById('addressFormTitle').textContent = addr ? '编辑地址' : '新增地址';
+  openModal('addressFormModal');
+}
+
+function editAddress(id) {
+  var token = localStorage.getItem('token');
+  fetch(API + '/api/addresses', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var addr = (data.addresses || []).find(function(a) { return a._id === id; });
+    if (addr) showAddressForm(addr);
+    else showToast('地址不存在');
+  })
+  .catch(function() { showToast('网络错误'); });
+}
+
+function saveAddress() {
+  var token = localStorage.getItem('token');
+  var id = document.getElementById('addrEditId').value;
+  var body = {
+    name: document.getElementById('addrName').value.trim(),
+    phone: document.getElementById('addrPhone').value.trim(),
+    province: document.getElementById('addrProvince').value.trim(),
+    city: document.getElementById('addrCity').value.trim(),
+    district: document.getElementById('addrDistrict').value.trim(),
+    detail: document.getElementById('addrDetail').value.trim(),
+    isDefault: document.getElementById('addrDefault').checked,
+  };
+
+  if (!body.name || !body.phone || !body.province || !body.city || !body.detail) {
+    showToast('请填写完整的地址信息');
+    return;
+  }
+
+  showToast('保存中...');
+  var url = API + '/api/addresses';
+  var method = 'POST';
+  if (id) { url += '/' + id; method = 'PUT'; }
+
+  fetch(url, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify(body),
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.success) {
+      closeModal('addressFormModal');
+      loadAddresses();
+      showToast('地址已保存');
+    } else {
+      showToast(data.error || '保存失败');
+    }
+  })
+  .catch(function() { showToast('网络错误'); });
+}
+
+function deleteAddress(id) {
+  if (!confirm('确定删除这个地址吗？')) return;
+  var token = localStorage.getItem('token');
+  fetch(API + '/api/addresses/' + id, {
+    method: 'DELETE',
+    headers: { 'Authorization': 'Bearer ' + token }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.success) {
+      loadAddresses();
+      showToast('地址已删除');
+    } else {
+      showToast(data.error || '删除失败');
+    }
+  })
+  .catch(function() { showToast('网络错误'); });
+}
+
+// ===== 订单 =====
+function showOrders(filter) {
+  var titles = { all: '全部订单', pending: '待付款', paid: '待发货', shipped: '待收货', completed: '已完成' };
+  document.getElementById('ordersTitle').textContent = titles[filter] || '我的订单';
+  openModal('ordersModal');
+
+  var token = localStorage.getItem('token');
+  var listEl = document.getElementById('ordersList');
+  listEl.innerHTML = '<div class="empty-state"><div class="empty-text">加载中...</div></div>';
+
+  fetch(API + '/api/orders', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var orders = data.orders || data || [];
+    if (!Array.isArray(orders)) orders = [];
+
+    // Filter
+    if (filter && filter !== 'all') {
+      orders = orders.filter(function(o) { return o.status === filter; });
+    }
+
+    if (orders.length === 0) {
+      listEl.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128230;</div><div class="empty-text">暂无订单</div></div>';
+      return;
+    }
+
+    var statusLabels = { pending: '待付款', paid: '已付款', shipped: '已发货', completed: '已完成', cancelled: '已取消' };
+    listEl.innerHTML = orders.map(function(o) {
+      var statusClass = o.status || 'pending';
+      var statusText = statusLabels[statusClass] || statusClass;
+      return '<div class="order-item">' +
+        '<div class="order-top">' +
+          '<span class="order-id">' + escHtml(o.orderId || o._id || '') + '</span>' +
+          '<span class="order-status ' + statusClass + '">' + statusText + '</span>' +
+        '</div>' +
+        '<div class="order-product">' + escHtml(o.product || o.productName || '定制商品') + '</div>' +
+        '<div class="order-bottom">' +
+          '<span class="order-amount">&yen;' + (parseFloat(o.amount || o.totalAmount || 0)).toFixed(2) + '</span>' +
+          '<span class="order-date">' + formatDate(o.createdAt) + '</span>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  })
+  .catch(function() {
+    listEl.innerHTML = '<div class="empty-state"><div class="empty-text">加载失败</div></div>';
+  });
+}
+
+// ===== 联系客服 =====
+function contactService() {
+  var token = localStorage.getItem('token');
+  var user = currentUser || JSON.parse(localStorage.getItem('user') || '{}');
+  var visitorId = user.id || ('visitor_' + Date.now());
+
+  showToast('正在连接客服...');
+  fetch(API + '/api/conversations', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify({
+      visitorId: visitorId,
+      name: user.nickname || '用户',
+      phone: user.phone || ''
+    }),
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.conversation && data.conversation._id) {
+      location.href = 'chat.html?convId=' + data.conversation._id;
+    } else if (data._id) {
+      location.href = 'chat.html?convId=' + data._id;
+    } else {
+      showToast('连接客服失败，请稍后重试');
+    }
+  })
+  .catch(function() { showToast('网络错误'); });
+}
+
+// ===== 关于我们 =====
+function showAbout() {
+  openModal('aboutModal');
+}
+
+// ===== 设置 =====
+function showSettings() {
+  // 目前设置页就是关于我们，后续可扩展
+  showAbout();
 }
 
 // ===== 退出登录 =====
 function doLogout() {
+  if (!confirm('确定要退出登录吗？')) return;
   var token = localStorage.getItem('token');
   fetch(API + '/api/auth/logout', {
     method: 'POST',
@@ -632,9 +1425,29 @@ function doLogout() {
   }).catch(function() {});
   localStorage.removeItem('token');
   localStorage.removeItem('user');
+  currentUser = null;
   showToast('已退出');
   setTimeout(function() { location.reload(); }, 500);
 }
+
+// ===== 模态框 =====
+function openModal(id) {
+  document.getElementById(id).classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// 点击遮罩关闭
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('modal-overlay') && e.target.classList.contains('show')) {
+    e.target.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+});
 
 // ===== 返回 =====
 function goBack() {
@@ -653,7 +1466,22 @@ function showToast(msg) {
   setTimeout(function() { t.classList.remove('show'); }, 2000);
 }
 
-// ===== 初始化：检查是否已登录 =====
+// ===== 工具函数 =====
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  var d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
+  var m = d.getMonth() + 1;
+  var day = d.getDate();
+  return d.getFullYear() + '-' + (m < 10 ? '0' + m : m) + '-' + (day < 10 ? '0' + day : day);
+}
+
+// ===== 初始化 =====
 function checkLogin() {
   var token = localStorage.getItem('token');
   var savedUser = localStorage.getItem('user');
@@ -664,7 +1492,7 @@ function checkLogin() {
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (data.success && data.user) {
-        showLoggedIn(data.user);
+        showProfile(data.user);
         localStorage.setItem('user', JSON.stringify(data.user));
       } else {
         localStorage.removeItem('token');
@@ -675,7 +1503,7 @@ function checkLogin() {
   }
 }
 
-// Check for WeChat code from native (saved by WXEntryActivity)
+// Check for WeChat code from native
 (function() {
   try {
     var sp = window.AndroidWeChat && window.AndroidWeChat.getWXCode ? window.AndroidWeChat.getWXCode() : null;
@@ -685,7 +1513,6 @@ function checkLogin() {
       return;
     }
   } catch(e) {}
-  // Also check URL params
   var urlParams = new URLSearchParams(window.location.search);
   var wxCode = urlParams.get('wxcode');
   if (wxCode) {
@@ -694,7 +1521,6 @@ function checkLogin() {
     window.history.replaceState({}, '', 'login.html');
     return;
   }
-  // Check localStorage (fallback)
   var stored = localStorage.getItem('wx_code');
   if (stored) {
     console.log('Found wx_code from localStorage:', stored);
@@ -723,7 +1549,7 @@ function wechatLogin_callback(code) {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       showToast(data.user && data.user.isNew ? '微信注册成功！' : '微信登录成功！');
-      setTimeout(function() { showLoggedIn(data.user); }, 500);
+      setTimeout(function() { showProfile(data.user); }, 500);
     } else {
       var errMsg = data.error || '微信登录失败';
       console.error('wechatLogin_callback: login failed - ' + errMsg);
