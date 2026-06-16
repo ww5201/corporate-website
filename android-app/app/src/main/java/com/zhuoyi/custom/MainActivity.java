@@ -86,6 +86,11 @@ public class MainActivity extends Activity {
 
         // 关键修复：在加载首页之前，先检查是否有微信回调的 code
         String wxCode = getIntent().getStringExtra("wx_code");
+        // 立即清除 Intent Extra 和 SharedPreferences，防止 onResume 重复处理
+        getIntent().removeExtra("wx_code");
+        getSharedPreferences("wx_login", MODE_PRIVATE).edit()
+            .remove("wx_code").remove("wx_time").remove("wx_errcode").apply();
+
         if (wxCode != null && !wxCode.isEmpty()) {
             Log.i(TAG, "onCreate: got wx_code from intent=" + wxCode);
             webView.loadUrl("file:///android_asset/login.html?wxcode=" + wxCode);
@@ -329,12 +334,15 @@ public class MainActivity extends Activity {
         setIntent(intent);
         // 优先处理微信回调 code
         String wxCode = intent.getStringExtra("wx_code");
+        // 立即清除 Intent Extra 和 SharedPreferences，防止 onResume 重复处理
+        intent.removeExtra("wx_code");
+        getSharedPreferences("wx_login", MODE_PRIVATE).edit()
+            .remove("wx_code").remove("wx_time").remove("wx_errcode").apply();
+
         if (wxCode != null && !wxCode.isEmpty()) {
             Log.i(TAG, "onNewIntent: got wx_code=" + wxCode);
             String url = "file:///android_asset/login.html?wxcode=" + wxCode;
             if (webView != null) webView.loadUrl(url);
-            // 关键：清除 extra，防止 onResume 重复处理同一个 code（code 只能用一次）
-            intent.removeExtra("wx_code");
             return;
         }
         // 处理微信错误
