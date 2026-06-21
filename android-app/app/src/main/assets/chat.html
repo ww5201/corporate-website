@@ -209,6 +209,8 @@
 var API='http://8.138.218.146';
 var convId=null, ws=null, wsRetry=0, MAX_RETRY=5;
 var lastTimeLabel='', pollTmr=null, sending=false;
+var renderedIds=new Set();
+var lastMsgTime='';
 
 async function init(){
   var saved=localStorage.getItem('zy_convId');
@@ -237,24 +239,37 @@ async function loadHistory(){
     var msgs=await r.json();
     if(msgs.length>0){
       document.getElementById('welcomeBlock').style.display='none';
-      msgs.forEach(function(m){ renderMsg(m,false); });
+      msgs.forEach(function(m){
+        var mid=m._id||m.id||'';
+        if(mid) renderedIds.add(mid);
+        renderMsg(m,false);
+        var t=m.createdAt||'';
+        if(t>lastMsgTime) lastMsgTime=t;
+      });
       scrollDown();
     }
   }catch(e){}
 }
+
+function stopPoll(){ if(pollTmr){ clearInterval(pollTmr); pollTmr=null; } }
 
 function connectWS(){
   if(!convId) return;
   var wsBase = API.replace(/^http/, 'ws');
   try{
     ws=new WebSocket(wsBase+'/ws/chat?convId='+convId);
-    ws.onopen=function(){ wsRetry=0; setStatus('online','在线'); hideConn(); startPoll(); };
+    ws.onopen=function(){ wsRetry=0; setStatus('online','在线'); hideConn(); stopPoll(); };
     ws.onmessage=function(e){
       try{
         var d=JSON.parse(e.data);
         if(d.type==='new_message'&&d.message.sender!=='visitor'){
+          var mid=d.message._id||d.message.id||'';
+          if(mid&&renderedIds.has(mid)) return;
+          if(mid) renderedIds.add(mid);
           document.getElementById('welcomeBlock').style.display='none';
           renderMsg(d.message,true);
+          var t=d.message.createdAt||'';
+          if(t>lastMsgTime) lastMsgTime=t;
         }
       }catch(err){}
     };
@@ -267,15 +282,24 @@ function connectWS(){
   }catch(e){ startPoll(); }
 }
 
-function startPoll(){ if(pollTmr) return; pollTmr=setInterval(doPoll,5000); }
+function startPoll(){ if(pollTmr) return; doPoll(); pollTmr=setInterval(doPoll,5000); }
 async function doPoll(){
   if(!convId) return;
   try{
-    var r=await fetch(API+'/api/conversations/'+convId+'/poll?since='+encodeURIComponent(lastTimeLabel));
+    var sinceParam=lastMsgTime||'';
+    var r=await fetch(API+'/api/conversations/'+convId+'/poll?since='+encodeURIComponent(sinceParam));
     var d=await r.json();
     if(d.messages&&d.messages.length>0){
       document.getElementById('welcomeBlock').style.display='none';
-      d.messages.forEach(function(m){ if(m.sender!=='visitor') renderMsg(m,true); });
+      d.messages.forEach(function(m){
+        if(m.sender==='visitor') return;
+        var mid=m._id||m.id||'';
+        if(mid&&renderedIds.has(mid)) return;
+        if(mid) renderedIds.add(mid);
+        renderMsg(m,true);
+        var t=m.createdAt||'';
+        if(t>lastMsgTime) lastMsgTime=t;
+      });
     }
   }catch(e){}
 }
@@ -285,7 +309,9 @@ async function sendMsg(){
   var txt=inp.value.trim();
   if(!txt||sending) return;
   sending=true; inp.value=''; autoGrow(inp); toggleSend();
-  renderMsg({sender:'visitor',content:txt,createdAt:new Date().toISOString()},true);
+  var clientMsg={sender:'visitor',content:txt,createdAt:new Date().toISOString(),_id:'local_'+Date.now()};
+  renderedIds.add(clientMsg._id);
+  renderMsg(clientMsg,true);
   try{
     var r=await fetch(API+'/api/conversations/'+convId+'/messages',{
       method:'POST',headers:{'Content-Type':'application/json'},
@@ -293,6 +319,7 @@ async function sendMsg(){
     });
     var d=await r.json();
     if(d.error) showToast('发送失败: '+d.error);
+    if(d._id) renderedIds.add(d._id);
   }catch(e){ showToast('网络错误，消息可能未送达'); }
   sending=false;
   document.getElementById('quickReplies').style.display='none';
