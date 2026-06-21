@@ -82,18 +82,19 @@
     .welcome-block p { font-size: 13px; color: var(--text-3); line-height: 1.7; }
     .time-divider { text-align: center; margin: 14px 0 10px; font-size: 11px; color: var(--text-3); }
     .time-divider span { background: rgba(0,0,0,0.04); padding: 2px 10px; border-radius: 10px; }
-    .msg-row { display: flex; margin-bottom: 10px; animation: fadeUp 0.2s ease; width: 100%; }
-    .msg-row.mine { flex-direction: row-reverse; justify-content: flex-end; }
+    .msg-row { display: flex; align-items: flex-start; margin-bottom: 10px; animation: fadeUp 0.2s ease; width: 100%; }
+    .msg-row.mine { justify-content: flex-end; }
     .msg-avatar {
       width: 36px; height: 36px; border-radius: 50%;
       flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px;
+      order: 0;
     }
     .msg-row:not(.mine) .msg-avatar {
       background: linear-gradient(135deg, var(--gold) 0%, #e8d5b0 100%); margin-right: 8px;
     }
     .msg-row.mine .msg-avatar {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-      color: #fff; margin-left: 8px;
+      color: #fff; margin-left: 8px; order: 2;
     }
     .msg-content { max-width: 72%; }
     .msg-bubble {
@@ -301,7 +302,8 @@ function sendQuick(txt){ document.getElementById('msgInput').value=txt; sendMsg(
 
 function renderMsg(msg,anim){
   var body=document.getElementById('chatBody');
-  var mine=msg.sender==='visitor';
+  var sender=(msg.sender||'').toLowerCase();
+  var mine=(sender==='visitor'||sender==='user'||sender==='customer');
   var t=msg.createdAt||new Date().toISOString();
   var tl=timeLabel(t);
   if(tl!==lastTimeLabel){
@@ -312,9 +314,14 @@ function renderMsg(msg,anim){
   row.className='msg-row'+(mine?' mine':'');
   if(!anim) row.style.animation='none';
   var av=mine?'&#128100;':'&#127968;';
-  row.innerHTML='<div class="msg-avatar">'+av+'</div>'
-    +'<div class="msg-content"><div class="msg-bubble">'+esc(msg.content)+'</div>'
+  var avatarHtml='<div class="msg-avatar">'+av+'</div>';
+  var contentHtml='<div class="msg-content"><div class="msg-bubble">'+esc(msg.content)+'</div>'
     +'<div class="msg-time-small">'+hm(t)+'</div></div>';
+  if(mine){
+    row.innerHTML=contentHtml+avatarHtml;
+  } else {
+    row.innerHTML=avatarHtml+contentHtml;
+  }
   body.appendChild(row); scrollDown();
 }
 

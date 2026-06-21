@@ -691,6 +691,45 @@
 </head>
 <body>
 
+  <!-- Privacy Consent Dialog -->
+  <div id="privacyOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:99999;justify-content:center;align-items:center;">
+    <div style="background:#fff;border-radius:16px;margin:20px;padding:28px 24px 20px;max-width:360px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+      <h3 style="text-align:center;font-size:18px;font-weight:700;color:#1a1a1a;margin-bottom:16px;">隐私政策提示</h3>
+      <p style="font-size:13px;color:#555;line-height:1.8;margin-bottom:12px;">
+        欢迎使用卓翌定制！在使用我们的服务前，请您阅读并同意
+        <a href="privacy.html" style="color:#1677ff;text-decoration:none;">《隐私政策》</a>和
+        <a href="user-agreement.html" style="color:#1677ff;text-decoration:none;">《用户协议》</a>。
+      </p>
+      <p style="font-size:13px;color:#555;line-height:1.8;margin-bottom:20px;">
+        我们将收集您的<strong>姓名、手机号码、昵称、头像</strong>等个人信息，用于账号注册、订单处理和客户服务。我们不会收集设备MAC地址或软件安装列表等敏感信息。详细信息请查阅隐私政策。
+      </p>
+      <button onclick="agreePrivacy()" style="width:100%;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#1677ff,#4096ff);color:#fff;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:10px;">同意并继续</button>
+      <button onclick="disagreePrivacy()" style="width:100%;padding:10px;border:none;border-radius:10px;background:#f5f5f5;color:#999;font-size:13px;cursor:pointer;">不同意</button>
+    </div>
+  </div>
+  <script>
+  (function(){
+    var agreed = false;
+    try { agreed = localStorage.getItem('privacy_agreed') === 'true'; } catch(e){}
+    if (!agreed) {
+      var el = document.getElementById('privacyOverlay');
+      if (el) el.style.display = 'flex';
+    }
+  })();
+  function agreePrivacy() {
+    try { localStorage.setItem('privacy_agreed', 'true'); } catch(e){}
+    document.getElementById('privacyOverlay').style.display = 'none';
+  }
+  function disagreePrivacy() {
+    if (confirm('不同意隐私政策将无法使用本应用，确定要退出吗？')) {
+      try {
+        if (window.AndroidBridge) window.AndroidBridge.finishApp();
+      } catch(e){}
+      history.back();
+    }
+  }
+  </script>
+
   <!-- 顶部 -->
   <div class="top-bar">
     <button class="back-btn" onclick="goBack()">&lsaquo;</button>
